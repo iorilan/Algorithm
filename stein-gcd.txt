@@ -1,0 +1,33 @@
+﻿使用stein 算法计算 最大公约数和最小公倍数
+
+介绍一种比欧几里得算法高效的用来计算gcd和lcm的stein算法,用来大数的计算:
+
+function gcd(a,b){
+if(a == b){return a;}
+
+var bigger;
+var smaller;
+if(a>b){bigger = a;smaller = b;}
+else{bigger = b;smaller = a;}
+
+if(smaller == 0){return bigger;}
+
+if(bigger %2 == 0 && smaller % 2 == 0){
+return 2*gcd(bigger/2,smaller/2);
+}
+else if(bigger%2 == 0){
+return gcd(bigger/2,smaller);
+}
+else if(smaller%2 == 0){
+return gcd(bigger,smaller/2);
+}
+else{
+return gcd((bigger+smaller)/2,(bigger-smaller)/2);
+}
+
+}
+
+function lcm(a,b){
+return a*b/gcd(a,b);
+}
+

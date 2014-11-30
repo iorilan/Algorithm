@@ -1,0 +1,27 @@
+﻿查找相邻相同字符串
+
+var found = false;
+
+function f(str){
+if(found){return;}
+var len = str.length;
+var a = str.substring(0,len/2);
+var b = str.substring(len/2,len);
+
+if(a == b && a!="" && a!=undefined){
+console.log("found: " + a+b);
+found = true;
+return;
+}
+
+for(var j = 1;j < len; j++){
+for(var i = j%2==0 ? j : j+1;i < len+2; i+=2){
+var c = str.substring(j,i);
+f(c);
+}
+}
+
+}
+
+f("abc9habcdefghjabcdefghj");
+if(!found){console.log("not found");}
