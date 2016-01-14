@@ -1,0 +1,36 @@
+﻿题目描述：
+Rotate an array of n elements to the right by k steps.
+
+For example, with n = 7 and k = 3, the array [1,2,3,4,5,6,7] is rotated to [5,6,7,1,2,3,4].
+
+就是讲数组的倒数第k个位置以后（包含k）的元素放在数组前。
+
+思路：
+1.使用辅助队列来完成。
+2.一次遍历，将k位置前的元素入队列。
+3.从最后一个元素开始往前遍历，将队列元素依次出队并赋值给nums[i]。 i ∈[n,0)
+
+实现代码
+
+public class Solution {
+    public void Rotate(int[] nums, int k) {
+        if(nums == null || nums.Length <= 1){
+            return;
+        }
+        
+        var q = new Queue<int>();
+		for(var i = nums.Length-1; i>=0; i--){
+			q.Enqueue(nums[i]);
+		}
+		
+		for(var i = 0 ;i < k; i++){
+			var n = q.Dequeue();
+			q.Enqueue(n);
+		}
+		
+		for(var i = nums.Length-1;i >=0; i--){
+			nums[i] = q.Dequeue();
+		}
+		
+    }
+}

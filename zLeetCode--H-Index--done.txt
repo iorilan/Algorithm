@@ -1,0 +1,49 @@
+﻿题目描述：
+Given an array of citations (each citation is a non-negative integer) of a researcher, write a function to compute the researcher's h-index.
+
+According to the definition of h-index on Wikipedia: "A scientist has index h if h of his/her N papers have at least h citations each, and the other N − h papers have no more than h citations each."
+
+For example, given citations = [3, 0, 6, 1, 5], which means the researcher has 5 papers in total and each of them had received 3, 0, 6, 1, 5 citations respectively. Since the researcher has 3 papers with at least 3 citations each and the remaining two with no more than 3 citations each, his h-index is 3.
+
+Note: If there are several possible values for h, the maximum one is taken as the h-index.
+
+本题是说，对于一个数组arr中的每一个数arr[i]，其中i∈[0,n-1] ，找到元素个数k，其中0<k<=n 。arr中有k个元素大于等于k，而arr中的其余n-k个元素均小于等于k。
+
+思路：
+对于数组arr，如果进行倒序排序再遍历的话，对于i和arr[i]关系，由于i是递增的，而arr[i]递减，只要找到第一个i>=arr[i]，那么后面第n-i个元素一定满足i>=arr[i]。因此，在遍历过程中，只要统计所有满足i<arr[i]的元素个数即可。
+
+因此本题可以转换为：对数组arr进行倒序排序，统计index < arr[index]的个数。例如对于
+
+3,5,7,1,2,3来说，排序后为: 7,5,3,3,2,1
+0 < 7 => count ++
+1 < 5 => count ++
+2 < 3 => count ++
+3 = 3
+4 > 2
+5 > 1
+
+因此H-index 为count = 3
+
+
+
+
+
+实现代码：
+
+public class Solution {
+    public int HIndex(int[] citations) {
+            if(citations.Length == 0){
+        		return 0;
+        	}
+        
+           var sorted = citations.OrderByDescending(x=>x).ToList();
+           var sum = 0;
+           for(var i = 0;i < sorted.Count; i++){
+               if(i < sorted[i]){
+        	   		sum ++;
+        	   }
+           }
+           
+           return sum;
+    }
+}

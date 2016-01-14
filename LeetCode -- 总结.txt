@@ -1,0 +1,256 @@
+﻿Leet 题目整理归类 - 快速通道 （持续更新）
+
+刷Leet 5个月了，先总结一下，这里算是每题的快速通道。自己做个记录便于以后重温算法。如果能帮到别人就更好了。
+本人是算法新手，如果对于一些题目读者有更好的实现方法，如能不吝赐教，万分感谢。
+
+
+【DFS】
+Word Search -- http://blog.csdn.net/lan_liang/article/details/50144427
+Sum Root to Leaf Numbers -- http://blog.csdn.net/lan_liang/article/details/49885323
+Serialize and Deserialize Binary Tree -- http://blog.csdn.net/lan_liang/article/details/49869885
+Binary Tree Paths -- http://blog.csdn.net/lan_liang/article/details/49869807
+Number of Islands -- http://blog.csdn.net/lan_liang/article/details/49704101
+Same Tree -- http://blog.csdn.net/lan_liang/article/details/49531135
+Expression Add Operators -- http://blog.csdn.net/lan_liang/article/details/49520109
+Path Sum -- http://blog.csdn.net/lan_liang/article/details/49108383
+WordBreak II -- http://blog.csdn.net/lan_liang/article/details/48158163
+Generate Parentheses -- http://blog.csdn.net/lan_liang/article/details/48028245
+Path Sum II -- http://blog.csdn.net/lan_liang/article/details/47424491
+
+
+【BFS】
+Word Ladder -- http://blog.csdn.net/lan_liang/article/details/50144399
+求树的最小深度 -- http://blog.csdn.net/lan_liang/article/details/50101103
+Binary Tree Level Order Traversal II -- http://blog.csdn.net/lan_liang/article/details/50100453
+Surrounded Regions -- http://blog.csdn.net/lan_liang/article/details/49885375
+Remove Invalid Parentheses -- http://blog.csdn.net/lan_liang/article/details/49770495
+Course Schedule II -- http://blog.csdn.net/lan_liang/article/details/48650023
+二叉树逐层遍历 -- http://blog.csdn.net/lan_liang/article/details/48650013
+Perfect Squares -- http://blog.csdn.net/lan_liang/article/details/48576005
+Binary Tree Zigzag Level Order Traversal -- http://blog.csdn.net/lan_liang/article/details/48379651
+Binary Tree Right Side View -- http://blog.csdn.net/lan_liang/article/details/48575915
+
+
+【Dynamic Programming】
+Word Break -- http://blog.csdn.net/lan_liang/article/details/50144951
+最长回文串 -- http://blog.csdn.net/lan_liang/article/details/50144631
+Unique Paths II -- http://blog.csdn.net/lan_liang/article/details/50125557
+Minimum Path Sum -- http://blog.csdn.net/lan_liang/article/details/50125389
+Maximum Subarray -- http://blog.csdn.net/lan_liang/article/details/50101095
+Longest Increasing Subsequence -- http://blog.csdn.net/lan_liang/article/details/49869869
+House Robber II -- http://blog.csdn.net/lan_liang/article/details/49520265
+Edit Distance -- http://blog.csdn.net/lan_liang/article/details/49027951
+Unique Paths -- http://blog.csdn.net/lan_liang/article/details/48897081
+Maximal Square -- http://blog.csdn.net/lan_liang/article/details/48897063
+Distinct Subsequences -- http://blog.csdn.net/lan_liang/article/details/48086757
+Decode Ways -- http://blog.csdn.net/lan_liang/article/details/47660039
+House Robber -- http://blog.csdn.net/lan_liang/article/details/47056295
+Unique BST -- http://blog.csdn.net/lan_liang/article/details/47020365
+最大连续乘积子序列 -- http://blog.csdn.net/lan_liang/article/details/47019711
+
+
+【字符串】
+ZigZag Conversion -- http://blog.csdn.net/lan_liang/article/details/50144495
+Valid Palindrome -- http://blog.csdn.net/lan_liang/article/details/50125569
+String to Integer (atoi) -- http://blog.csdn.net/lan_liang/article/details/50125465
+Multiply Strings -- http://blog.csdn.net/lan_liang/article/details/50125395
+Length of last word -- http://blog.csdn.net/lan_liang/article/details/49531069
+Implement strStr() -- http://blog.csdn.net/lan_liang/article/details/48422333
+最长公共前缀-- http://blog.csdn.net/lan_liang/article/details/47056413
+单词反转-- http://blog.csdn.net/lan_liang/article/details/47019509
+
+【哈希表】
+Two Sum -- http://blog.csdn.net/lan_liang/article/details/50144879
+Word Pattern -- http://blog.csdn.net/lan_liang/article/details/50144421
+Valid Anagram -- http://blog.csdn.net/lan_liang/article/details/50125561
+Group Anagrams -- http://blog.csdn.net/lan_liang/article/details/50100561
+LRU Cache -- http://blog.csdn.net/lan_liang/article/details/49962311
+Contains Duplicate II -- http://blog.csdn.net/lan_liang/article/details/49962279
+Single Number III -- http://blog.csdn.net/lan_liang/article/details/49869913
+Bulls and Cows -- http://blog.csdn.net/lan_liang/article/details/49869827
+Single Number II -- http://blog.csdn.net/lan_liang/article/details/49770815
+Repeated DNA Sequences -- http://blog.csdn.net/lan_liang/article/details/49704105
+Minimum Window Substring -- http://blog.csdn.net/lan_liang/article/details/49620651
+Majority Element II -- http://blog.csdn.net/lan_liang/article/details/49531073
+Contains Duplicate -- http://blog.csdn.net/lan_liang/article/details/49108355
+Single Number -- http://blog.csdn.net/lan_liang/article/details/49028097
+Majority Element -- http://blog.csdn.net/lan_liang/article/details/48897025
+Longest Substring Without Repeating Characters -- http://blog.csdn.net/lan_liang/article/details/48422051
+Substring with Concatenation of All Words -- http://blog.csdn.net/lan_liang/article/details/47660233
+Isomorphic Strings -- http://blog.csdn.net/lan_liang/article/details/48226703
+
+
+【树】
+最大权值路径 -- http://blog.csdn.net/lan_liang/article/details/50144507
+二叉搜索树中查找最小公共祖先 -- http://blog.csdn.net/lan_liang/article/details/50145263 
+Symmetric Tree -- http://blog.csdn.net/lan_liang/article/details/50125501
+后序遍历 -- http://blog.csdn.net/lan_liang/article/details/49620611
+Invert Binary Tree -- http://blog.csdn.net/lan_liang/article/details/49520283
+Binary Search Tree Iterator -- http://blog.csdn.net/lan_liang/article/details/49519959
+先序遍历 -- http://blog.csdn.net/lan_liang/article/details/49188153
+Validate Binary Search Tree -- http://blog.csdn.net/lan_liang/article/details/49188109
+Kth Smallest Element in a BST -- http://blog.csdn.net/lan_liang/article/details/48897017
+Trie(前缀树) -- http://blog.csdn.net/lan_liang/article/details/48897013
+Construct Binary Tree from Inorder and Postorder Traversal -- http://blog.csdn.net/lan_liang/article/details/48896981
+中序遍历 -- http://blog.csdn.net/lan_liang/article/details/48575897
+判断平衡树-- http://blog.csdn.net/lan_liang/article/details/48227095
+完全树节点个数统计 -- http://blog.csdn.net/lan_liang/article/details/48211899
+Flatten一个二叉树将节点存链表 -- http://blog.csdn.net/lan_liang/article/details/47420913
+
+【图】
+复制图 -- http://blog.csdn.net/lan_liang/article/details/50100483
+Course Schedule -- http://blog.csdn.net/lan_liang/article/details/49620627
+
+【栈】
+Valid Parentheses -- http://blog.csdn.net/lan_liang/article/details/50125625
+Min Stack -- http://blog.csdn.net/lan_liang/article/details/49962363
+Basic Calculator II -- http://blog.csdn.net/lan_liang/article/details/49962137
+逆波兰表达式 -- http://blog.csdn.net/lan_liang/article/details/49188215
+Simplify Path -- http://blog.csdn.net/lan_liang/article/details/49028045
+Longest Valid Parentheses -- http://blog.csdn.net/lan_liang/article/details/48731261
+简单的计算器 -- http://blog.csdn.net/lan_liang/article/details/48649985
+Implement Queue using Stacks -- http://blog.csdn.net/lan_liang/article/details/48379771
+
+
+【堆】
+Kth Largest Element in an Array -- http://blog.csdn.net/lan_liang/article/details/50100585
+Permutations II -- http://blog.csdn.net/lan_liang/article/details/50125415
+
+【Two Pointer】
+Move zero -- http://blog.csdn.net/lan_liang/article/details/50144743
+Trap Water Rain -- http://blog.csdn.net/lan_liang/article/details/50125521
+Remove Duplicates From Sorted Array 2 -- http://blog.csdn.net/lan_liang/article/details/50125437
+4Sum -- http://blog.csdn.net/lan_liang/article/details/50100439
+3Sum Closest -- http://blog.csdn.net/lan_liang/article/details/50100423
+Minimum Size Subarray Sum -- http://blog.csdn.net/lan_liang/article/details/49962379
+Container With Most Water -- http://blog.csdn.net/lan_liang/article/details/49770209
+Summary Ranges -- http://blog.csdn.net/lan_liang/article/details/48897071
+三色旗问题 -- http://blog.csdn.net/lan_liang/article/details/48650121
+Remove Duplicates from Sorted Array -- http://blog.csdn.net/lan_liang/article/details/47865551
+3 Sum -- http://blog.csdn.net/lan_liang/article/details/47258159
+
+
+【快慢指针】
+Find the Duplicate Number -- http://blog.csdn.net/lan_liang/article/details/50100527
+Reorder List -- http://blog.csdn.net/lan_liang/article/details/49962425
+Linked List Cycle II -- http://blog.csdn.net/lan_liang/article/details/49962291
+Linked List cycle -- http://blog.csdn.net/lan_liang/article/details/49947067
+判断链表是否有环 -- http://blog.csdn.net/lan_liang/article/details/47027249
+
+
+
+【链表操作】
+反转链表 -- http://blog.csdn.net/lan_liang/article/details/50144827
+Rotate List -- http://blog.csdn.net/lan_liang/article/details/49704129
+Remove Duplicates from Sorted List II -- http://blog.csdn.net/lan_liang/article/details/49620659
+找到链表交点（如果相交） -- http://blog.csdn.net/lan_liang/article/details/49620635
+Reverse Nodes in k-Group -- http://blog.csdn.net/lan_liang/article/details/49511523
+Insertion Sort List -- http://blog.csdn.net/lan_liang/article/details/49108365
+Add Two Numbers -- http://blog.csdn.net/lan_liang/article/details/49108345
+Palindrome Linked List -- http://blog.csdn.net/lan_liang/article/details/49028011
+Reverse Linked List -- http://blog.csdn.net/lan_liang/article/details/48576059
+Remove Nth Node From End of List -- http://blog.csdn.net/lan_liang/article/details/48576041
+Remove Duplicates from Sorted List -- http://blog.csdn.net/lan_liang/article/details/48576027
+合并有序链表-- http://blog.csdn.net/lan_liang/article/details/48261603
+删除值为k的节点 -- http://blog.csdn.net/lan_liang/article/details/47016795
+
+【回溯】
+求子集 -- http://blog.csdn.net/lan_liang/article/details/50125477
+Combinations -- http://blog.csdn.net/lan_liang/article/details/50100509
+Subsets II -- http://blog.csdn.net/lan_liang/article/details/49869927
+Combination Sum III -- http://blog.csdn.net/lan_liang/article/details/49519983
+Palindrome Partitioning -- http://blog.csdn.net/lan_liang/article/details/49188359
+Letter Combinations of a Phone Number -- http://blog.csdn.net/lan_liang/article/details/49108367
+Combination Sum -- http://blog.csdn.net/lan_liang/article/details/49108349
+Combination Sum II -- http://blog.csdn.net/lan_liang/article/details/49027925
+全排列（此处用回溯，在Permutation II题目中用的是HeapPerm算法） -- http://blog.csdn.net/lan_liang/article/details/48731289
+Combination Sum -- http://blog.csdn.net/lan_liang/article/details/47906861
+
+
+【数组操作】
+merge sorted array -- http://blog.csdn.net/lan_liang/article/details/50144697
+Rotate Array -- http://blog.csdn.net/lan_liang/article/details/50125457
+Product of Array Except Self -- http://blog.csdn.net/lan_liang/article/details/50125427
+Remove Element -- http://blog.csdn.net/lan_liang/article/details/49531123
+Longest Consecutive Sequence -- http://blog.csdn.net/lan_liang/article/details/49027995
+Insert Interval（区间操作） -- http://blog.csdn.net/lan_liang/article/details/48731239
+Compare Version Numbers -- http://blog.csdn.net/lan_liang/article/details/48379733
+Contains Duplicate III -- http://blog.csdn.net/lan_liang/article/details/47906693
+合并区间数组 -- http://blog.csdn.net/lan_liang/article/details/47257907
+
+
+【桶排序】
+Maximum Gap -- http://blog.csdn.net/lan_liang/article/details/50100599
+
+【贪心法】
+Candy -- http://blog.csdn.net/lan_liang/article/details/47978745
+
+【滑动窗口】
+Sliding Window Maximum -- http://blog.csdn.net/lan_liang/article/details/49771149
+
+【二分查找】
+Search Insert Position -- http://blog.csdn.net/lan_liang/article/details/49704131
+Search in Rotated Sorted Array -- http://blog.csdn.net/lan_liang/article/details/49531323
+Search in Rotated Sorted Array II -- http://blog.csdn.net/lan_liang/article/details/49531155
+First Bad Version -- http://blog.csdn.net/lan_liang/article/details/49520205
+Find Peak Element -- http://blog.csdn.net/lan_liang/article/details/49055175
+Search for a Range -- http://blog.csdn.net/lan_liang/article/details/49028029
+Find Minimum in Rotated Sorted Array -- http://blog.csdn.net/lan_liang/article/details/49027977
+Search Matrix -- http://blog.csdn.net/lan_liang/article/details/48650073
+
+【分治】
+Unique Binary Search Trees II -- http://blog.csdn.net/lan_liang/article/details/50125543
+Convert Sorted Array to Binary Search Tree -- http://blog.csdn.net/lan_liang/article/details/49188195
+Convert SortedList To BST -- http://blog.csdn.net/lan_liang/article/details/48731215
+Different Ways to Add Parentheses -- http://blog.csdn.net/lan_liang/article/details/48575941
+找最小公共祖先-- http://blog.csdn.net/lan_liang/article/details/47421007
+
+
+【bit 操作】
+Reverse Bits -- http://blog.csdn.net/lan_liang/article/details/50125453
+Number of 1 Bits -- http://blog.csdn.net/lan_liang/article/details/49962407
+Bitwise AND of Numbers Range --http://blog.csdn.net/lan_liang/article/details/49962271
+
+
+【其他趣题】
+H index -- http://blog.csdn.net/lan_liang/article/details/50145121
+H-Index II -- http://blog.csdn.net/lan_liang/article/details/49869849
+Implement int sqrt(int x) -- http://blog.csdn.net/lan_liang/article/details/50144615
+Excel Sheet Column Title -- http://blog.csdn.net/lan_liang/article/details/50144599
+Valid Sudoku -- http://blog.csdn.net/lan_liang/article/details/50144377
+First Missing Positive -- http://blog.csdn.net/lan_liang/article/details/50144341
+Search a 2D Matrix II -- http://blog.csdn.net/lan_liang/article/details/49962513
+Ugly Number -- http://blog.csdn.net/lan_liang/article/details/49885485
+Ugly Number II -- http://blog.csdn.net/lan_liang/article/details/49885465
+Integer to English Words -- http://blog.csdn.net/lan_liang/article/details/49885299
+Game of Life -- http://blog.csdn.net/lan_liang/article/details/49869841
+Set Matrix Zeroes -- http://blog.csdn.net/lan_liang/article/details/49770661
+Roman to Integer -- http://blog.csdn.net/lan_liang/article/details/49704123
+Permutation Sequence -- http://blog.csdn.net/lan_liang/article/details/49531109
+Pascal's Triangle II -- http://blog.csdn.net/lan_liang/article/details/49531099
+Nim Game -- http://blog.csdn.net/lan_liang/article/details/49531079
+Largest Number -- http://blog.csdn.net/lan_liang/article/details/49520305
+Rectangle Area -- http://blog.csdn.net/lan_liang/article/details/49188467
+Pow(x, n) -- http://blog.csdn.net/lan_liang/article/details/49188419
+Jump Game -- http://blog.csdn.net/lan_liang/article/details/49188297
+Climbing Stairs -- http://blog.csdn.net/lan_liang/article/details/49188175
+Best Time to Buy and Sell Stock -- http://blog.csdn.net/lan_liang/article/details/49188129
+Spiral Matrix II -- http://blog.csdn.net/lan_liang/article/details/49108417
+Happy Number -- http://blog.csdn.net/lan_liang/article/details/49108359
+Missing Number -- http://blog.csdn.net/lan_liang/article/details/49028001
+Max Points on a Line -- http://blog.csdn.net/lan_liang/article/details/48897059
+Gas Station -- http://blog.csdn.net/lan_liang/article/details/48897005
+Factorial Trailing Zeroes -- http://blog.csdn.net/lan_liang/article/details/48896997
+Next Permutation -- http://blog.csdn.net/lan_liang/article/details/48650053
+Reverse Integer -- http://blog.csdn.net/lan_liang/article/details/48576053
+Fraction to Recurring Decimal -- http://blog.csdn.net/lan_liang/article/details/48575985
+Count Digit One -- http://blog.csdn.net/lan_liang/article/details/48575923
+Excel Sheet Column Number -- http://blog.csdn.net/lan_liang/article/details/48575959
+Add Digit -- http://blog.csdn.net/lan_liang/article/details/48422443
+SpiralOrder -- http://blog.csdn.net/lan_liang/article/details/48156797
+Best Time to Buy and Sell Stock II -- http://blog.csdn.net/lan_liang/article/details/47906575
+帕斯卡三角形 -- http://blog.csdn.net/lan_liang/article/details/47257859
+旋转图片 -- http://blog.csdn.net/lan_liang/article/details/47424119
+Plus One -- http://blog.csdn.net/lan_liang/article/details/47979589
+格雷码 -- http://blog.csdn.net/lan_liang/article/details/47019363
+Count And Say -- http://blog.csdn.net/lan_liang/article/details/47016965

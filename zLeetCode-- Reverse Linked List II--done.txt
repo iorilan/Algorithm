@@ -1,0 +1,94 @@
+﻿题目描述：
+
+Reverse a linked list from position m to n. Do it in-place and in one-pass.
+
+For example:
+Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+
+return 1->4->3->2->5->NULL.
+
+Note:
+Given m, n satisfy the following condition:
+1 ≤ m ≤ n ≤ length of list.
+
+思路：
+1. 使用栈来保存m到n之间的数字，其余元素使用队列保存
+2. 在[m,n]区间外时，循环弹出栈内元素到链表
+3. 在[m,n]区间内，先循环弹出队列元素到链表，再创建栈，最后需要判断当前head是否为空
+
+
+实现代码：
+
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode ReverseBetween(ListNode head, int m, int n) {
+        var stack = new Stack<int>();
+        var q = new Queue<int>();
+        ListNode node = null;
+        var c = 1;
+		ListNode newNode = null;
+        while(head != null)
+        {
+            if(c >= m && c <=n){
+                while(q.Count > 0){
+                    var first = MoveNext(ref node , q.Dequeue());
+					if(first){
+						newNode = node;
+					}
+                }
+                while(c >= m && c<= n){
+                    stack.Push(head.val);
+                    head = head.next;
+                    c++;
+                }
+				if(head == null){
+					 while(stack.Count > 0){
+						var first = MoveNext(ref node , stack.Pop());
+						if(first){
+							newNode = node;
+						}
+					}
+				}
+            }
+            else{
+                while(stack.Count > 0){
+                    var first = MoveNext(ref node , stack.Pop());
+					if(first){
+						newNode = node;
+					}
+                }
+                var f = MoveNext(ref node , head.val);
+				if(f)
+				{
+					newNode = node;
+				}
+                head = head.next;
+				c++;
+            }
+        }
+        
+        return newNode;
+    }
+    
+    private bool MoveNext(ref ListNode n , int val){
+        if(n == null){
+            n = new ListNode(val);
+			return true;
+        }
+        else{
+            n.next = new ListNode(val);
+            n = n.next;
+			return false;
+        }
+    }
+    
+}

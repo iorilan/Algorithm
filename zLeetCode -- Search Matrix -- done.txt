@@ -1,0 +1,81 @@
+﻿题目描述：
+
+Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+
+Integers in each row are sorted from left to right.
+The first integer of each row is greater than the last integer of the previous row.
+For example,
+
+Consider the following matrix:
+
+[
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+Given target = 3, return true.
+
+就是在一个矩阵中找到1个数。
+而每行每列都是排序好的，并且第n行的最后1个元素小于第n+1行的第一个元素。
+
+思路：
+可以先定位元素的行进行定位，在找到列。
+由于行列均已排序，行定位和列定位均可使用二分法进行搜索。
+
+
+实现代码：
+
+
+
+public class Solution {
+    public bool SearchMatrix(int[,] matrix, int target) {
+        
+    var rowLen = matrix.GetLength(0);
+	var colLen = matrix.GetLength(1);
+	
+	// first , locate the target in which row
+	int? rowIndex = null;
+	for(var i = 0;i < rowLen - 1; i++){
+		if(target >= matrix[i,0] && target < matrix[i+1,0]){
+			rowIndex = i;
+			break;
+		}
+	}
+	
+	// try find in last row
+	if(!rowIndex.HasValue){
+		rowIndex = rowLen - 1;
+	}
+	
+	
+	// try find the target in matrix[row,0...n]
+	var colArr = new int[colLen];
+	for(var i = 0; i < colLen; i++ ){
+		colArr[i] = matrix[rowIndex.Value, i];
+	}
+	
+	var found = BSearch(colArr, target);
+	return found.HasValue;
+}
+
+public int? BSearch(int[] arr, int n){
+	for(var i =0 ;i < arr.Length; i++){
+		var l = i;
+		var r = arr.Length - 1;
+		var m = arr.Length / 2;
+		
+		if(n == arr[l] || n == arr[r] || n == arr[m]){
+			return n;
+		}
+		
+		if(n > arr[m]){
+			l = m;
+		}
+		else {
+			r = m;
+		}
+	}
+	
+	return null;
+}
+}

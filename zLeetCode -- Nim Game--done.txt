@@ -1,0 +1,30 @@
+﻿题目描述：
+
+You are playing the following Nim Game with your friend: There is a heap of stones on the table, each time one of you take turns to remove 1 to 3 stones. The one who removes the last stone will be the winner. You will take the first turn to remove the stones.
+
+Both of you are very clever and have optimal strategies for the game. Write a function to determine whether you can win the game given the number of stones in the heap.
+
+For example, if there are 4 stones in the heap, then you will never win the game: no matter 1, 2, or 3 stones you remove, the last stone will always be removed by your friend.
+
+一个拿石子的游戏，有n个石子，每次可以从中拿走[1,3]个。你和另一个人轮流拿石子，你先拿。
+问：对于数量为n的石子，能否判断你必胜？
+
+
+思路：
+如果有4个石子，轮到谁谁就输了；
+有8个石子，轮到谁谁也输，因为我无论拿几个，对方都会有办法给我剩4个；
+以此类推，有4k个石子，轮到谁谁输。
+
+而由于我先拿，因此只要第一次我能保证给对方剩余4的倍数个石子，我就能赢。
+这样就等于把这个拿石子问题转化为了判断n是否为4的倍数的问题。
+
+因此代码很简单：
+
+
+ public bool CanWinNim(int n) {
+        if(n < 4){
+    		return true;
+    	}
+    	
+    	return n % 4 != 0;
+    }

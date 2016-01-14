@@ -1,0 +1,47 @@
+public class Solution {
+    public IList<int> GrayCode(int n) {
+    if(n < 0){
+		return new List<int>();
+	}
+	if(n == 0){
+	    return new List<int>{0};
+	}
+	if(n == 1){
+		return new List<int>(){0,1};
+	}
+	if(n == 2){
+		return new List<int>{0,1,3,2};
+	}
+	
+	var r = new List<string>(){"00","01","11","10"};
+	for(var i = 3;i <= n; i++){
+		var tmp = new List<string>();
+		for(var j = 0;j < r.Count; j++){
+			var countOne = 0;
+			foreach(var c in r[j]){
+				if(c == '1'){
+					countOne ++;
+				}
+			}
+			if(countOne % 2 == 0){
+				tmp.Add(r[j]+"0");
+				tmp.Add(r[j]+"1");
+			}
+			else{
+				tmp.Add(r[j]+"1");
+				tmp.Add(r[j]+"0");
+			}
+		}
+		r = tmp;
+	}
+	
+	var ret = new List<int>();
+	foreach(var s in r){
+		var num = Convert.ToInt32(s,2);
+		ret.Add(num);
+	}
+	
+	return ret;
+	
+    }
+}

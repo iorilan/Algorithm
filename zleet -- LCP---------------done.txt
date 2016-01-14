@@ -1,0 +1,27 @@
+Find the longest common prefix in all strings
+
+
+public string LongestCommonPrefix(string[] strs) {
+        
+    if(strs == null || strs.Length == 0){
+	    return string.Empty;
+	}
+	
+	if(strs.Length == 1){
+	    return strs[0];
+	}
+	
+	var index = 0;
+	for(var j = 0;j < strs[0].Length; j++){
+		for(var i = 1;i < strs.Length; i++){
+			if(j >= strs[i].Length || strs[0][j] != strs[i][j]){
+				return strs[0].Substring(0,index);
+			}
+		}
+		index++;
+		
+	}
+	
+	return strs[0].Substring(0 ,index);
+	
+    }

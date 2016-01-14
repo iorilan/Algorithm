@@ -1,0 +1,45 @@
+﻿题目描述：
+
+Given an array and a value, remove all instances of that value in place and return the new length.
+
+The order of elements can be changed. It doesn't matter what you leave beyond the new length.
+
+就是把数组nums中的值为val的元素放在数组最后，返回新长度。
+
+思路：
+1.由于元素已有的顺序可以被改变，因此可以使用两个索引i和j进行两头找。j从后往前找值不为val的元素，i从前向后找值为val的元素，直到i与j相遇为止，交互nums[i]和nums[j]
+2.然后继续移动i,直到nums[i]为val为止，此时i的位置即为新长度，返回i即可。
+
+
+
+实现代码：
+
+public class Solution {
+    public int RemoveElement(int[] nums, int val) 
+    {
+        if(nums.Length == 0){
+    		return 0;
+    	}
+    	
+    	var i = 0;
+    	var j = nums.Length - 1;
+    	while(i < j){
+    		while(i < j && nums[i] != val){
+    			i ++;
+    		}
+    		while(i < j && nums[j] == val){
+    			j --;
+    		}
+    		if(i < j){
+    			var t = nums[i];
+    			nums[i] = nums[j];
+    			nums[j] = t;
+    		}
+    	}
+    	
+    	while(i < nums.Length && nums[i] != val){
+    		i++;
+    	}
+    	return i;
+    }
+}

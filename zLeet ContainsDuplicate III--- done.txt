@@ -1,0 +1,41 @@
+﻿public class Solution {
+    public bool ContainsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+    	if(k < 1 || t < 0){
+			return false;
+		}
+		
+		if(nums == null || nums.Length == 1)
+    	{
+    		return false;
+    	}
+		
+		var map = new SortedSet<int>();
+		
+        for(var i = 0 ;i < nums.Length; i++)
+		{
+		    if(nums[i] > Int32.MaxValue){
+				return false;
+			}
+			
+			if(map.Count > k){
+				map.Remove(nums[i-k-1]);
+			}
+			
+			var max = nums[i] + t;
+			if(nums[i] > 0 && max < 0){
+				max = Int32.MaxValue;
+			}
+			
+			var min = nums[i] - t;
+			
+			var found = map.GetViewBetween(min,max);
+			if(found.Count > 0){
+				return true;
+			}
+
+			map.Add(nums[i]);
+       }
+	   
+       return false;
+    }
+}

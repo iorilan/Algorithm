@@ -1,0 +1,89 @@
+﻿题目描述：
+Write a program to find the n-th ugly number.
+
+Ugly numbers are positive numbers whose prime factors only include 2, 3, 5. For example, 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly numbers.
+
+Note that 1 is typically treated as an ugly number.
+
+本题算是Ugly number 1的扩展问题，求出第n个ugly number。
+
+本题属于数学问题，回顾一下ugly number的定义：因数只包含2,3,5的数和1。
+
+
+
+方法一：
+基于Ugly number 1中的函数IsUgly，逐个判断从1到n，累计到第n个ugly的number即可。缺点很显然，逐个判断效率非常低。
+
+方法二：
+
+对于任意1个大于2,3,5的ugly number 来说，除以2,3,5后必然仍是ugly number，可使用哈希来缓存ugly number ，每次除以2,3,5判断是否在哈希中有键值。
+这种方式使用了大量的空间，并且很多多余的判断浪费在了不是ugly number上。 
+本解法依然无法被AC。
+
+实现代码：
+
+public int NthUglyNumber(int n) 
+{
+	var hash = new Dictionary<int, int>();
+	hash.Add(1 , 1);
+	hash.Add(2 , 2);
+	hash.Add(3 , 3);
+	hash.Add(4 , 4);
+	hash.Add(5 , 5);
+	if(hash.ContainsKey(n)){
+		return hash[n];
+	}
+	var count = 5;
+	var n1 = 6;
+	while(count < n){
+		if(n1 % 2 == 0 && hash.ContainsKey(n1/2) ||
+		   n1 % 3 == 0 && hash.ContainsKey(n1/3) ||
+		   n1 % 5 == 0 && hash.ContainsKey(n1/5)){
+			hash.Add(n1, count);
+			count ++;
+		}
+		n1++;
+	}
+	
+	return hash.Keys.Last();
+}
+
+
+方法三：
+1.由于是计算第n个ugly number，那么它一定来自于由2,3,5分别出发的3个序列中的其中某个元素。
+2.可使用2,3,5三个变量来记录当前序列出发的最小ugly数，每次取得这3个序列中的最小那个，然后从2,3,5序列取出下一位ugly数。
+
+本实现参考了：
+http://www.geeksforgeeks.org/ugly-numbers/
+http://www.cnblogs.com/grandyang/p/4743837.html
+
+实现代码：
+
+public class Solution {
+    public int NthUglyNumber(int n) 
+    {
+    	var i2 = 1;
+    	var i3 = 1;
+    	var i5 = 1;
+    	var uglies = new List<int>();
+    	uglies.Add(1);
+    	while (uglies.Count < n) {
+    		var v2 = uglies[i2-1] * 2;
+    		var v3 = uglies[i3-1] * 3;
+    		var v5 = uglies[i5-1] * 5;
+    		
+    		int min = Math.Min(v2, Math.Min(v3, v5));
+    		if (min == v2) {
+    			i2++;
+    		}
+    		if (min == v3){
+    			i3++;
+    		}
+    		if (min == v5) {
+    			i5++;
+    		}
+    		uglies.Add(min);
+    	}
+    	return uglies.Last();
+    }
+}

@@ -1,0 +1,70 @@
+﻿题目描述：
+Given a roman numeral, convert it to an integer.
+
+Input is guaranteed to be within the range from 1 to 3999.
+
+就是把罗马数字转化为整数。
+
+1. 首先要了解罗马数字对应的整数：
+字符	I	V	X	L	C	D	M
+数字	1	5	10	50	100	500	1000
+
+2.转换规则
+在罗马字符串s中，对于s[i]和s[i+1]，如果s[i+1]数字小，则整数为s[i]+s[i+1]，否则：
+如果s[i+1]比s[i]大，则s[i]与s[i+1]表示s[i+1]-s[i]。
+
+思路：
+遍历罗马字符串s，一一映射为字符，total初始化为s[0]，i∈[0,n)，比较s[i]和s[i+1]，如果后面大则直接累加s[i+1]；否则把减去s[i]的二倍并加上当前数s[i+1]。
+
+
+实现代码：
+
+public class Solution {
+    public int RomanToInt(string s) 
+    {
+       if(string.IsNullOrEmpty(s))
+       {
+    		return 0;
+    	}
+    	
+    	var len = s.Length;
+    	var result = Convert(s[0]);
+    	if(len < 2){
+    		return result;
+    	}
+    	for(var i = 1;i < len; i++){
+    		var pre = Convert(s[i - 1]);
+    		var current = Convert(s[i]);
+    		
+    		if(current <= pre){
+    			result += current;
+    		}else{
+    			result = result - 2 * pre + current;
+    		}
+    	}
+    	
+    	return result;
+    }
+	
+private int Convert(char c) 
+{
+	switch (c) {
+		case 'I':  
+			return 1;
+		case 'V':
+			return 5;
+		case 'X':  
+			return 10;  
+		case 'L':  
+			return 50;  
+		case 'C':  
+			return 100;  
+		case 'D':  
+			return 500;  
+		case 'M':  
+			return 1000;  
+		default : 
+			throw new ArgumentException();
+	}
+}
+}

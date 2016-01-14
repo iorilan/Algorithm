@@ -1,0 +1,64 @@
+﻿题目描述：
+Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+
+    For example, given array S = {-1 2 1 -4}, and target = 1.
+
+    The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+本题与 Three Sum Zero类似，不同点在于，之前是寻找a+b+c=0的组合，现在是找最接近target的a+b+c的值。
+
+思路：
+依然是two pointer的思路。
+1.对数组排序
+2.使用a表示当前第i轮查找，b=i+1，表示第i轮的第1个元素，b∈[i+1,n)，c=len-1，一开始指向最后一个元素。
+3.当找到a+b+c=target，直接返回；如果a+b+c < target，b++；否则，c--。
+4.每次取Math.Abs(a+b+c- target)与当前Math.Abs(min-target)的最小值。
+5.最后返回min
+
+
+实现代码：
+
+
+public class Solution {
+    public int ThreeSumClosest(int[] nums, int target) 
+    {
+        if(nums == null || nums.Length < 3){
+    		return nums.Sum();
+    	}
+    	
+    	var list = nums.OrderBy(x=>x).ToList();
+    	
+    	var len = list.Count;
+    	
+    	int? min = null;
+    	
+    	for (var i = 0 ;i <= len - 3 ;i++)
+    	{
+    		var a = list[i];
+    		var start = i+1;
+    		var end = len-1;
+    		while (start < end) 
+    		{
+    			var b = list[start];
+    			var c = list[end];
+    			if(a+b+c == target){
+    				min = target;
+    				break;
+    			}
+    			else if (a+b+c > target){
+    				end --;
+    			}
+    			else{
+    				start ++;
+    			}
+    			// update min
+    			if (min == null || Math.Abs(a+b+c - target) < Math.Abs(min.Value - target)) 
+    			{
+    				min = a+b+c;
+    			}
+    		}
+    	}
+    	
+    	return min.Value;
+    }
+}

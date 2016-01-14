@@ -1,0 +1,77 @@
+﻿题目描述：
+
+There are a total of n courses you have to take, labeled from 0 to n - 1.
+
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: [0,1]
+
+Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?
+
+For example:
+
+2, [[1,0]]
+There are a total of 2 courses to take. To take course 1 you should have finished course 0. So it is possible.
+
+2, [[1,0],[0,1]]
+There are a total of 2 courses to take. To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it is impossible.
+
+选课问题，需要选n门课，已知依赖关系为二维数组[{1,0},{0,2},{x,y}..]，表示课程0依赖课程1（要选0必须先选1），课程0依赖课程2，课程x依赖课程y。课程id的取值范围是[0,n)。
+
+思路：
+每个课程看作一个节点，依赖关系数组其实是一个图结构。对于[{0,1},{2,3}]这个依赖数组来说，其实相当于图中的0->1 , 2->3，只要不存在环，选课操作就是可以继续的。
+1. 使用referencing[0...n-1]来存当前课程所依赖其他课程的数量
+2. 使用标记数组selections[0...n-1]来标记课程selections[i]是否已被选
+3. 每次遍历referencing数组，找出依赖数为0并且还没有被选的课，这些课程id将被选择并放入集合S；然后遍历S，在依赖关系图中找到谁依赖了S[i]，拿到这个课程id: course，然后用于更新引用数组：referencing[course]--，重复步骤1。
+4. 直到referencing中没有元素0或选够了n门课为止。
+
+
+实现代码：
+
+
+public class Solution {
+    public bool CanFinish(int numCourses, int[,] prerequisites) 
+    {
+        var row = prerequisites.GetLength(0);
+    	if(row < 2){
+    		return true;
+    	}
+    	
+    	var referencing = new int[numCourses];
+    	var selections = new bool[numCourses];
+    	for(var i = 0;i < row; i++)
+    	{
+    		referencing[prerequisites[i,0]] ++;
+    	}
+    	
+    	var c = 0;
+    	while(c < numCourses){
+    		
+    		// find out which courses not referencing others
+    		var selected = new List<int>();
+    		for(var i = 0;i < referencing.Length; i++){
+    			if(referencing[i] == 0 && !selections[i])
+    			{
+    				// select this course
+    				c++;
+    				selections[i] = true;
+    				selected.Add(i);
+    			}
+    		}
+    		
+    		if(selected.Count == 0)
+    		{
+    			break;
+    		}
+    		
+    		// find out which ones referencing this course then update referencing counter
+    		foreach(var s in selected){
+    			for(var j = 0; j < row; j++){
+    				if(prerequisites[j,1] == s){
+    					referencing[prerequisites[j,0]] --;
+    				}
+    			}
+    		}
+    	}
+    	
+    	return c >= numCourses;    
+    }
+}

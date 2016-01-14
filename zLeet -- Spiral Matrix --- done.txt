@@ -1,0 +1,67 @@
+public class Solution {
+    public IList<int> SpiralOrder(int[,] matrix) {
+   if(matrix == null){
+		return new List<int>();		
+	}
+	
+	var result = new List<int>();
+	
+	var rowLen = matrix.GetLength(0);
+	var len = matrix.GetLength(1);
+	
+	if(rowLen == 1){
+		for(var i =0 ;i < len; i++){
+			result.Add(matrix[0,i]);
+		}
+		return result;
+	}
+	if(len == 1){
+		for(var i =0 ;i < rowLen; i++){
+			result.Add(matrix[i,0]);
+		}
+		return result;
+	}
+	
+	var minLen = Math.Min(rowLen,len);
+	var cycleCount = minLen % 2 == 0 ? minLen/2 : (minLen + 1) / 2;
+	var c = 0;
+	
+	for(var i = 0;i < cycleCount; i++){
+		if(c == len-c-1){
+			for(var k = c;k < rowLen - c; k++){
+				result.Add(matrix[k, c]);	
+			}
+			
+			c++;
+			continue;
+		}
+		
+		// stick row to top, column : [c,len-c-1]
+		for(var top = c; top < len-c - 1; top++){
+			result.Add(matrix[c,top]);
+		}
+		
+		// stick column to right, row : [c,rowLen-c-1]
+		for(var right = c; right < rowLen-c - 1; right ++){
+			result.Add(matrix[right, len-c-1]);
+		}
+		
+		// stick row to bottom, column : [len-c-1, c]
+		for(var down = len-c -1; down > c; down --){
+			result.Add(matrix[rowLen-c-1, down]);
+		}
+		
+		// stick column to left, row : [len-c-1, c]
+		for(var left = rowLen-c - 1; left > c; left --){
+			result.Add(matrix[left, c]);
+		}
+		
+		c++;
+	}
+	
+	return result;
+    }
+    
+
+ 
+}

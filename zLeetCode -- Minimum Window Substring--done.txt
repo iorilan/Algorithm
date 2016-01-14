@@ -1,0 +1,99 @@
+﻿题目描述：
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+For example,
+S = "ADOBECODEBANC"
+T = "ABC"
+Minimum window is "BANC".
+Note:
+If there is no such window in S that covers all characters in T, return the empty string "".
+
+If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S.
+
+本题就是要在串S中找到一个字串S[i...k]，其中i,k∈[0,n) ，n为S的长度，使得S[i...k]包含字符串T中的所有字符。
+
+
+思路：
+1. 使用hashT来保存每个字符出现的次数
+2. 初始化hashS（将t的每个字符添加到hashS并将值初始化为0，即出现次数都为0），遍历一次s（i∈[0,n)），对于s[i]：
+2.1 如果s[i]在hashT中出现，将hashS[s[i]]累加，判断hashS[s[i]]与hashT[s[i]]是否相等，即判断此时是否完成了一次s[i]的映射，如果相等，将mapped变量（初始化为0）++
+2.2 当完成了t中所有字符的映射时，即mapped = t中字符个数（不包含重复）时：
+从当前窗口最左边left(初始化为0)开始判断：
+	如果hashT不包含s[left]：直接left++
+	如果hashT包含s[left]并且hashS[s[left]] 大于hashT[s[left]]，说明对s[left]的映射数量超出了所需要的个数hashT[s[left]]，此时也可以将left++。
+此时判断left到i的距离是否小于当前最小窗口，小于则更新窗口即可。
+
+
+本题的实现参考了以下链接：
+https://github.com/yuzhangcmu/LeetCode/blob/master/string/MinWindow.java
+http://www.programcreek.com/2014/05/leetcode-minimum-window-substring-java/
+
+
+实现代码：
+
+
+public class Solution {
+    public string MinWindow(string s, string t) 
+    {
+        // 1. save t[i] into hash and get count of unique char in t
+    	var countT = 0;
+    	var hashT = new Dictionary<char, int>();
+    	for(var i = 0;i < t.Length; i++){
+    		if(!hashT.ContainsKey(t[i])){
+    			hashT.Add(t[i], 1);
+    			countT++;
+    		}
+    		else{
+    			hashT[t[i]]++;
+    		}
+    	}
+    	
+    	// 2. init hashS 
+    	var hashS = new Dictionary<char, int>();
+    	for(var i = 0;i < s.Length; i++){
+    		if(!hashS.ContainsKey(s[i])){
+    			hashS.Add(s[i], 0);
+    		}
+    	}
+    	
+    	var mapped = 0; // without duplicate (say 'bccd' , mapped here means 'bcd')
+    	var left = 0;
+    	var minLen = s.Length;
+    	var result = s;
+    	
+    	var found = false;
+    	for (int i = 0; i < s.Length; i++) {
+    		char c = s[i];
+    		if (hashT.ContainsKey(c)) {
+    			hashS[c]++;
+    			// we have done mapping for s[i], increase mapped count for it
+    			if (hashT[c] == hashS[c]) {
+    				mapped++; 
+    			}
+    		}
+    		
+    		if (mapped == countT) 
+    		{
+    			found = true;
+    			var leftC = s[left];
+    			// if first char(say c) is not include in t , or count of c in hashS is more than in hashT then: hashS[c] -- 
+    			// set left++
+                while (!hashT.ContainsKey(leftC) || hashS[leftC] > hashT[leftC]){
+                    if (hashT.ContainsKey(leftC) && hashS[leftC] > hashT[leftC]){
+    					hashS[leftC]--;
+    				}
+                        
+                    left++;
+                    leftC = s[left];
+                }
+     
+                if (i - left + 1< minLen) {
+                    result = s.Substring(left, i - left + 1);
+                    minLen = i - left + 1;
+                }
+    		}
+        }
+    	
+    	return !found ? "" : result;
+    }
+}

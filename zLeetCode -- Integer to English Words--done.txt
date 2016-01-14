@@ -1,0 +1,213 @@
+﻿题目描述：
+
+Convert a non-negative integer to its english words representation. Given input is guaranteed to be less than 231 - 1.
+
+For example,
+123 -> "One Hundred Twenty Three"
+12345 -> "Twelve Thousand Three Hundred Forty Five"
+1234567 -> "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+
+就是把数字转化为英语单词。
+
+
+思路：
+1.先把从100-999映射为英文单词的函数写出来：
+1.1先考虑一位数：一一映射就可以了。函数为Digit()
+1.2然后考虑两位数的情况：需要区分11-19，函数为Teen()和20-99的情况，函数为Ty()
+1.3然后对百位数调用Digit()就可以了。如果百位数为0，则调用Teen()或Ty()
+函数存为Hundred()
+2.考虑小于等于6位数的情况，即百万以下的数。
+将这六位数分为前3位和后3位，分别调用Hundred()函数，中间插入"Thousand"即可。
+函数存为Thousand()
+3.考虑小于等于9位数的情况，同6位数处理过程类似，考虑前3位和后六位，分别调用Thousand()，中间插入"Million"即可
+函数存为Million()
+4.考虑9位数以上的情况，同理，考虑前3位和后9位，分别调用Million()函数，中间插入"Billion"
+5.需要注意的是，所有输出都是首字母大写
+
+本题的难点在于情况特别多，边界值的情况尤其要注意。问题分类的话算是数学问题。
+
+实现代码：
+
+public class Solution {
+    
+    public string NumberToWords(int num) 
+    {
+        if(num == 0){
+    		return "Zero";
+    	}
+	
+    	var str = num.ToString();
+    	
+    	if(num > 999999999){
+    		var s1 = str.Substring(0,str.Length - 9);
+    		var n1 = int.Parse(s1);
+    		var s2 = str.Substring(str.Length - 9, 9);
+    		
+    		var s = Millions(s1) + " Billion " + Millions(s2);
+    		s = s.TrimEnd();
+    		return s;
+    	}
+    	else{
+    		return Millions(str);
+    	}
+    }
+    
+    private string Millions(string str)
+    {
+    	var n = int.Parse(str);
+    	if(n > 999999){
+    		var s1 = str.Substring(0,str.Length - 6);
+    		var n1 = int.Parse(s1);
+    		var s2 = str.Substring(str.Length - 6, 6);
+    		
+    		var s = Thousands(s1) + " Million " + Thousands(s2);
+    		s = s.TrimEnd();
+    		return s;
+    	}
+    	else{
+    		return Thousands(n.ToString());
+    	}
+    }
+    
+    
+    private string Thousands(string str)
+    {
+    	var n = int.Parse(str);
+    	if(n > 999){
+    		var s1 = str.Substring(0,str.Length - 3);
+    		var n1 = int.Parse(s1);
+    		var s2 = str.Substring(str.Length - 3, 3);
+    		
+    		var s = Hundreds(s1)+ " Thousand " + Hundreds(s2);
+    		s = s.TrimEnd();
+    		return s;
+    	}
+    	else{
+    		return Hundreds(n.ToString());
+    	}
+    }
+    
+    private string Hundreds(string str)
+    {
+    	int n = int.Parse(str);
+    	if(n < 10){
+    		return Digit(str.Last());
+    	}
+    	else if(n == 10){
+    		return "Ten";
+    	}
+    	else if(n > 10 && n < 20)
+    	{
+    		return Teen(str.Substring(str.Length - 2,2));
+    	}
+    	else if(n >= 20 && n < 100)
+    	{
+    		return Ty(str.Substring(str.Length - 2,2));
+    	}
+    	else if(n >= 100 && n <= 999)
+    	{
+    		var c1 = str[0];
+    		var s = Digit(c1) + " Hundred";
+    		
+    		var c2 = str[1];
+    		var c3 = str[2];
+    		if(c2 == '0'){
+    			return c3 != '0' ? s + " " + Digit(c3) : s;	
+    		}
+    		if(c2 == '1'){
+    			return s + " " + Teen(str.Substring(str.Length - 2,2));
+    		}
+    		else{
+    			return s + " " + Ty(str.Substring(str.Length - 2,2));
+    		}
+    	}
+    	else{
+    		throw new ArgumentException("input should be less than 1000");
+    	}
+    }
+    
+    private string Teen(string str)
+    {
+    	switch(str){
+    		case "10":
+    		return "Ten";
+    		case "11":
+    		return "Eleven";
+    		case "12":
+    		return "Twelve";
+    		case "13":
+    		return "Thirteen";
+    		case "14":
+    		return "Fourteen";
+    		case "15":
+    		return "Fifteen";
+    		case "16":
+    		return "Sixteen";
+    		case "17":
+    		return "Seventeen";
+    		case "18":
+    		return "Eighteen";
+    		case "19":
+    		return "Nineteen";
+    		default :
+    		throw new ArgumentException("input should be from 11 to 19 ONLY.");
+    	}
+    }
+    
+    private string Ty(string str)
+    {
+    	var c1 = str[0];
+    	var c2 = str[1];
+    	var space = c2 == '0' ? "" : " ";
+    	switch(c1){
+    		case '2':
+    		return "Twenty" +space+ Digit(c2);
+    		case '3':
+    		return "Thirty" +space+ Digit(c2);
+    		case '4':
+    		return "Forty" +space+ Digit(c2);
+    		case '5':
+    		return "Fifty" +space+ Digit(c2);
+    		case '6':
+    		return "Sixty" +space+ Digit(c2);
+    		case '7':
+    		return "Seventy" +space+ Digit(c2);
+    		case '8':
+    		return "Eighty" +space+ Digit(c2);
+    		case '9':
+    		return "Ninety" +space+ Digit(c2);
+    		default :
+    		throw new ArgumentException(string.Format("input should between [20,99], but got {0}",c1));
+    	}
+    }
+    
+    private string Digit(char c)
+    {
+    	switch(c){
+    		case '0':
+    		return "";
+    		case '1':
+    		return "One";
+    		case '2':
+    		return "Two";
+    		case '3':
+    		return "Three";
+    		case '4':
+    		return "Four";
+    		case '5':
+    		return "Five";
+    		case '6':
+    		return "Six";
+    		case '7':
+    		return "Seven";
+    		case '8':
+    		return "Eight";
+    		case '9':
+    		return "Nine";
+    		default :
+    		throw new ArgumentException("input should beteen [0-9]");
+    	}
+    }
+
+}
+

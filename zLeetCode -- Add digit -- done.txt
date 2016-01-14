@@ -1,0 +1,42 @@
+﻿Add Digits
+
+题目描述：
+Given a non-negative integer num, repeatedly add all its digits until the result has only one digit.
+
+For example:
+
+Given num = 38, the process is like: 3 + 8 = 11, 1 + 1 = 2. Since 2 has only one digit, return it.
+
+
+就是给定一个数字n，将每一位相加，再判断和是否只有一位：
+只有1位：返回这个和
+否则：继续相加每一位，判断新的和
+
+
+
+实现代码：
+
+
+public class Solution {
+    public int AddDigits(int num) {
+         if(num < 10){
+            return num;
+        }
+        
+        var n = num;
+		
+		while(true){
+			var s = 0;
+			while(n >= 10){
+				s+= n % 10;
+				n /= 10;
+			}
+			s += n;
+			
+			if(s < 10){
+				return s;
+			}
+			n = s;
+		}
+    }
+}

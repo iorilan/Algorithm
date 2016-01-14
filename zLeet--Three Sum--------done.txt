@@ -1,0 +1,54 @@
+﻿问题描述： 在一个序列中找到3个数和等于N的所有组合（3个数升序排列，去重）
+思路：
+1 内循环使用two pointer ，从两端往中间找，判断和分别等于，小于，大于0的情况
+2 外循环逐个后移
+3 使用字典存键值=三个数的升序排列，解决重复问题
+
+
+最坏情况： O(N²)
+
+
+实现代码：
+
+public IList<IList<int>> ThreeSum(int[] nums)
+{
+    if(nums == null || nums.Length < 3){
+		return new List<IList<int>>();
+	}
+	
+	var dic = new Dictionary<string, List<int>>();
+	var list = nums.OrderBy(x=>x).ToList();
+	
+	var len = list.Count;
+	for (var i = 0 ;i <= len - 3 ;i++){
+		var a = list[i];
+		var start = i+1;
+		var end = len-1;
+		while (start < end) {
+		var b = list[start];
+		var c = list[end];
+		if (a+b+c == 0) {
+			var v = new List<int>(){a,b,c}.OrderBy(x=>x).ToList();
+			var k = string.Join(",",v);
+			if(!dic.ContainsKey(k)){
+				dic.Add(k,v);
+			}
+			start ++;
+			end --;
+		}
+		else if (a+b+c > 0){
+			end --;
+		}
+		else{
+			start ++;
+		}
+	}
+}
+	
+	var ret = new List<IList<int>>();
+	foreach(var kv in dic){
+		ret.Add(kv.Value);
+	}
+	
+	return ret;
+}

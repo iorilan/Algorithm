@@ -1,0 +1,50 @@
+public IList<Interval> Merge(IList<Interval> intervals) 
+{
+	if(intervals == null || intervals.Count == 0){
+		return new List<Interval>();
+	}
+	
+	var result = new List<Interval>();
+	
+	intervals = intervals.OrderBy(s=>s.start).ToList();
+	
+	var len = intervals.Count;
+	for(var i = 0;i < len; i++){
+		// - add or merge into result
+		bool merged = false;
+		foreach(var r in result){
+			// |-------| : r
+			//           |---| : intervals[i]
+			if(r.end < intervals[i].start){
+				// no interset 
+				continue;
+			}
+			// |-------| : r
+			//         |---| : intervals[i]
+			else if(r.end == intervals[i].start){
+				r.end = intervals[i].end;
+				merged = true;
+				break;
+			}
+			// |------------------| : r
+			//  |-----| : intervals[i]
+			else if(r.end >= intervals[i].end){
+				// do nothing
+				merged = true;
+				break;
+			}
+			// |--------| : r
+			//   |--------| : intervals[i]
+			else if(r.end < intervals[i].end){
+				r.end = intervals[i].end;
+				merged = true;
+				break;
+			}
+		}
+		
+		if(!merged){
+			result.Add(intervals[i]);
+		}
+	}
+	return result;
+}

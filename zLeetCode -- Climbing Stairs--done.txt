@@ -1,0 +1,46 @@
+﻿题目描述：
+
+You are climbing a stair case. It takes n steps to reach to the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+就是有n阶楼梯，求出不同上法的次数，每次只能上1或2阶楼梯。
+
+要求上楼梯的情况数，即求下楼梯的情况数，即对于n阶楼梯的下楼情况数来说，相当于先下一阶和先下两阶的情况数之和，即：
+ClimbStairs(n) = ClimbStairs(n-1)+ClimbStairs(n-2)。
+
+这个题目的递推式完全与斐波那契数列吻合。因此可以使用斐波那契数列的快速算法来解此题从而提高效率。只是要区分只有一阶楼梯的情况数为1。
+
+有关斐波那契的快速算法，可以看笔者的这篇文章：
+http://blog.csdn.net/lan_liang/article/details/40825863
+
+
+本题的实现代码：
+
+
+public class Solution {
+    public int ClimbStairs(int n) 
+    {
+    	return Go(n + 1);
+    }
+
+    private int Go(int n)
+    {
+    	if(n == 1 || n == 2)
+    	{
+    		return 1;
+    	}
+    	
+    	if(n%2 == 0)
+    	{
+    		var k = n/2;
+    		return Go(k) * (2*Go(k+1) - Go(k));
+    	}
+    	else
+    	{
+    		var k = (n-1)/2;
+    		return Go(k+1) * Go(k+1) + Go(k) * Go(k);
+    	}
+    }
+
+}

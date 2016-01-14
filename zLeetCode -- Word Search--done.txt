@@ -1,0 +1,70 @@
+﻿Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+For example,
+Given board =
+
+[
+  ["ABCE"],
+  ["SFCS"],
+  ["ADEE"]
+]
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+
+就是在一个字母矩阵中搜索一个单词。如果通过对某个字符进行上下左右移动所构成的路径，可以找到指定单词则返回true。
+
+思路：
+从矩阵的每个字符分别出发，进行DFS。
+
+实现代码：
+
+
+public class Solution {
+    public bool Exist(char[,] board, string word) 
+    {
+    	RowLen = board.GetLength(0);
+    	ColLen = board.GetLength(1);
+    	
+    	for(var i =0 ;i < RowLen; i++){
+    		for(var j = 0;j < ColLen; j++){
+    			if(TryFind(board, word, i, j, 0)){
+    				return true;
+    			}
+    		
+    		}
+    	}
+    	
+    	return false;
+    }
+
+
+private int RowLen;
+private int ColLen;
+
+public bool TryFind(char[,] board, string word, int row, int col, int i)
+{
+	if(row < 0 || col < 0 || row >= RowLen || col >= ColLen || word[i] != board[row,col]){
+		return false;
+	}
+	
+	if(i == word.Length - 1){
+		return true;
+	}
+	
+	var t = board[row,col];
+	board[row,col] = '%';
+	
+    if(TryFind(board, word, row-1 , col, i+1)||
+	TryFind(board, word, row+1 , col, i+1)||
+	TryFind(board, word, row , col-1, i+1)||
+	TryFind(board, word, row , col+1, i+1)){
+		return true;
+	}
+	board[row,col] = t;
+	
+	return false;
+}
+}

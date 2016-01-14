@@ -1,0 +1,61 @@
+﻿题目描述：
+
+Given a pattern and a string str, find if str follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in str.
+
+Examples:
+pattern = "abba", str = "dog cat cat dog" should return true.
+pattern = "abba", str = "dog cat cat fish" should return false.
+pattern = "aaaa", str = "dog cat cat dog" should return false.
+pattern = "abba", str = "dog dog dog dog" should return false.
+Notes:
+You may assume pattern contains only lowercase letters, and str contains lowercase letters separated by a single space.
+
+给一个模式字符串：pattern，和一个包含了很多单词由空格隔开组成的字符串str，判断是否符合同样的结构。
+符合同样的结构即每个单词的对应是不变的。
+
+思路：
+1. 如果长度不一样肯定不同构。
+2. 设pattern[i]为pattern中的第i个字符，arr为str分隔后的单词数组。
+使用两个字典dict1和dict2，遍历pattern过程中，如果pattern[i]在dict1中存在，那么arr[i]在dict2中也一定存在，并且dict1[pattern[i]]与arr[i]是相等的；而如果pattern[i]在dict1中不存在，那么arr[i]在dict2中也一定不应该存在。
+
+
+实现代码：
+
+public class Solution {
+    public bool WordPattern(string pattern, string str) {
+        var i = 0;
+    	var arr = str.Split(' ').Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
+    	var dict1 = new Dictionary<char, string>();
+    	var dict2 = new Dictionary<string, char>();
+    	
+    	if(pattern.Length != arr.Count){
+    		return false;
+    	}
+    	
+    	while(i < pattern.Length)
+    	{
+    		if(!dict1.ContainsKey(pattern[i])){
+    			if(dict2.ContainsKey(arr[i])){
+    				return false;
+    			}
+    			
+    			dict1.Add(pattern[i] , arr[i]);
+    			dict2.Add(arr[i], pattern[i]);
+    		}
+    		else{
+    			if(!dict2.ContainsKey(arr[i])){
+    				return false;
+    			}
+    			if(arr[i] != dict1[pattern[i]]){
+    				return false;
+    			}
+    		}
+    		
+    		i++;
+    	}
+    	
+    	return true;
+    }
+}

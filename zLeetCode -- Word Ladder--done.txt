@@ -1,0 +1,97 @@
+﻿题目描述：
+
+Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence from beginWord to endWord, such that:
+
+Only one letter can be changed at a time
+Each intermediate word must exist in the word list
+For example,
+
+Given:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+
+Note:
+Return 0 if there is no such transformation sequence.
+All words have the same length.
+All words contain only lowercase alphabetic characters.
+
+
+思路：
+就是给定1个单词数组(wordList)和起始单词(beginWord)以及终止单词(endWord)，求从beginWord到endWord的最小变化过程：
+对于beginWord[0...n]，每次只能变一个字符得到新单词newWord，并且newWord必须在wordList中存在才能进行下一次变化。
+本题可以理解为，每个单词代表一个节点，每次求出“梯子节点”（改变1个字符后在WordList中存在），对所有的梯子节点继续遍历，步骤数+1。求从beginWord到endWord的最小变化步骤数。
+
+由于目标是步数最小化，因此本题是一个BFS问题。
+1.由于题目已经说明，所有单词为'a'-'z'字符组成，因此每次单词的变化可以为：将word[0...n)的每个字符分别替换为不等于word[i]的字符'a'-'z'，得到新单词newWord，如果newWord在词典中存在，添加到‘梯子节点’集合中。
+2.从beginWord开始，不断的查找下一个梯子节点，循环判断梯子节点是否为endWord，如果不是则准备下一轮的梯子节点集合。
+3.BFS一共跑的循环次数就等于最小步骤数。
+
+
+实现代码：
+
+
+public class Solution {
+    public int LadderLength(string beginWord, string endWord, ISet<string> wordList) 
+    {
+        if(beginWord.Length == 1 )
+    	{
+    		return beginWord[0] != endWord[0] ? 2 : 0;
+    	}
+    	wordList.Remove(beginWord);
+    	wordList.Add(endWord);
+    	
+    	var matchedWords = new HashSet<string>();
+    	matchedWords.Add(beginWord);
+    	
+    	var found = false;
+    	var result = new List<ISet<string>>(){matchedWords};
+    	while(matchedWords.Count > 0 && !found){
+    		var nextRound = new HashSet<string>();
+    		foreach(var w in matchedWords){
+    			if(w == endWord){
+    				found = true;
+    				break;
+    			}
+    			else{
+    				var r = NextLadderWords(w, ref wordList);
+    				foreach(var w1 in r){
+    					nextRound.Add(w1);
+    				}
+    			}
+    		}
+    		
+    		matchedWords = nextRound;
+    		if(!found){
+    			result.Add(nextRound);
+    		}
+    		
+    	}
+    	return found ? result.Count : 0;
+    }
+
+private ISet<string> NextLadderWords(string word,ref ISet<string> words){
+	var ret = new HashSet<string>();
+	var len = word.Length;
+	for(var i = 0;i < len; i++){
+		var c = (int)word[i];
+		for(var j = 'a'; j <= 'z'; j++){
+			if(c != j){				
+				var newWord = word.ToCharArray();
+				newWord[i] = (char)j;
+				var s = new string(newWord);
+				if(words.Contains(s)){
+					ret.Add(s);
+					words.Remove(s);
+				}
+			}
+		}
+	}
+	
+	return ret;
+}
+
+
+}

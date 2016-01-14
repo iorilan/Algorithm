@@ -1,0 +1,104 @@
+﻿题目描述：
+Given two numbers represented as strings, return multiplication of the numbers as a string.
+
+Note: The numbers can be arbitrarily large and are non-negative.
+
+Subscribe to see which companies asked this question
+
+完成两个字符串相乘。
+
+思路：
+
+1. 实现1个字符与字符串的相乘函数
+2. 实现两个字符串相加的函数
+3. 遍历num1[]，将num1[i]与num2相乘得到r，使用result累加保存r (r需要每次追加'0')。
+
+
+实现代码：
+
+
+public class Solution {
+    public string Multiply(string num1, string num2) 
+    {
+        if(string.IsNullOrEmpty(num1) || string.IsNullOrEmpty(num2)){
+    		return "";
+    	}
+        if(num1 == "0" || num2 == "0"){
+            return "0";
+        }
+        
+    	var p1 = num1.Length - 1;
+    	var p2 = num2.Length - 1;
+    	
+    	var result = string.Empty;
+    	var pow = "";
+    	for(var i = p1;i >= 0;i --){
+    		var r = Multiply(num1[i], num2) + pow;
+    		if(result == string.Empty){
+    			result = r;
+    		}
+    		else{
+    			result = Add(r, result);
+    		}
+    		
+    		pow += "0";
+    	}
+    	
+    	return result;
+    }
+    
+    
+    
+    private string Add(string s1, string s2)
+    {
+    	var p1 = s1.Length - 1;
+    	var p2 = s2.Length - 1;
+    	
+    	var carry = 0;
+    	var result = "";
+    	while(p1 >= 0 || p2 >= 0){
+    		var n1 = 0;
+    		var n2 = 0;
+    		if(p1 >= 0){
+    			n1 = s1[p1] - '0';
+    		}
+    		if(p2 >= 0){
+    			n2 = s2[p2] - '0';
+    		}
+    		
+    		var r = n1 + n2 + carry;
+    		carry = r / 10;
+    		result = r % 10 + result;
+    		
+    		p1 --;
+    		p2 --;
+    	}
+    	
+    	if(carry > 0){
+    		result = carry + result;
+    	}
+    	
+    	return result;
+    }
+    
+    private string Multiply(char c, string s)
+    {
+    	var d = c - '0';
+    	if(d == 0){
+    		return "0";
+    	}
+    	
+    	var carry = 0;
+    	var result = "";
+    	for(var i = s.Length - 1;i >= 0; i--){
+    		var n = s[i] - '0';
+    		var r = d * n + carry;
+    		carry = r / 10;
+    		result = r % 10 + result;
+    	}
+    	if(carry > 0){
+    		result = carry + result;
+    	}
+    	return result;
+    }
+}

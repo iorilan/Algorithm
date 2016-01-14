@@ -1,0 +1,76 @@
+﻿题目描述：
+
+Given inorder and postorder traversal of a tree, construct the binary tree.
+
+Note:
+You may assume that duplicates do not exist in the tree.
+
+
+就是输入中序遍历（左右中）和后序遍历（左右中）序列，生成二叉树。
+
+思路：
+
+设iFrom, iTo 分别inorder的起始和终止索引； pFrom ,pTo为递归过程中postorder的起始和终止索引。
+
+1. 每次取后序遍历的最后节点，作为当前根节点，即current = new TreeNode(postorder[len - 1])
+2. 从inorder序列中找到postorder[len-1]的索引，记为index
+3. 创建左子树： inorder的索引范围：[0,index) , postorder的索引范围：[pFrom, pFrom + 距离(index, iFrom) - 1)。
+4. 创建右子树： inorder的索引范围: [index + 1, len), postorder 的索引范围: [pFrom + 距离(index, iFrom), pTo-1]。
+
+终止条件：pFrom > pTo 或iFrom > iTo
+
+
+
+实现代码：
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    
+public TreeNode BuildTree(int[] inorder, int[] postorder) 
+{
+	TreeNode node = null;
+	var len = postorder.Length - 1;
+	Build(ref node, inorder, 0, len, postorder, 0, len);
+	
+	return node;
+}
+
+private void Build(ref TreeNode current, int [] inorder, int iFrom, int iTo, int[] postorder, int pFrom, int pTo)
+{
+	if(iFrom > iTo || pFrom > pTo){
+		return;
+	}
+	
+	// set current
+	current = new TreeNode(postorder[pTo]);
+	
+	// take the last one from post order , because it is the root
+	var pLast = postorder[pTo];
+	
+	// find its index in inorder
+	var index = -1;
+	for(var i = iFrom;i <= iTo; i++){
+		if(inorder[i] == pLast){
+			index = i;
+			break;
+		}
+	}
+	
+	// for left sub tree , inorder : [0, index) . postorder : [pFrom, pFrom + distance(index, iFrom) - 1)
+	Build(ref current.left, inorder, iFrom, index - 1, postorder, pFrom, pFrom + index - iFrom - 1);
+
+	// for right sub tree , inorder : [index + 1, len), postorder : [pFrom + distance(index, iFrom), pTo-1]
+	Build(ref current.right, inorder, index + 1, iTo ,postorder, pFrom + index - iFrom, pTo - 1);
+}
+
+	
+}

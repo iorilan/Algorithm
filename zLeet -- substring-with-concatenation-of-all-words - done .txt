@@ -1,0 +1,50 @@
+public class Solution {
+    public IList<int> FindSubstring(string s, string[] words) {
+        
+   	if(string.IsNullOrWhiteSpace(s) || words == null || s.Length < words.Length * words[0].Length){
+		return new List<int>();
+	}
+	
+	
+	var wLen = words[0].Length;
+	var result = new List<int>();
+	var len = words.Length * wLen;
+		
+	var hash = new Dictionary<string, int>();
+	for(var i = 0;i < words.Length; i++){
+		if(!hash.ContainsKey(words[i])){
+			hash.Add(words[i], 1);
+		}
+		else{
+			hash[words[i]] ++;
+		}
+	}
+	
+	var h = new Dictionary<string, int>();
+	for(var i = 0; i < s.Length - len + 1; i++){
+		for(var j = 0;j < words.Length; j++){
+			var str = s.Substring(i + j * wLen, wLen);
+			if(hash.ContainsKey(str)){
+				if(!h.ContainsKey(str)){
+					h.Add(str,1);
+				}
+				else{
+					h[str] ++;
+				}
+			}
+		}
+		
+		if(hash.All(x=>h.ContainsKey(x.Key) && h[x.Key] == x.Value)){
+			result.Add(i);
+		}
+		
+		var k2 = new List<string>(h.Keys);
+		foreach(var k in k2){
+			h[k] = 0;
+		}
+	}
+	
+	
+	return result;
+    }
+}

@@ -1,0 +1,56 @@
+﻿题目描述：
+
+Given an integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+
+For example,
+Given n = 3,
+
+You should return the following matrix:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+
+给定一个数字，由外到内生成矩阵。
+
+思路：
+
+本题主要是完成一个旋转的过程，遍历时track圈(cycle)的宽度，分为从左到右，上到下，右到左，左到上四个不同方向。每次cycle递减。
+其次要注意n为奇偶数的cycle值的不同。
+
+
+实现代码：
+
+public class Solution {
+    public int[,] GenerateMatrix(int n) {
+        var matrix = new int[n,n];
+	
+    	var row = n % 2 == 0 ? n / 2 : (n+1) / 2;
+    	var count = 1;
+    	for(var cycle = 0;cycle < row; cycle++){
+    		
+    		// left to right
+    		for(var col = cycle;col < n - cycle - 1; col++){
+    			matrix[cycle,col] = count ++;
+    		}
+    		
+    		// right to bottom
+    		for(var r = cycle ; r < n - cycle; r++){
+    			matrix[r, n - cycle - 1] = count ++;
+    		}
+    		
+    		// bottom to left
+    		for(var col = n - cycle - 2;col >= cycle; col --){
+    			matrix[n-cycle-1,col] = count ++;
+    		}
+    		
+    		// left to top
+    		for(var r = n - cycle - 2;r > cycle; r --){
+    			matrix[r,cycle] = count ++;
+    		}
+    	}
+    	
+    	return matrix;
+    }
+}

@@ -1,0 +1,60 @@
+﻿题目描述：
+
+Note: This is an extension of House Robber.
+
+After robbing those houses on that street, the thief has found himself a new place for his thievery so that he will not get too much attention. This time, all houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, the security system for these houses remain the same as for those in the previous street.
+
+Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight without alerting the police.
+
+与之前的第一个版本类似，只是这次的数组首尾的马会被看成是相邻的，即不能同时抢第1匹和最后1匹。
+
+思路：
+本题依然使用DP来解，只是需要基于第1种解法考虑两种特殊情况即可（抢第1匹放弃最后一匹和放弃第1匹抢最后1匹）：
+1. 对第[0,n-1]匹马执行DP ， 得到max1
+2. 对第[1,n]匹马执行DP，得到max2
+
+最后返回max1与max2的最大值。
+
+注意，由于是环，因此小于4匹马时，只需要返回数组最大值即可。
+
+
+实现代码：
+
+
+public int Rob(int[] nums) 
+    {
+        if(nums == null || nums.Length == 0)
+    	{
+    		return 0;
+    	}
+    	
+    	if(nums.Length < 4){
+    		return nums.Max();
+    	}
+    	
+    	var list = new List<int>(nums);
+    	var first = list[0];
+    	list.RemoveAt(0);
+    	var max1 = Max(list);
+    	
+    	list.Insert(0 , first);
+    	list.RemoveAt(list.Count-1);
+    	var max2 = Max(list);
+    	
+    	return Math.Max(max1 , max2);
+    }
+
+
+    private int Max(IList<int> nums)
+    {
+    	var len = nums.Count;
+    	var dp = new int[len + 1];
+    	dp[0] = 0;
+    	dp[1] = Math.Max(nums[0], 0);
+    	
+    	for(var i = 2;i < len + 1; i++){
+    		dp[i] = Math.Max(dp[i-1], dp[i-2] + nums[i-1]);
+    	}
+    
+    	return dp[len];
+    }

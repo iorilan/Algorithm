@@ -1,0 +1,129 @@
+﻿题目描述：
+
+Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+You must do this in-place without altering the nodes' values.
+
+For example,
+Given {1,2,3,4}, reorder it to {1,4,2,3}.
+
+本题算是链表中很有特点的一道题目。对于链表1->2->3->4->5->6 ，要变成1->6->2->5->3->4，
+即第i个节点指向倒数第i个节点，而倒数第i个节点，指向第i+1个节点。
+
+
+
+
+解法一：
+使用前后两个指针p和q。
+具体实现步骤在注释中有详细说明，在此不再赘述。
+
+
+由于时间复杂度为O(N^2)，不够高效导致会超时。无法通过OJ的测试数据。
+
+实现代码：
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void ReorderList(ListNode head) 
+    {
+        if(head == null || head.next == null || head.next.next == null){
+    		return;
+    	}
+    	
+    	var p = head;
+    	var q = head;
+    	while(q.next.next != null){
+    		while(p.next.next != null){
+    			p = p.next;
+    		}
+    		
+    		// point head to last
+    		var t = q.next;
+    		q.next = p.next;
+    		// point last to 2nd and set the second last to null
+    		p.next.next = t;
+    		
+    		// point 2nd last to null
+    		p.next = null;
+    
+    		// reset p and q
+    		p = t;
+    		q = t;
+    		if(q.next == null){
+    			break;
+    		}
+    	}
+    }
+}
+
+
+解法二：
+
+本实现参考了连接：
+http://www.acmerblog.com/reorder-list-leetcode-6088.html
+
+
+1.使用slow和fast指针将链表分为两部分，part1和part2 ，假设链表为1->2->3->4->5->6->7->8, part1 = {1->2->3->4} , part2= {5->6->7->8}
+2.然后对part2逆置,即8->7->6->5
+3.然后分别将part1[0]->part2[0], part2[0]->part1[1], part1[1]->part2[1]...
+即，对于i < len - 1
+part1[i] -> part2[i]
+part2[i] -> part1[i+1]
+i++
+
+实现代码：
+
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void ReorderList(ListNode head) 
+    {
+        if(head == null || head.next == null || head.next.next == null){
+    		return;
+    	}
+    	
+    	var slow = head;
+    	var fast = head;
+    	while(fast.next != null && fast.next.next != null)
+    	{
+    		slow = slow.next;
+    		fast = fast.next.next;
+    	}
+    	
+    	var mid = slow.next;
+    	var last = mid;
+    	ListNode pre = null;
+    	while(last != null){
+    		ListNode next = last.next;
+    		last.next = pre;
+    		pre = last;
+    		last = next;
+    	}
+    	slow.next = null;
+    	
+    	while(head != null && pre != null)
+    	{
+    		var next1 = head.next;
+    		head.next = pre;
+    		pre = pre.next;
+    		head.next.next = next1;
+    		head = next1;
+    	}
+    }
+}

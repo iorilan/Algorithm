@@ -1,0 +1,113 @@
+﻿题目描述：
+
+Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+You may assume no duplicate exists in the array.
+
+
+在一个被部分旋转的排序好的序列中，查找一个数字。
+
+思路：
+
+由于该序列只有一部分被旋转，因此还是可以做二分查找的。
+*相当于要在两个递增序列中判断向左还是向右，并且，左边递增序列的最小值大于右边递增序列的最大值。
+
+设m,l,l分别为中间，左边，右边索引。target为要找的数
+1. 当nums[m] 比两边都大时：
+如果target小于nums[r]，说明target位于右边的递增序列上，因此向右找，l=m
+否则：
+如果target大于nums[m]，说明target只能在左边序列上，并且在m右侧，因此向右找，l=m
+如果target小于nums[m]，说明target在左边序列的m左侧。因此向左找，r=m
+
+2. 当nums[m] 比两边都小时（m只可能位于右边序列）：
+如果target大于nums[l]，说明target在左边序列，需要向左找，r=m
+否则：
+如果target大于nums[m]，说明target在右边序列的m右侧，需要向右找，l=m
+如果target小于nums[m]，说明target只可能在右序列的m左侧，需要向左走，r=m
+
+3. 当nums[m]大于nums[l] 并且nums[m] < nums[r]时
+说明m,l,r已经位于同一个序列中，可以应用一般二分法的算法了：
+当target大于nums[m]时，向右找，l=m
+否则向左找，r=m
+
+
+实现代码：
+
+
+public class Solution {
+    public int Search(int[] nums, int target) {
+        if(nums.Length == 0){
+    		return -1;
+    	}
+    	
+    	if(nums.Length == 1){
+    		return nums[0] == target ? 0 : -1;
+    	}
+    	
+    	var l = 0;
+    	var r = nums.Length - 1;
+    	
+    	
+    	while(l < r - 1){
+		var m = (l + r) / 2;
+		if(nums[m] == target){
+			return m;
+		}
+		if(nums[r] == target){
+			return r;
+		}
+		if(nums[l] == target){
+			return l;
+		}
+		
+		if(nums[m] > nums[l] && nums[m] > nums[r]){
+			if(target < nums[r]){
+				l = m;
+			}
+			else {
+				if(target > nums[m]){
+					l = m;	
+				}
+				else{
+					r = m;
+				}
+			}
+		}
+		else if(nums[m] < nums[l] && nums[m] < nums[r]){
+			if(target > nums[l]){
+				r = m;
+			}
+			else{
+				if(target > nums[m]){
+					l = m;	
+				}
+				else{
+					r = m;
+				}
+			}
+			
+		}
+		else if(nums[m] > nums[l] && nums[m] < nums[r]){
+			if(target > nums[m]){
+				l = m;
+			}
+			else {
+				r = m;
+			}
+		}
+	}
+	
+	if(target == nums[l]){
+		return l;
+	}
+	if(target == nums[r]){
+		return r;
+	}
+	
+	return -1;
+    }
+}

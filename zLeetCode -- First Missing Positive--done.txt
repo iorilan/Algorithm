@@ -1,0 +1,47 @@
+﻿题目描述：
+Given an unsorted integer array, find the first missing positive integer.
+
+For example,
+Given [1,2,0] return 3,
+and [3,4,-1,1] return 2.
+
+Your algorithm should run in O(n) time and uses constant space.
+
+在一个数组中找出第一个缺失的正数。
+
+要求O(n)的时间复杂度。
+
+思路：
+暂时只能想出O(n*logN)的，对数组排序，然后根据先后元素的差值来判断缺失的数字。
+需要考虑第一个和最后一个元素的情况。
+
+
+实现代码：
+
+public class Solution {
+    public int FirstMissingPositive(int[] nums) {
+        if(nums == null || nums.Length == 0){
+    		return 1;
+    	}
+    	
+    	var list = new List<int>();
+    	for(var i = 0;i < nums.Length;i ++){
+    		if(nums[i] > 0){
+    			list.Add(nums[i]);
+    		}
+    	}
+    	
+    	list.Sort();
+    	if(list.Count == 0 || list[0] > 1){
+    		return 1;
+    	}
+    	
+    	for(var i = 0;i < list.Count - 1; i++){
+    		if(list[i+1] - list[i] > 1){
+    			return list[i] + 1;
+    		}
+    	}
+    	
+    	return list[list.Count - 1] + 1;
+    }
+}

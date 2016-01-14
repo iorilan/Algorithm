@@ -1,0 +1,104 @@
+﻿题目描述：
+
+Given an array of n positive integers and a positive integer s, find the minimal length of a subarray of which the sum ≥ s. If there isn't one, return 0 instead.
+
+For example, given the array [2,3,1,2,4,3] and s = 7,
+the subarray [4,3] has the minimal length under the problem constraint.
+
+对于数组A中的子数组a，找到满足Sum(a[0]+a[1]...a[n-1]) >= target时的最短长度的子数组。
+
+思路：
+本题属于移动窗口问题，最直接的办法就是分别以a[i]为起点，不断往后移动指针进行累加存到s，当s>=target时，更新最短长度min。
+时间复杂度为O(N^2)
+
+
+实现代码：
+
+
+public class Solution {
+    public int MinSubArrayLen(int s, int[] nums) 
+    {
+       	int? min = null;
+    	
+    	for(var i = 0;i < nums.Length; i++){
+    		var l = MinLen(nums, i, s);
+    		if(l.HasValue && l < min || min == null){
+    			min = l;
+    		}
+    	}
+    	
+    	return min.HasValue ? min.Value : 0;
+    }
+    
+    private int? MinLen(int[] nums, int start, int target)
+    {
+    	var s = 0;
+    	var startFrom = start;
+    	while(start < nums.Length){
+    		s += nums[start];
+    		if(s >= target){
+    			return (start - startFrom + 1);
+    		}
+    		start ++;
+    	}
+    	
+    	return null;
+    }
+    
+}
+
+本题使用two pointer可以完成o(N)的实现。 比较推荐这种实现方式。
+
+1. 使用left和right两个指针分别从0作为起点
+2. 如果当前s小于target，right一直往后走，直到s大于或等于target
+3. 如果s大于等于target，left一直往后走，同时判断left与right的距离，更新最小窗口的大小。
+
+本实现方式参考了连接：
+http://www.geeksforgeeks.org/minimum-length-subarray-sum-greater-given-value/
+
+
+实现代码：
+
+public class Solution {
+    public int MinSubArrayLen(int s, int[] nums) 
+    {
+       	var len = nums.Length;
+    	var sum = 0;
+    	int? min = null;
+    	
+     	// use two pointers 
+        var start = 0;
+    	var end = 0;
+    	
+        while (end < len)
+        {
+    		// if current sum if smaller , keep moving right pointer forward
+            while (sum < s && end < len){
+                sum += nums[end];
+    			end ++;
+    		}
+     		
+    		// if sum is more than target, keep moving left pointer forward to shrink the window size
+            while (sum >= s)
+            {
+    			// find a smaller window then update size
+                if (!min.HasValue || end - start < min){
+    				min = end - start;
+    			}
+    			
+    			// unload left most value from sum
+                sum -= nums[start];
+    			start ++;
+            }
+    		
+    		// now sum less than target again
+    		// lets play again with the right pointer if not yet reach the end
+        }
+    	
+        return !min.HasValue ? 0 : min.Value;
+    }
+    
+    
+}
+
+

@@ -1,0 +1,25 @@
+public class Solution {
+    public int NumTrees(int n) {
+        if(n <= 0) {
+		return 1;
+	}
+	
+	// - dp array
+	var dp = new int[n+1];
+	dp[0] = 1;
+	dp[1] = 1;
+	
+	for(var j = 2; j <= n; j++){
+		// i: 1.. j
+		// dp[j] = sum (dp[i-1] * dp[j-i])
+		var s = 0;
+		for(var i = 1; i <= j; i++){
+			s += dp[i-1] * dp[j-i];
+		}
+		
+		dp[j] = s;
+	}
+	
+	return dp[n];
+    }
+}

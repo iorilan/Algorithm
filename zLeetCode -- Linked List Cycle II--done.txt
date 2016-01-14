@@ -1,0 +1,66 @@
+﻿题目描述：
+
+Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+Note: Do not modify the linked list.
+
+Follow up:
+Can you solve it without using extra space?
+
+
+判断链表是否有环，如果存在，返回环起始节点；如果不存在，返回Null。
+
+思路：
+1. 使用快慢指针的方法找到环的位置。
+2. 如果找到了环，慢指针回到起点，快慢指针每次各走一步，下一次相遇的位置就是环的起点。
+
+
+实现代码：
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode DetectCycle(ListNode head) 
+    {
+        if(head == null){
+    		return null;
+    	}
+
+        var p = head;
+    	var q = head;
+    	
+    	var found = false;
+    	while(p != null && q != null && q.next != null && !found){
+    		var t = q;
+    		p = p.next;
+    		q = q.next.next;
+    		if(ReferenceEquals(p,q)){
+    			found = true;
+    		}
+    	}
+    	
+        if(!found){
+    		return null;
+    	}
+    	
+    	// p start from head again
+    	// and q standing where it is
+    	// next time they meet point is where cycle starts from
+    	p = head;
+    	while(!ReferenceEquals(p, q)){
+    		p = p.next;
+    		q = q.next;
+    	}
+    	
+    	return q;
+    }
+}

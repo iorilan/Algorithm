@@ -1,0 +1,101 @@
+﻿题目描述
+
+Given an array with n objects colored red, white or blue, sort them so that objects of the same color are adjacent, with the colors in the order red, white and blue.
+
+Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.
+
+Note:
+You are not suppose to use the library's sort function for this problem.
+
+其实就是三色旗问题，给3个数字0,1,2，把它们排序好。
+
+
+解法一：
+三次遍历。
+
+思路:
+先从左边找2，右边找0，第一次遍历，保证0在2的左边；
+从左边找1，右边找0，第二次遍历，保证0在1的左边；
+从左边找2，右边找1，第三次遍历，保证1在2的左边。
+
+实现代码：
+
+
+public class Solution {
+    public void SortColors(int[] nums) 
+    {		
+    	FindAndSwap(nums, 0, 2);
+    	FindAndSwap(nums, 0, 1);
+    	FindAndSwap(nums, 1, 2);
+    }
+    	
+public void FindAndSwap(int[] nums, int left, int right){
+	var i = 0;
+	var k = nums.Length - 1;
+	while(i < k){
+		while(nums[i] != right && i < k){
+           i++;
+       }
+       while(nums[k] != left && k > 0){
+           k--;
+       }
+		if(i < k){
+			var t = nums[i];
+			nums[i] = nums[k];
+			nums[k] = t;
+		}
+	}
+}
+
+}
+
+
+
+
+解法二：
+其实本题按区域来理解，只需要遍历一次。
+
+思路：
+i,j,k分别表示0,1,2的区域下标
+1. 如果j为1,往下走：j++ ；如果j为0，交换nums[i]和nums[j]并i++,j++。第一步是保证0区域在1区域的左边
+2. 如果j为2，从右边（k=length-1，k--）开始找，找到不是2的，交换nums[j]和nums[k]并k--，这一步是为了保证2在0与1区域的右边。
+
+实现代码：
+
+
+public class Solution {
+    public void SortColors(int[] nums) 
+    {		
+        var i = 0;
+    	var k = nums.Length - 1;
+    	var j = 0;
+    	while(j <= k){
+    		
+    		if(nums[j] == 1){
+    			j++;
+    		}
+    		else if(nums[j] == 0){
+    			var t = nums[i];
+    			nums[i] = nums[j];
+    			nums[j] = t;
+    			
+    			j++;
+    			i++;
+    		}
+    		else{
+    			while(nums[k] == 2 && j < k){
+    				k--;
+    			}
+    			
+    			var t = nums[j];
+    			nums[j] = nums[k];
+    			nums[k] = t;
+    			k--;
+    		}
+    	}
+	
+    }
+    	
+
+}
+

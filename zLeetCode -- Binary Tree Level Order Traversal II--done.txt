@@ -1,0 +1,76 @@
+﻿题目描述：
+Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
+
+For example:
+Given binary tree {3,9,20,#,#,15,7},
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its bottom-up level order traversal as:
+[
+  [15,7],
+  [9,20],
+  [3]
+]
+
+输入一棵二叉树，从底层叶子节点开始，将每层的节点存成一个list，然后逐层将每个list存入结果集中。
+
+思路：
+由于逐层遍历，显然是BFS，不过最底层的叶子集合需要放在最上，每次添加结果集时，将当前层的节点集合插入在首位即可。
+
+
+实现代码：
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public IList<IList<int>> LevelOrderBottom(TreeNode root) 
+    {
+       var result = new List<IList<int>>();
+    	if(root == null){
+    		return result;
+    	}
+    	
+    	var nodes = new List<TreeNode>(){root};
+    	Bfs(nodes, ref result);
+    	
+    	return result;
+    }
+
+private void Bfs(List<TreeNode> parents, ref List<IList<int>> result)
+{
+    if(parents.Count == 0){
+		return ;
+	}
+	
+	var children = new List<TreeNode>();
+	var nodes = new List<int>();
+	for(var i = 0;i < parents.Count; i++){
+		nodes.Add(parents[i].val);
+		LoadChildren(parents[i], ref children);
+	}
+	result.Insert(0, nodes);
+	Bfs(children, ref result);
+}
+
+private void LoadChildren(TreeNode node , ref List<TreeNode> nodes)
+{
+	if(node.left != null){
+		nodes.Add(node.left);
+	}
+	if(node.right != null){
+		nodes.Add(node.right);
+	}
+}
+
+}

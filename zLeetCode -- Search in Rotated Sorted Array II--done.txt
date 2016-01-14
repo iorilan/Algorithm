@@ -1,0 +1,102 @@
+﻿题目描述：
+
+Follow up for "Search in Rotated Sorted Array":
+What if duplicates are allowed?
+
+Would this affect the run-time complexity? How and why?
+
+Write a function to determine if a given target is in the array.
+
+思路：
+
+这个题目与Search in Rotated Sorted Array基本是一样的，在旋转过的排序好的数组中进行二分查找，区别只是在于这个题目的输入可能包含重复元素。
+本题解法基本与Search in Rotated Sorted Array I相同，区别只是需要跳过重复元素。
+这里是Search in Rotated Sorted Array的解法：
+<link>
+
+而对于本题，需要在得到中间索引m后跳过左右重复元素，并重新计算m：
+while(l < m && nums[l] == nums[m]){
+    		l++;
+    	}
+    	while(r > m && nums[r] == nums[m]){
+    		r--;
+    	}
+m = (l + r) / 2;
+
+
+
+实现代码：
+
+public class Solution {
+    public bool Search(int[] nums, int target) {
+        if(nums.Length == 0)
+    	{
+    		return false;
+    	}
+    	
+    	if(nums.Length == 1)
+    	{
+    		return nums[0] == target ;
+    	}
+    	
+    	var l = 0;
+    	var r = nums.Length - 1;
+    	
+    	while(l < r - 1){
+    	var m = (l + r) / 2;
+    	while(l < m && nums[l] == nums[m]){
+    		l++;
+    	}
+    	while(r > m && nums[r] == nums[m]){
+    		r--;
+    	}
+	    m = (l + r) / 2;
+	    
+    	if(nums[m] == target || nums[r] == target || nums[l] == target){
+    		return true;
+    	}
+    	
+    	if(nums[m] > nums[l] && nums[m] > nums[r]){
+    		if(target < nums[r]){
+    			l = m;
+    		}
+    		else {
+    			if(target > nums[m]){
+    				l = m;	
+    			}
+    			else{
+    				r = m;
+    			}
+    		}
+    	}
+    	else if(nums[m] < nums[l] && nums[m] < nums[r]){
+    		if(target > nums[l]){
+    			r = m;
+    		}
+    		else{
+    			if(target > nums[m]){
+    				l = m;	
+    			}
+    			else{
+    				r = m;
+    			}
+    		}
+    		
+    	}
+    	else if(nums[m] > nums[l] && nums[m] < nums[r]){
+    		if(target > nums[m]){
+    			l = m;
+    		}
+    		else {
+    			r = m;
+    		}
+    	}
+    	}
+    	
+    	if(target == nums[l] || target == nums[r]){
+    		return true;
+    	}
+    	
+    	return false;
+    }
+}

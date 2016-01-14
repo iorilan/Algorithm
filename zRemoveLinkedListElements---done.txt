@@ -1,0 +1,53 @@
+public class ListNode {
+      public int val;
+      public ListNode next;
+      public ListNode(int x) { val = x; }
+  }
+
+public class Solution {
+    
+    public ListNode RemoveElements(ListNode head, int val) {
+    
+   	 // null list
+	if(head == null){
+		return null;
+	}
+	// constains only one node
+	if(head.next == null && head.val == val){
+		return null;
+	}
+	
+	//remove first nodes
+	while(head.val == val){
+	    if(head.next == null){
+	        break;
+	    }
+		head = head.next;
+	}
+
+	var tmp = head;
+	
+	// nodes in between
+	while(head.next != null){
+		if(head.next.val == val){
+			head.next = head.next.next;
+		}
+		else{
+			head = head.next;
+		}
+		if(head.next == null){
+			break;
+		}
+	}
+	// last node
+	if(head.val == val){
+		return null;
+	}
+	
+	// restore head node
+	head = tmp;
+	
+	return head;
+	
+    }
+}

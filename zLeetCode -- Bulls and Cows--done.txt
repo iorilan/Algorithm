@@ -1,0 +1,63 @@
+﻿题目描述：
+
+You are playing the following Bulls and Cows game with your friend: You write down a number and ask your friend to guess what the number is. Each time your friend makes a guess, you provide a hint that indicates how many digits in said guess match your secret number exactly in both digit and position (called "bulls") and how many digits match the secret number but locate in the wrong position (called "cows"). Your friend will use successive guesses and hints to eventually derive the secret number.
+
+For example:
+
+Secret number:  "1807"
+Friend's guess: "7810"
+Hint: 1 bull and 3 cows. (The bull is 8, the cows are 0, 1 and 7.)
+Write a function to return a hint according to the secret number and friend's guess, use A to indicate the bulls and B to indicate the cows. In the above example, your function should return "1A3B".
+
+Please note that both secret number and friend's guess may contain duplicate digits, for example:
+
+Secret number:  "1123"
+Friend's guess: "0111"
+In this case, the 1st 1 in friend's guess is a bull, the 2nd or 3rd 1 is a cow, and your function should return "1A1B".
+You may assume that the secret number and your friend's guess only contain digits, and their lengths are always equal.
+
+给一个字符串s，包含了从0-9的数字。输入一个字符串t，要求判断t[j]和s[j]（j∈[0,N)）的每一位是否相等，如果相等，就看做是Bulls；如果不等，那么就看t[j]是否等于s[i]，其中i!=j，如果等，就看做是cows。
+
+1. 本题可以用哈希表来做，第一遍遍历，将guess和secret的每一位比较，直接就能得出bulls的数量。同时统计s[i]的每一位出现的次数，存入哈希表hash中。
+2. 如果bulls等于s的长度，说明secret和guess完全匹配，直接返回bulls即可。
+3. 遍历guess的每一位，如果guess在hash中出现并且hash[guess[i]]大于0，则hash[guess[i]]--,并统计cows的数量。
+4. 最后返回bulls和cows的数量即可。
+
+
+实现代码：
+
+
+public class Solution {
+    public string GetHint(string secret, string guess) 
+    {
+        var bulls = 0;
+    	var hash = new Dictionary<char,int>();
+    	for(var i = 0;i < secret.Length; i++){
+    		if(guess[i] == secret[i]){
+    			bulls++;
+    		}
+    		if(!hash.ContainsKey(secret[i])){
+    			hash.Add(secret[i], 1);
+    		}
+    		else{
+    			hash[secret[i]]++;
+    		}
+    	}
+    	
+    	if(bulls == secret.Length){
+    		return string.Format("{0}A0B",bulls);
+    	}
+    	
+    	var guessed = 0;
+    	for(var i = 0;i < guess.Length; i++){
+    		if(hash.ContainsKey(guess[i]) && hash[guess[i]] > 0){
+    			hash[guess[i]] --;
+    			guessed ++;
+    		}
+    	}
+    	
+    	guessed -= bulls;
+    	
+    	return string.Format("{0}A{1}B", bulls , guessed);
+    }
+}

@@ -1,0 +1,82 @@
+﻿题目描述
+Given a positive integer n, find the least number of perfect square numbers (for example, 1, 4, 9, 16, ...) which sum to n.
+
+For example, given n = 12, return 3 because 12 = 4 + 4 + 4; given n = 13, return 2 because 13 = 4 + 9.
+
+Credits:
+Special thanks to @jianchao.li.fighter for adding this problem and creating all test cases.
+
+思路：
+本题还是BFS， 递归的对象是完全平方数集合，以及要寻找的数集list[0...i]（=n-table[0...i]）
+
+
+
+1. 找出小于目标数：n的完全平方数，如果找到直接返回
+2. 进行BFS（完全平方数集合:table，要寻找的数集:list，层数:depth）：
+循环table,针对每个小于当前n的完全平方数，求出它要寻找的数集：x={n-table[i]} , i∈[0,table.Count] => 得到list
+
+实现代码
+
+
+public class Solution {
+    public int NumSquares(int n) 
+    {
+       if(n == 1){
+		return 1;
+	}
+	
+	var len = n/2;
+	var depth = 1;
+	var table = new List<int>();
+	for(var i = 1;i <= len; i++){
+		var x = i * i;
+		if(x == n){
+			return 1;
+		}
+		if(x < n){
+			table.Add(x);
+		}
+	}
+	
+	
+	var list = new List<int>();
+	for(var i = 0 ;i < table.Count; i++){
+		list.Add(n-table[i]);
+	}
+	
+	Bfs(table, list, depth + 1);
+	
+	return Depth;
+}
+
+private int Depth;
+private bool Found = false;
+
+public void Bfs(IList<int> table , IList<int> target , int depth)
+{
+	if(Found){
+		return;
+	}
+	
+	for(var i =0 ;i < table.Count; i++){
+		for(var j = 0;j < target.Count; j++){
+			if(table[i] == target[j]){
+				Depth = depth;
+				Found = true;
+				return;
+			}
+		}
+	}
+	
+	var list = new List<int>();
+	for(var i = 0;i < target.Count; i++){
+		var t = table.Where(x=>x<target[i]).ToList();
+		for(var j = 0;j < t.Count; j++){
+			list.Add(target[i]-t[j]);
+		}
+	}
+	
+	Bfs(table, list, depth+1);
+}
+
+}

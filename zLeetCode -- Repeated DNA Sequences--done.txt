@@ -1,0 +1,49 @@
+﻿题目描述：
+
+All DNA is composed of a series of nucleotides abbreviated as A, C, G, and T, for example: "ACGAATTCCG". When studying DNA, it is sometimes useful to identify repeated sequences within the DNA.
+
+Write a function to find all the 10-letter-long sequences (substrings) that occur more than once in a DNA molecule.
+
+For example,
+
+Given s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT",
+
+Return:
+["AAAAACCCCC", "CCCCCAAAAA"].
+
+
+就是在一个字符串s中长度为10的字串中找到出现次数大于1次的子串。
+
+思路：
+使用哈希统计s[i...i+10]出现的次数，i∈[0,n-9)。
+
+
+实现代码：
+
+public class Solution {
+    public IList<string> FindRepeatedDnaSequences(string s) 
+    {
+        if(s.Length < 11){
+    		return new List<string>();
+    	}
+    	var hash = new Dictionary<string ,int>();
+    	for(var i = 0;i < s.Length - 9; i++){
+    		var t = s.Substring(i,10);
+    		if(!hash.ContainsKey(t)){
+    			hash.Add(t,1);
+    		}
+    		else{
+    			hash[t]++;
+    		}
+    	}
+    	
+    	var ret = new List<string>();
+    	foreach(var k in hash.Keys){
+    		if(hash[k] > 1){
+    			ret.Add(k);
+    		}
+    	}
+    	
+    	return ret;
+    }
+}

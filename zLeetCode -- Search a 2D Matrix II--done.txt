@@ -1,0 +1,51 @@
+﻿题目描述：
+Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+
+Integers in each row are sorted in ascending from left to right.
+Integers in each column are sorted in ascending from top to bottom.
+For example,
+
+Consider the following matrix:
+
+[
+  [1,   4,  7, 11, 15],
+  [2,   5,  8, 12, 19],
+  [3,   6,  9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30]
+]
+Given target = 5, return true.
+
+Given target = 20, return false.
+
+本题看起来是Search a 2D Matrix的扩展问题，其实和第一题的思路完全不一样。比较精简的思路是：
+1.从左下开始找，如果matrix[r,c]（r为行，c为列） < target，c++；否则r--。
+2.直到r或c越界为止。
+
+
+实现代码：
+
+public class Solution {
+    public bool SearchMatrix(int[,] matrix, int target) 
+    {
+        var rowLen = matrix.GetLength(0);
+        var colLen = matrix.GetLength(1);
+        
+        var row = rowLen - 1;
+        var col = 0;
+        
+        while(col <= colLen - 1 && row >= 0){
+            if(matrix[row,col] == target){
+                return true;
+            }
+            else if(matrix[row,col] < target){
+                col ++;
+            }
+            else{
+                row --;
+            }
+        }
+        return false;
+    }
+
+}

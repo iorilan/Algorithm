@@ -1,0 +1,63 @@
+﻿问题描述：
+Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+
+输入一个m*n的矩阵，判断如果matrix[i,j]为0（i∈[0,m) , j∈[0,n)），则把它的整行和整列都标记为0。
+
+思路：
+第一次遍历：使用队列存值为0的位置
+第二次遍历，遍历队列进行标记。
+
+空间复杂度为O(n^2)
+
+这里有一个空间复杂度为常数的解法，但是可读性不够强因此不推荐，如果空间允许的情况下，依然推荐使用O(n^2)空间复杂度的解法。
+http://www.programcreek.com/2012/12/leetcode-set-matrix-zeroes-java/
+
+实现代码：
+
+
+public class Solution {
+    public void SetZeroes(int[,] matrix) 
+    {
+    	var row = matrix.GetLength(0);
+    	var col = matrix.GetLength(1);
+    	if(row <= 1 && col <= 1){
+    		return;
+    	}
+    	
+    	var q = new Queue<Pos>();
+    	for(var i = 0;i < row; i++){
+    		for(var j = 0;j < col; j++){
+    			if(matrix[i,j] == 0){
+    				q.Enqueue(new Pos(i,j));
+    			}
+    		}
+    	}
+    	
+    	while(q.Count > 0){
+    		var pos = q.Dequeue();
+    		for(var i = pos.row;i >=0; i--){
+    			matrix[i,pos.col] = 0;
+    		}
+    		for(var i = pos.row;i < row; i++){
+    			matrix[i,pos.col] = 0;
+    		}
+    		for(var i = pos.col;i >=0; i--){
+    			matrix[pos.row,i] = 0;
+    		}
+    		for(var i = pos.col;i < col; i++){
+    			matrix[pos.row,i] = 0;
+    		}
+    	}
+    }
+
+    public class Pos{
+    	public Pos(int r, int c)
+    	{
+    		row = r;
+    		col = c;
+    	}
+    	public int row;
+    	public int col;
+    }
+
+}

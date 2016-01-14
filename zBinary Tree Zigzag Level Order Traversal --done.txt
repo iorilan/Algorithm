@@ -1,0 +1,104 @@
+﻿题目描述：
+
+
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+Given binary tree {3,9,20,#,#,15,7},
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its zigzag level order traversal as:
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+
+就是对BFS做了一个小小的变化，需要一个Bool记录正在遍历的方向（左到右或右到左）。
+
+思路：
+使用一个栈s来存放正在遍历层的节点，一个Bool记录当前遍历的方向。将节点存入一个list。
+对每层节点进行BFS，得到每层节点的子节点，存入s中。
+循环执行，直到最后一层为止。
+
+本题还可以用递归来进行BFS，不过执行效率相对要低一些。通不过leet的测试数据。
+
+实现代码：
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+public IList<IList<int>> ZigzagLevelOrder(TreeNode root) 
+{
+    var result = new List<IList<int>>();
+    if(root == null){
+        return result;
+    }
+    
+	var list = new Stack<TreeNode>();
+	list.Push(root);
+	
+	result.Add(list.Select(x=>x.val).ToList());
+	
+	var leftToRight = false;
+	
+	while(list.Count > 0){
+		var q = new List<TreeNode>();
+		
+		while(list.Count > 0)
+		{
+			var n = list.Pop();
+			var c = Children(n, leftToRight);
+			q.AddRange(c);
+		}
+		
+		if(q.Count > 0){
+			result.Add(q.Select(x=>x.val).ToList());
+		}
+		
+		for(var i =0 ;i < q.Count; i++){
+			list.Push(q[i]);
+		}
+		
+		leftToRight = !leftToRight;
+	}
+	
+	return result;
+	
+}
+
+public IList<TreeNode> Children(TreeNode n, bool leftToRight){
+	var list = new List<TreeNode>();
+	if(leftToRight){
+		if(n.left != null){
+			list.Add(n.left);
+		}
+		if(n.right != null){
+			list.Add(n.right);
+		}
+	}
+	else{
+		if(n.right != null){
+			list.Add(n.right);
+		}
+		if(n.left != null){
+			list.Add(n.left);
+		}
+	}
+	
+	
+	return list;
+}
+
+}

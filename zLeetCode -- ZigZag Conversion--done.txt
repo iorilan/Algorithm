@@ -1,0 +1,29 @@
+﻿题目描述：
+
+本题考查的是纯粹字符串操作，遍历i∈[0, numRows)次,从第i个字符起始，每次向后取2 * numRows - 2处的字符累加，需要判断末尾处可取的部分。
+
+实现代码：
+
+public class Solution {
+    public string Convert(string s, int numRows) 
+    {
+        if(string.IsNullOrWhiteSpace(s) || numRows == 1){
+    		return s;
+    	}
+    	
+        var s1 = "";
+        int distance = 2 * numRows - 2;
+    	
+        for(var i = 0; i < numRows ; i++)
+        {  
+            for(int j = i; j < s.Length; j += distance)
+            {  
+                s1 += s[j];
+                if(i !=0 && i != numRows - 1 && j + distance - 2 * i < s.Length){
+    				s1 += s[j + distance - 2 * i];
+    			}
+            }                  
+        }
+        return s1;      
+    }
+}

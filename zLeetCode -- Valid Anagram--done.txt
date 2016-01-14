@@ -1,0 +1,49 @@
+﻿题目描述：
+
+
+Given two strings s and t, write a function to determine if t is an anagram of s.
+
+For example,
+s = "anagram", t = "nagaram", return true.
+s = "rat", t = "car", return false.
+
+Note:
+You may assume the string contains only lowercase alphabets.
+
+
+就是要判断字符串s和字符串t中的每个字符出现的次数是否相等。
+
+思路：
+使用哈希表，扫一遍s中的每个字符，存在哈希表中: hash[s[i], n] ，n为出现的次数
+扫一遍t,如果t[i]不在哈希表中，返回false，否则把hash[t[i]] 的次数减一
+最后判断hash中的每个字符出现次数是否都为0就可以了
+
+
+实现代码：
+
+
+public class Solution {
+    public bool IsAnagram(string s, string t) {
+        var dict = new Dictionary<char, int>();
+        for(var i = 0;i < s.Length; i++){
+            if(!dict.ContainsKey(s[i])){
+                dict.Add(s[i], 1);
+            }
+            else{
+                dict[s[i]]++;
+            }
+        }
+        
+        for(var i = 0;i < t.Length; i++){
+            if(!dict.ContainsKey(t[i])){
+                return false;
+            }
+            else{
+                dict[t[i]] -- ;
+            }
+        }
+        
+        return dict.All(x=>x.Value == 0);
+        
+    }
+}

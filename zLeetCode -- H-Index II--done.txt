@@ -1,0 +1,31 @@
+﻿题目描述：
+Follow up for H-Index: What if the citations array is sorted in ascending order? Could you optimize your algorithm?
+
+与H-Index的区别就是，这个数组是倒序排序好的。
+
+思路：
+省去了排序的步骤，直接从数组尾部向前遍历就可以了。
+其余思路与H-index相同。
+
+
+实现代码：
+
+public class Solution {
+    public int HIndex(int[] citations) 
+    {
+        if(citations.Length == 0){
+    		return 0;
+    	}
+    	
+    	var sum = 0;
+    	var j = 0;
+    	for(var i = citations.Length - 1;i >= 0; i--){
+    		if(j < citations[i]){
+    			sum ++;
+    		}
+    		j++;
+    	}
+    	
+    	return sum;
+    }
+}

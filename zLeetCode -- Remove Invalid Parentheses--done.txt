@@ -1,0 +1,90 @@
+﻿题目描述：
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+Examples:
+"()())()" -> ["()()()", "(())()"]
+"(a)())()" -> ["(a)()()", "(a())()"]
+")(" -> [""]
+
+
+就是输入一个字符串，其中包含了'('和')'以及字母。对这个字符串进行最小次数的删除，假设只删除了1次得到：str1（删除了第i位），str2(删除了第j位)...，strN。
+将这些删除后的字符串符合括号匹配的（就是除了字母外，'('和')'构成的是一个有效的括号字符串）加入结果集中。
+
+
+思路：
+1. 本题可以用DFS也可以BFS，但由于本题求的是最小次数而非第一个匹配的结果，因此BFS比较合适。
+2. 如果s不符合要求，对s的第i位进行移除，i∈[0,n)，得到新字符串t1,t2,t3...判断t[1...n]是否符合要求，如果符合要求则依次加入结果集中；否则将t[0...n)加入队列中即可。
+3. 遍历过程中由于可能存在t已经判断过，可使用字典来做剪枝。
+
+实现代码：
+
+
+
+
+public class Solution {
+    public IList<string> RemoveInvalidParentheses(string s) 
+    {
+        var ret = new List<string>();
+    	var visited = new Dictionary<string, int>();
+    	
+    	var q = new Queue<string>();
+    	q.Enqueue(s);
+    	
+    	var next = new Queue<string>();
+    	while(q.Count > 0){
+    		var str = q.Dequeue();
+    		if(IsValid(str))
+    		{
+    			ret.Add(str);
+    		}
+    		else
+    		{
+    			for(var i = 0;i < str.Length; i++){
+    				if(str[i] != '(' && str[i] != ')') continue;
+    				
+    				var t = str.Substring(0 , i) + str.Substring(i+1, str.Length - i - 1);
+    				if(!visited.ContainsKey(t))
+    				{
+    					visited.Add(t , 1);
+    					next.Enqueue(t);
+    				}
+    			}
+    		}
+    		
+    		if(q.Count == 0){
+    			if(ret.Count > 0){
+    				break;
+    			}
+    			
+    			q = new Queue<string>(next);
+    			next.Clear();
+    		}
+    	}
+    	
+    	if(ret.Count == 0){
+    		ret.Add("");
+    	}
+    	return ret;
+    }
+
+private bool IsValid(string s)
+{
+	
+	var stack = new Stack<char>();
+	for(var i = 0;i < s.Length; i++){
+		if(s[i] == '('){
+			stack.Push(s[i]);
+		}
+		else if(s[i] == ')'){
+			if(stack.Count == 0){
+				return false;
+			}
+			stack.Pop();
+		}
+	}
+	
+	return stack.Count == 0;
+}
+}

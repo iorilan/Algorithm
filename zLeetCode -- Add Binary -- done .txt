@@ -1,0 +1,44 @@
+public class Solution {
+    public string AddBinary(string a, string b) {
+        
+        var lenA = a.Length;
+        var lenB = b.Length;
+        
+        var i = lenA - 1;
+        var j = lenB - 1;
+        
+        var c = 0;
+        var ret = "";
+        do{
+        	var a1 = "0";
+        	var b1 = "0";
+        	
+        	if(i >= 0){
+        		a1 = a[i].ToString();
+        	}
+        	i--;
+        	
+        	if(j >= 0){
+        		b1 = b[j].ToString();
+        	}
+        	j--;
+        	
+        	var s = int.Parse(a1) + int.Parse(b1) + c;
+        	if(s >= 2){
+        		ret = s%2 + ret;
+        		c = 1;
+        	}
+        	else{
+        		ret = s + ret;
+        		c = 0;
+        	}
+        }while(i >=0 || j >= 0);
+        
+        if(c == 1){
+        	ret = "1" + ret;
+        }
+        
+        return ret;
+    }
+
+}

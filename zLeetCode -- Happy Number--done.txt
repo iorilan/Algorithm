@@ -1,0 +1,44 @@
+﻿
+Write an algorithm to determine if a number is "happy".
+
+A happy number is a number defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits, and repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1. Those numbers for which this process ends in 1 are happy numbers.
+
+Example: 19 is a happy number
+
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+
+
+判断一个数字是否为happy number。
+按照描述来做就可以了，把每位的平方累加，得到新数字，如果和为1则返回true，否则使用哈希来存已经计算过的数字。如果已经在哈希中存在，返回false。
+
+实现代码：
+
+
+public class Solution {
+    public bool IsHappy(int n) {
+        var digs = n.ToString();
+    	var hash = new Dictionary<int, bool>();
+    	
+    	while(true){
+    		int r = 0;
+    		for(var i = 0;i < digs.Length; i++){
+    			var x = int.Parse(digs[i].ToString());
+    			r += x * x;
+    		}
+    		if(r == 1){
+    			return true;
+    		}
+    		if(!hash.ContainsKey(r)){
+    			hash.Add(r, true);
+    			digs = r.ToString();
+    		}
+    		else{
+    			return false;
+    		}
+    	}
+	
+    }
+}

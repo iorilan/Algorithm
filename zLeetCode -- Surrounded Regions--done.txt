@@ -1,0 +1,115 @@
+﻿题目描述：
+Given a 2D board containing 'X' and 'O', capture all regions surrounded by 'X'.
+
+A region is captured by flipping all 'O's into 'X's in that surrounded region.
+
+For example,
+X X X X
+X O O X
+X X O X
+X O X X
+After running your function, the board should be:
+
+X X X X
+X X X X
+X X X X
+X O X X
+
+在由'X'和'O'组成的矩阵中，找出所有被'X'包围的'O'，将它们替换为'X'。
+
+思路：
+1.本题可以DFS也可以BFS，但是DFS速度会慢一些，无法通过测试数据。无论哪种方式，就是从四个边的'O'作为切入点n（如果BFS，需要先将四个边的'O'入队列），遍历时找到n的上下左右邻居，分别进行标记（假设标记为A），凡是标记为A的点即为：不能被围的'O'，以这些邻居为中心继续下一次标记。
+2.然后对board做一个遍历，把剩余的'O'赋值为'X'，而'A'赋值为'O'即可。
+
+实现代码：
+
+public class Solution {
+    public void Solve(char[,] board) 
+    {
+       	var row = board.GetLength(0);
+    	var col = board.GetLength(1);
+    	
+    	if(row < 2 || col < 2){
+    		return;
+    	}
+    	
+    	// try go from left & right boundary
+    	var q = new Queue<Pos>();
+    	for(var i = 0;i < row; i++){
+    		if(board[i , 0] == 'O'){
+    			q.Enqueue(new Pos(i , 0));
+    		}
+    		if(board[i , col - 1] == 'O'){
+    			q.Enqueue(new Pos(i , col - 1));
+    		}
+    	}
+    	
+    	// try go from top & down boundary
+    	for(var i = 0;i < col; i++){
+    		if(board[0,i] == 'O'){
+    			q.Enqueue(new Pos(0 , i));
+    		}
+    		if(board[row - 1 , i] == 'O'){
+    			q.Enqueue(new Pos(row - 1 , i));
+    		}
+    	}
+    	Bfs(ref board, row, col , q);
+    	
+    	// restore 'A' to 'O'
+    	// mark 'O' to 'X'
+    	for(var i = 0;i < row; i++){
+    		for(var j = 0;j < col; j++){
+    			if(board[i,j] == 'O'){
+    				board[i,j] = 'X';
+    			}
+    			if(board[i,j] == 'A'){
+    				board[i,j] = 'O';
+    			}
+    		}
+    	}
+    }
+
+
+private void Bfs(ref char[,] board, int rowLen, int colLen, Queue<Pos> q)
+{
+	if(q.Count == 0){
+		return;
+	}
+	
+	var q1 = new Queue<Pos>();
+	while(q.Count > 0){
+		var p = q.Dequeue();
+		board[p.row, p.col] = 'A';
+		
+		// move up
+		if(p.row > 0 && board[p.row - 1, p.col] == 'O'){
+			q1.Enqueue(new Pos(p.row - 1, p.col));	
+		}
+		// move down
+		if(p.row < rowLen - 1 && board[p.row + 1, p.col] == 'O'){
+			q1.Enqueue(new Pos(p.row + 1, p.col));
+		}
+		// move right
+		if(p.col < colLen - 1 && board[p.row, p.col + 1] == 'O'){
+			q1.Enqueue(new Pos(p.row, p.col + 1));
+		}
+		// move left
+		if(p.col > 0 && board[p.row, p.col - 1] == 'O'){
+			q1.Enqueue(new Pos(p.row, p.col - 1));
+		}
+	}
+	
+	Bfs(ref board, rowLen, colLen, q1);
+}
+
+class Pos{
+	public Pos(int r, int c){
+		row = r;
+		col = c;
+	}
+	
+	public int row;
+	public int col;
+}
+
+}

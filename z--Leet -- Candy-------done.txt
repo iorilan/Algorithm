@@ -1,0 +1,59 @@
+public class Solution {
+    class IndexValue{
+	public IndexValue(int i , int v){
+		index = i;
+		value = v;
+	}
+	
+	public int index;
+	public int value;
+}
+
+public int Candy(int[] ratings) 
+{
+if(ratings == null || ratings.Length == 0){
+	return 0;
+}
+
+if(ratings.Length == 1){
+	return 1;
+}
+
+var arr = new List<IndexValue>();
+var candies = new int[ratings.Length];
+    for(var i = 0 ;i < ratings.Length; i++){
+	candies[i] = 0;
+	arr.Add(new IndexValue(i, ratings[i]));
+}
+
+arr = arr.OrderBy(x=>x.value).ToList();
+
+for(var i = 0 ;i < arr.Count ; i++){
+	var index = arr[i].index;
+	if(candies[index] != 0){
+		continue;
+	}
+	
+	if(index == 0){
+		candies[index] = ratings[index] == ratings[index + 1]  ? 1 : candies[index + 1] + 1;
+	}
+	else if(index == candies.Length - 1){
+		candies[index] = ratings[index] == ratings[index - 1]  ? 1 : candies[index - 1] + 1;
+	}
+	else{
+		var left = ratings[index-1] == ratings[index] ? 1 : candies[index - 1] + 1;
+		var right = ratings[index+1] == ratings[index] ? 1 : candies[index + 1] + 1;
+		
+		candies[index] = Math.Max(left , right);
+	}
+	
+}
+
+var s = 0;
+for(var i = 0;i < candies.Length; i++){
+	s += candies[i];
+}
+
+return s;
+}
+}

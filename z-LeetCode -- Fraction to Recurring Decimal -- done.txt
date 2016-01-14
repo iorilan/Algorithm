@@ -1,0 +1,74 @@
+﻿题目描述：
+Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+
+If the fractional part is repeating, enclose the repeating part in parentheses.
+
+For example,
+
+Given numerator = 1, denominator = 2, return "0.5".
+Given numerator = 2, denominator = 1, return "2".
+Given numerator = 2, denominator = 3, return "0.(6)".
+
+就是给一个除数和被除数，返回小数的字符串表达形式。 要求：对于无限循环小数，要括号标记出循环节。
+
+思路：
+本题算是一个数学问题。 首先要明确一点，也是题目的前提，任何分数都不存在无限不循环小数。
+因此可以不断使用分子n除以分母d，记录结果。
+如果能够除尽直接返回结果。
+否则使用哈希表存余数以及上一次出现的位置，再次出现时，就可以添加括号返回结果。
+
+
+实现代码：
+
+public class Solution {
+    public string FractionToDecimal(int numerator, int denominator) {
+     if (numerator == 0)
+		return "0";
+	if (denominator == 0)
+		return "";
+ 
+	var result = "";
+ 
+	// is result is negative
+	if ((numerator < 0) ^ (denominator < 0)) {
+		result += "-";
+	}
+ 
+	// convert int to long
+	long num = numerator, den = denominator;
+	num = Math.Abs(num);
+	den = Math.Abs(den);
+ 
+	// quotient 
+	long res = num / den;
+	result += res.ToString();
+ 
+	// if remainder is 0, return result
+	long remainder = (num % den) * 10;
+	if (remainder == 0)
+		return result;
+ 
+	// right-hand side of decimal point
+	Dictionary<long, int> map = new Dictionary<long, int>();
+	result += ".";
+	while (remainder != 0) {
+		// if digits repeat
+		if (map.ContainsKey(remainder)) {
+			int beg = map[remainder]; 
+			var part1 = result.Substring(0, beg);
+			var part2 = result.Substring(beg, result.Length-beg);
+			result = part1 + "(" + part2 + ")";
+			return result;
+		}
+ 
+		// continue
+		map.Add(remainder, result.Length);
+		res = remainder / den;
+		result += res.ToString();
+		remainder = (remainder % den) * 10;
+	}
+ 
+	return result;
+	 
+    }
+}

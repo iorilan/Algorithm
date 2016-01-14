@@ -1,0 +1,107 @@
+﻿题目描述：
+Implement Trie (Prefix Tree)
+Implement a trie with insert, search, and startsWith methods.
+Note:
+You may assume that all inputs are consist of lowercase letters a-z.
+
+
+思路：
+1.由于题目可以假设所有input均为小写字母，因此每个节点存1个字符。
+2.root的val保持空
+3.创建树时，不断拿去当前word[i]的字符,i∈[0,n)，如果word[i]在当前node的children中找不到，就添加到children中。同时把最后一个节点标记（hasWord）为是否为单词的末尾。
+4.搜索时，每次拿word[i]的字符，逐层判断即可。如果是Search，判断最后到达的字符是否标记为hasWord；如果仅仅搜索prefix，只需判断i是否到word结尾即可。
+
+
+
+实现代码：
+
+public class TrieNode {
+    // Initialize your data structure here.
+    public TrieNode() {
+		children = new List<TrieNode>();
+		hasWord = false;
+    }
+	public TrieNode(char v){
+		val = v;
+		children = new List<TrieNode>();
+		hasWord = false;
+	}
+	
+	public IList<TrieNode> children;
+	public char val;
+	public bool hasWord ;
+}
+
+public class Trie {
+    public TrieNode root;
+
+    public Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    public void Insert(String word) {
+		if(string.IsNullOrEmpty(word)){
+			return;
+		}
+		var n = root;
+		var index = 0;
+		
+		// try find
+		while(n.children.Count > 0 && index < word.Length){
+			var first = n.children.FirstOrDefault(x=>x.val == word[index]);
+			if(first != null){
+				n = first;
+				index++;
+			}
+			else{
+				break;
+			}
+		}
+		if(index < word.Length){
+			// if not exist , create new node
+			for(var i = index; i < word.Length; i++){
+				var child = new TrieNode(word[i]);
+				n.children.Add(child);
+				n = child;
+			}
+		}
+		n.hasWord = true;
+		
+    }
+
+    // Returns if the word is in the trie.
+    public bool Search(string word) {
+		TrieNode n = null;
+		var index = TryFindNode(word, out n);
+		return index == word.Length && n.hasWord;
+    }
+	
+    // Returns if there is any word in the trie
+    // that starts with the given prefix.
+    public bool StartsWith(string word) {
+		TrieNode n = null;
+		var index = TryFindNode(word, out n);
+		return index == word.Length;
+    }
+	
+	private int TryFindNode(string word, out TrieNode node){
+		var n = root;
+		
+		var index = 0;
+		while(n.children.Count > 0 && index < word.Length){
+			var first = n.children.FirstOrDefault(x => x.val == word[index]);
+			if(first != null){
+				n = first;
+				index++;
+			}
+			else{
+				break;
+			}
+		}
+		
+		node = n;;
+		return index;
+	}
+
+}

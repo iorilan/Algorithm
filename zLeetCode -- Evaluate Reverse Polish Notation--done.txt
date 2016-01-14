@@ -1,0 +1,84 @@
+﻿题目描述：
+
+Evaluate the value of an arithmetic expression in Reverse Polish Notation.
+
+Valid operators are +, -, *, /. Each operand may be an integer or another expression.
+
+Some examples:
+  ["2", "1", "+", "3", "*"] -> ((2 + 1) * 3) -> 9
+  ["4", "13", "5", "/", "+"] -> (4 + (13 / 5)) -> 6
+
+
+算是一个经典题目，就是执行一个逆波兰表达式。
+
+思路：
+1. 使用操作符栈，操作数栈。
+解析tokens的过程中，如果token[i]是操作符：
+a. 操作数栈中没有元素，操作符入栈
+b. 操作数栈有元素，弹出最上两个与该操作符计算，结果入操作数栈
+
+2. 如果token[i]操作数，直接入操作数栈
+3. 如果解析完毕后，操作符栈还有操作符，一一弹出并计算（弹1个操作符，两个操作数），结果入操作符栈
+4. 弹出操作符栈的最后元素，即为计算结果。
+
+
+public class Solution {
+    public int EvalRPN(string[] tokens) 
+    {
+        var stNo = new Stack<int>();
+    	var stOp = new Stack<char>();
+    	
+    	for(var i = 0;i < tokens.Length; i++){
+    		if(IsOp(tokens[i])){
+    			if(stNo.Count == 0){
+    				stOp.Push(tokens[i][0]);
+    			}
+    			else{
+    				var n1 = stNo.Pop();
+    				var n2 = stNo.Pop();
+    				stNo.Push(Calc(n1, n2, tokens[i][0]));
+    			}
+    		}
+    		else{
+    			stNo.Push(int.Parse(tokens[i]));
+    		}
+    	}
+	
+
+    	while(stOp.Count > 0){
+    		var op = stOp.Pop();
+    		var n1 = stNo.Pop();
+    		var n2 = stNo.Pop();
+    		stNo.Push(Calc(n1, n2, op));
+    	}
+    	
+    	return stNo.Pop();
+    }
+
+private int Calc(int n1 , int n2, char op)
+{
+	switch(op)
+	{
+		case '+':
+			return n2 + n1;
+		case '-':
+			return n2 - n1;
+		case '*':
+			return n2 * n1;
+		case '/':
+			return n2 / n1;
+		default:
+			throw new NotSupportedException();
+	}
+}
+
+private bool IsOp(string str)
+{
+	if(str == "+" || str == "-" || str == "*" || str == "/")
+	{
+		return true;
+	}
+	
+	return false;
+}
+}

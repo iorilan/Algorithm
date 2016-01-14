@@ -1,0 +1,67 @@
+﻿题目描述：
+
+Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+
+According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes v and w as the lowest node in T that has both v and w as descendants (where we allow a node to be a descendant of itself).”
+
+
+即在一个BST中，找到两个节点p和q的最小公共祖先。
+
+思路：
+
+由于是BST，因此可以分别求出p和q的查找路径pPath,qPath
+找出pPath和qPath的第一个不同节点即可。
+
+
+实现代码：
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        var pathP = new List<TreeNode>();
+        Path(root, p, pathP);
+        var pathQ = new List<TreeNode>();
+        Path(root, q , pathQ);
+		
+        var i = 0;
+        while(i < pathP.Count || i < pathQ.Count){
+			if(i >= pathP.Count ||i >= pathQ.Count){
+				return pathP[--i];
+			}
+			
+            if(pathP[i].val == pathQ[i].val){
+                i ++;
+            }
+            else{
+                return pathP[--i];
+            }
+        }
+        return null;
+    }
+    
+    public void Path(TreeNode node, TreeNode n, IList<TreeNode> list){
+        if(node == null){
+            return ;
+        }
+        list.Add(node);
+		if(n.val == node.val){
+			return;
+		}
+        if(n.val < node.val){
+            Path(node.left, n ,list);
+        }
+        else{
+            Path(node.right, n ,list);
+        }
+    }
+    
+}

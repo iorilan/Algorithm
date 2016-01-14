@@ -1,0 +1,25 @@
+public class Solution {
+    public bool IsIsomorphic(string s, string t) {
+        var hash1 = new Dictionary<char, int>();
+		var hash2 = new Dictionary<char, int>();
+		
+		for(var i = 0;i < s.Length; i++){
+			if(!hash1.ContainsKey(s[i])){
+				hash1.Add(s[i], i);
+				if(hash2.ContainsKey(t[i])){
+					return false;
+				}
+				hash2.Add(t[i],i);
+			}
+			else{
+				if(!hash2.ContainsKey(t[i]) || hash2[t[i]] != hash1[s[i]]){
+					return false;
+				}
+				hash1[s[i]] = i;
+				hash2[t[i]] = i;
+			}
+		}
+		
+		return true;
+    }
+}

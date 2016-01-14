@@ -1,0 +1,89 @@
+﻿题目描述：
+
+Given a 2D binary matrix filled with 0's and 1's, find the largest square containing all 1's and return its area.
+
+For example, given the following matrix:
+
+1 0 1 0 0
+1 0 1 1 1
+1 1 1 1 1
+1 0 0 1 0
+Return 4.
+
+
+在一个矩阵中，找到最大的正方形面积（1表示正方形的点，0表示空）。
+
+
+本题是很典型的DP问题。
+
+1. 把dp[0,i]赋值为matrix[0,i] , dp[i,0]赋值为matrix[i,0]。i∈[0,n)
+
+2. 两层循环根据不同情况为dp[i,j]赋值：
+a. matrix[i,j] == 1 且3个邻居(dp[i-1,j],dp[i,j-1],dp[i-1,j-1])均为1 : dp[i,j] = 4
+b. matrix[i,j] == 1 且3个邻居>1且相等: dp[i,j] = （邻居面积的平方根+1）的平方
+c. matrix[i,j] == 1 且3个邻居>=1但不一定相等: dp[i,j]=（邻居中最小值的平方根+1）的平方
+d. 其他情况： dp[i,j] = matrix[i,j]
+
+3.使用max变量来track当前dp[i,j]的最值
+
+实现代码：
+
+
+
+public class Solution {
+    public int MaximalSquare(char[,] matrix) {
+        
+        var row = matrix.GetLength(0);
+        var col = matrix.GetLength(1);
+        if(row < 2){
+            if(row == 0){
+				return 0;
+			}
+			else if(col == 1){
+				return matrix[0,0] == '1' ? 1 : 0;
+			}
+        }
+        var max = 0;
+		
+        var dp = new int[row, col];
+        for(var i = 0;i < row; i++){
+            var x = matrix[i,0] == '1' ? 1 : 0;
+			dp[i, 0] = x;
+			
+			if(dp[i,0] > max){max = dp[i,0];}
+        }
+        for(var i = 0;i < col; i++){
+            var x = matrix[0,i] == '1' ? 1 : 0;
+			dp[0, i] = x;
+			if(dp[0,i] > max){max = dp[0,i];}
+        }
+        
+        for(var i = 1;i < row; i++){
+            for(var j = 1;j < col; j++){
+				// neighbours all equals 1
+                if(matrix[i,j] == '1' && dp[i-1,j] == 1 && dp[i, j-1] == 1 && dp[i-1,j-1] == 1){
+					if(dp[i-1, j] == 1){
+						dp[i,j] = 4;
+					}
+                }
+				// neighbours all bigger than 1 and equals each other
+				else if(matrix[i,j] == '1' && dp[i-1,j] == dp[i,j-1] && dp[i-1,j-1] == dp[i-1,j] && dp[i-1,j] > 1){
+					dp[i,j] = (int)Math.Pow(Math.Sqrt(dp[i,j-1]) + 1,2);
+				}
+				// neighbours all no less than 1, but may not equals each other
+				else if(matrix[i,j] == '1' && dp[i-1,j] >= 1 && dp[i,j-1] >= 1 && dp[i-1,j-1] >= 1){
+					var min = Math.Min(Math.Min(dp[i-1,j-1], dp[i-1,j]), dp[i,j-1]);
+					dp[i,j] = (int)Math.Pow(Math.Sqrt(min) + 1,2);
+				}
+                else{
+                    dp[i,j] = matrix[i,j] == '1' ? 1 : 0;
+                }
+				
+				if(dp[i,j] > max){max = dp[i,j];}
+            }
+        }
+		
+        return max;
+        
+    }
+}

@@ -1,0 +1,49 @@
+﻿题目描述：
+
+Given an absolute path for a file (Unix-style), simplify it.
+
+For example,
+path = "/home/", => "/home"
+path = "/a/./b/../../c/", => "/c"
+
+
+就是对一个UNIX风格的路径简化。
+
+思路：
+1. 将路径用'/'分隔存在数组中，过滤掉值为".","/"或空的元素
+2. 遍历数组的同时使用栈，如果值为".."，如果栈有元素，弹出；如果值不为".."入栈。
+3. 最后对栈做一次遍历拼简化后的路径就可以了。
+
+实现代码：
+
+
+
+public class Solution {
+    public string SimplifyPath(string path) {
+        var folders = path.Split('/').Where(x=>x!="." && x != "/" && x != "").ToList();
+	
+    	var stack = new Stack<string>();
+    	for(var i = 0;i < folders.Count; i++){
+    		if(folders[i] == ".."){
+    			if(stack.Count > 0){
+    				stack.Pop();
+    			}
+    			
+    		}
+    		else{
+    			stack.Push(folders[i]);
+    		}
+    	}
+    	
+    	var result = string.Empty;
+    	while(stack.Count > 0){
+    		var f = stack.Pop();
+    		result = string.Format("/{0}",f) + result;
+    	}
+    	if(result == string.Empty){
+    		return "/";
+    	}
+    	
+    	return result;
+    }
+}

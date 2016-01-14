@@ -1,0 +1,44 @@
+﻿题目描述：
+
+Given a singly linked list, determine if it is a palindrome.
+
+Follow up:
+Could you do it in O(n) time and O(1) space?
+
+
+即判断链表是否为回文。
+
+思路：只能想到借助队列，没能达到空间复杂度O(1)，空间复杂度O(N)
+
+实现代码：
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public bool IsPalindrome(ListNode head) {
+        if(head == null || head.next == null){
+            return true;
+        }
+        
+        var list = new List<int>();
+        while(head != null){
+            list.Add(head.val);
+            head = head.next;
+        }
+        
+        for(var i =0 ;i < list.Count/2; i++){
+            if(list[i] != list[list.Count-i-1]){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}

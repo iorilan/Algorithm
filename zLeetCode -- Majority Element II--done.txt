@@ -1,0 +1,41 @@
+﻿题目描述：
+
+Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times. The algorithm should run in linear time and in O(1) space.
+
+
+本题就是需要计算一个数组中出现次数超过n/3次的元素。
+
+暂时没想出如何使用O(1)的空间复杂度来做，思路还是使用哈希来完成。
+
+实现代码：
+
+public class Solution {
+    public IList<int> MajorityElement(int[] nums) 
+    {
+        if(nums == null || nums.Length == 0){
+            return new List<int>();
+        }
+        var hash = new Dictionary<int,int>();
+        var len = nums.Length;
+        
+        for (var i = 0;i < len; i++)
+        {
+            if(!hash.ContainsKey(nums[i]))
+            {
+                hash.Add(nums[i],1);
+            }
+            else{
+                hash[nums[i]]++;
+            }
+        }
+        
+        var ret = new List<int>();
+        foreach(var k in hash.Keys)
+        {
+            if(hash[k] > len / 3){
+                ret.Add(k);
+            }
+        }
+        return ret;
+    }
+}

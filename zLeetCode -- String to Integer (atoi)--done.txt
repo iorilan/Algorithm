@@ -1,0 +1,64 @@
+﻿题目描述：
+Implement atoi to convert a string to an integer.
+
+Hint: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.
+
+Notes: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front.
+
+就是完成字符串转整数的操作。
+本题的复杂点在于情况很多需要考虑：
+1.可能是负数。
+2.首字母为+
+3.跳过开始的'0'
+4.超大整数（使用double来解析）
+
+public class Solution {
+    public int MyAtoi(string str) {
+        if(string.IsNullOrWhiteSpace(str)){
+            return 0;
+        }
+        str = str.Trim();
+		
+        var digits = "0123456789";
+        
+        if(str.Length > 1 && !digits.Contains(str[0]) && !digits.Contains(str[1])){
+            return 0;
+        }
+        
+        var s1 = "";
+		var c = 0;
+        if(str[0] == '-'){
+            s1 = "-";
+			c++;
+        }
+        
+        // skip '+'
+		if(str[0] == '+'){
+			c++;
+		}
+		
+		//skip all starting '0' 
+        while(c < str.Length && str[c] == '0'){
+            c ++;
+        }
+        
+        // start from non-zero number , collect all valid digit char
+        while(c < str.Length && digits.Contains(str[c])){
+            s1 += str[c];
+            c++;
+        }
+		
+        double v;
+        if(double.TryParse(s1, out v)){
+            if(v > int.MaxValue){
+				return int.MaxValue;
+			}
+			if(v < int.MinValue){
+				return int.MinValue;
+			}
+			return (int)v;
+        }
+        return 0;
+        
+    }
+}

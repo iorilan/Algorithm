@@ -1,0 +1,51 @@
+﻿题目描述：
+
+Given an unsorted array of integers, find the length of longest increasing subsequence.
+
+For example,
+Given [10, 9, 2, 5, 3, 7, 101, 18],
+The longest increasing subsequence is [2, 3, 7, 101], therefore the length is 4. Note that there may be more than one LIS combination, it is only necessary for you to return the length.
+
+Your algorithm should run in O(n2) complexity.
+
+Follow up: Could you improve it to O(n log n) time complexity?
+
+就是在一个数组中，找到最大递增子序列的长度，注意，这个最大递增子序列不一定是连续的。
+
+思路：
+通常根据序列求极值的问题都可以优先考虑DP，两层遍历，因此时间复杂度通常是O(N^2)。
+本题也一样，先找递推式：
+1.对于每个数字nums[i]，i∈[0,n)，只有1个数字时，它的最大长度为1，因此dp[0...n) = 1，dp[i]表示位置i的最大递增长度。
+2.对于nums[i]和nums[j]，如果i > j，并且nums[i] > nums[j]。那么就看dp[j] + 1是否大于dp[i]，如果大于，就需要更新dp[i]。
+3.返回dp中最大元素即可。
+
+实现代码：
+
+public class Solution {
+    public int LengthOfLIS(int[] nums) 
+    {
+        if(nums.Length == 0){
+            return 0;
+        }
+        
+        var dp = new int[nums.Length];
+	
+    	for(var i = 0;i < nums.Length; i++){
+    		dp[i] = 1;
+    	}
+    	
+    	for (var i = 0; i < nums.Length; i++){
+    		for (var j = 0;j < nums.Length; j++){
+    			if(i <= j){
+    				continue;
+    			}
+    			
+    			if(nums[i] > nums[j] && dp[j]  + 1 > dp[i]){
+    				dp[i] = dp[j] + 1;
+    			}
+    		}
+    	}
+    	
+    	return dp.Max();
+    }
+}

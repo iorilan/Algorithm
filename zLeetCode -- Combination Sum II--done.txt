@@ -1,0 +1,61 @@
+﻿题目描述：
+Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+Each number in C may only be used once in the combination.
+
+Note:
+All numbers (including target) will be positive integers.
+Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+The solution set must not contain duplicate combinations.
+For example, given candidate set 10,1,2,7,6,1,5 and target 8, 
+A solution set is: 
+[1, 7] 
+[1, 2, 5] 
+[2, 6] 
+[1, 1, 6] 
+
+就是从一个序列candidates中找出非重复元素的组合，要求和等于target。
+
+思路：
+本题与Combination Sum很类似，区别在于，回溯时，从Index处开始；而前者每次都从0开始。
+1.本题解法依旧是回溯，使用一个数组arr在遍历nums时，添加nums[i]，进入递归，移除nums[i]。i∈[0,n)
+2.使用index变量来track下次循环的起始位置。
+3.使用哈希来去重
+
+实现代码：
+
+    public IList<IList<int>> CombinationSum2(int[] candidates, int target) 
+    {
+    	if(candidates == null || candidates.Length == 0){
+		    return null;
+	}
+
+    	var arr = candidates.OrderBy(x=>x).ToList();
+    	
+    	var result = new Dictionary<string, IList<int>>();
+    	Travel(arr ,new List<int>(), 0, target, result);
+
+    	return new List<IList<int>>(result.Select(x=>x.Value));
+    }
+
+
+private void Travel(IList<int> candidates, IList<int> arr, int index, int target, Dictionary<string ,IList<int>> result){
+	if(target == 0 ){
+	    var key = string.Join(",", arr);
+	    if(!result.ContainsKey(key)){
+	        result.Add(key, arr.ToList());
+	    }
+		
+		return ;
+	}
+	
+	for(var i = index ;i < candidates.Count; i++){
+		if(target < candidates[i]){
+			return;
+		}
+		
+		arr.Add(candidates[i]);
+		Travel(candidates, arr, i + 1, target - candidates[i], result);
+		arr.Remove(candidates[i]);
+	}
+}

@@ -1,0 +1,23 @@
+﻿题目描述：
+
+Write a function that takes an unsigned integer and returns the number of ’1' bits it has (also known as the Hamming weight).
+
+For example, the 32-bit integer ’11' has binary representation 00000000000000000000000000001011, so the function should return 3.
+
+
+本题依然属于一道位运算的题目，输入一个无符号的整数，判断出1的个数。
+
+思路：
+对于整数n,从n开始对n和n-1做与运算然后赋值给n。即，n=n&n-1。直到n等于n为止。能做多少次运算就说明有多少个1。
+
+实现代码：
+
+public class Solution {
+    public int HammingWeight(uint n) {
+        int count;
+		for (count=0; n > 0 ; count++){
+			n &= n-1;
+		}
+		return count;
+    }
+}

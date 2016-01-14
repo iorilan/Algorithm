@@ -1,0 +1,31 @@
+﻿题目描述：
+
+Implement pow(x, n).
+
+思路：
+
+如果n为偶数：
+MyPow(x,n) = MyPow(x,n/2) 的平方
+如果n为奇数：
+MyPow(x,n) = x * MyPow(x, (n-1)/2)的平方
+
+
+
+实现代码：
+
+public class Solution {
+    public double MyPow(double x, int n) {
+        if(n <= 2){
+    		return Math.Pow(x, n);
+    	}
+    	
+    	if(n % 2 == 0){
+    		var y = MyPow(x, n/2) ;
+    		return y * y;
+    	}
+    	else{
+    		var y = MyPow(x, (n-1)/2);
+    		return x * y * y;
+    	}
+    }
+}

@@ -1,0 +1,84 @@
+﻿题目描述：
+
+
+Given a digit string, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+
+
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+Note:
+Although the above answer is in lexicographical order, your answer could be in any order you want.
+
+给一串数，先将数字映射为手机键盘的字母集，返回所有的字母组合。 
+关于手机键盘的图片可以看题目：
+https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+思路：
+本题依然使用回溯的思路，只是需要做额外的预备工作。
+1. 创建映射的map
+2. 将每一位映射为字符数组
+3.1 如果当前是最后一行，返回每个字符组成的集合
+3.2 如果不是最后一行，得到子结果，并循环当前每一位，将当前位放在每个字符数组的最前，返回结果。
+
+实现代码：
+
+public class Solution {
+    public IList<string> LetterCombinations(string digits) 
+    {
+      	if(string.IsNullOrWhiteSpace(digits) || digits.Contains('1'))
+      	{
+		    return new List<string>();
+	    }
+	
+    	BuildMap();
+    	
+    	var all = new List<char[]>();
+    	for(var i = 0;i < digits.Length; i++){
+    		all.Add(dict[digits[i]]);
+    	}
+    	
+    	var r = Find(all, 0);
+    	
+    	return r;
+    }
+
+private Dictionary<char, char[]> dict = new Dictionary<char, char[]>();
+
+private IList<string> Find(IList<char[]> all, int row)
+{
+	if(row == all.Count - 1){
+		var arr = new List<string>();
+		for(var i = 0;i < all[all.Count -1].Length; i++){
+			arr.Add(all[all.Count - 1][i].ToString());
+		}
+		return arr;
+	}
+	else{
+		var children = Find(all, row + 1);
+		var arr = new List<string>();
+		for(var i = 0;i < all[row].Length; i++){
+			var self = all[row][i];
+			for(var j = 0;j < children.Count; j++){
+				arr.Add(self + children[j]);
+			}
+		}
+		
+		return arr;
+	}
+}
+
+
+private void BuildMap(){
+	dict.Add('2', new char[3]{'a','b','c'});
+	dict.Add('3', new char[3]{'d','e','f'});
+	dict.Add('4', new char[3]{'g','h','i'});
+	dict.Add('5', new char[3]{'j','k','l'});
+	dict.Add('6', new char[3]{'m','n','o'});
+	dict.Add('7', new char[4]{'p','q','r','s'});
+	dict.Add('8', new char[3]{'t','u','v'});
+	dict.Add('9', new char[4]{'w','x','y','z'});
+}
+}

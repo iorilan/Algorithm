@@ -1,0 +1,86 @@
+﻿题目描述：
+
+Given a string that contains only digits 0-9 and a target value, return all possibilities to add binary operators (not unary) +, -, or * between the digits so they evaluate to the target value.
+
+Examples: 
+"123", 6 -> ["1+2+3", "1*2*3"] 
+"232", 8 -> ["2*3+2", "2+3*2"]
+"105", 5 -> ["1*0+5","10-5"]
+"00", 0 -> ["0+0", "0-0", "0*0"]
+"3456237490", 9191 -> []
+
+给定一串数，在数字中间插入操作符构成表达式，计算表达式，使得结果等于target。
+
+思路：
+由于要考虑多位数的情况，对于数组nums,需要对每一位nums[i]（其中i∈[0,n)）进行字符串截取: nums.Substr[i,i+1],nums.Substr[i,i+2]...nums.Substr[i,i+n-1]，然后对每个字串DFS。
+
+一开始想DFS出所有表达式然后逐个计算的，可是表达式计算本身需要字符串遍历，使用栈和队列求解，因此这个方案不可取；
+而是需要在遍历过程中立即计算，对于这个方案，要考虑到不同操作符+,-和*计算时的优先级问题。
+
+1.对于+和-可以直接计算，然后从下一位作为起始进入DFS；
+2.而对于*并且之前为+或-，需要恢复上一次+或-的计算值，先计算当前的*，然后再执行之前运算的逆运算。
+
+其次，需要考虑当字符串长度大于1并且首字符为0的情况，直接返回。
+
+
+参考连接：
+http://www.sptzxb.com/oj/2015/09/21/LeetCode-Expression%20Add%20Operators/
+http://bookshadow.com/weblog/2015/09/16/leetcode-expression-add-operators/
+
+
+实现代码：
+
+public class Solution {
+    public IList<string> AddOperators(string num, int target) 
+    {
+        var result = new List<string>();
+    	Dfs(target, num, 0, 0, '+', "", ref result);
+    	
+    	return result;
+    }
+    
+private void Dfs(int target, string num, long current , long prevNum, char prevOp, string s, ref List<string> result)
+{
+   if (num == "")
+   {
+   		if(current == target){
+			result.Add(s);
+		}
+		return;
+   }
+   
+	for(var i = 1 ;i <= num.Length; i++)
+	{
+		var str = num.Substring(0, i);
+		
+		if(str.Length > 1 && str[0] == '0'){
+			return;
+		}
+		
+		long n = long.Parse(str);
+		
+		var left = num.Substring(i, num.Length - i);
+		if(s == ""){
+			Dfs(target, left, n, n,'+', str, ref result);
+			continue;
+		}
+		//Console.WriteLine(str + ","+index);
+		
+		Dfs(target, left, current + n, n,'+', s +"+"+str, ref result);
+		Dfs(target, left, current - n, n,'-', s +"-"+str, ref result);
+		
+		// for '*' operator , execute reverse operation for previous operation
+		if(prevOp == '+'){
+			Dfs(target, left, current - prevNum + prevNum * n,  prevNum * n, prevOp, s +"*"+str, ref result);
+		}
+		else if(prevOp == '-'){
+			Dfs(target, left, current + prevNum - prevNum * n,  prevNum * n, prevOp, s +"*"+str, ref result);
+		}
+		else{
+		    Dfs(target, left, current * n, n, prevOp, s +"*"+str, ref result);
+		}
+
+	}
+}
+
+}

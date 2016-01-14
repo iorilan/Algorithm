@@ -1,0 +1,38 @@
+
+public IList<string> WordBreak(string s, ISet<string> wordDict) 
+   {
+		var results = new List<string>();
+		var possible = new bool[s.Length];
+		for(var i = 0;i < possible.Length; i++){
+			possible[i] = true;
+		}
+		
+		DfsWithCut(0,s, wordDict, "", results, possible);
+		return results;
+   }
+
+public void DfsWithCut(int start , string s, ISet<string> wordDic, string result, IList<string> results, bool[] possible){
+
+	var left = s.Substring(start , s.Length - start);
+	if(wordDic.Any(x=> x == left)){
+		var r = result == "" ? left : result + " " + left;
+		results.Add(r);
+	}
+	
+   for(var i = start ;i < s.Length ; i++){
+       var w = s.Substring(start, i - start + 1);
+
+       if(wordDic.Any(x=>x == w) && i < s.Length - 1){
+           if(possible[i+1] /*only if possible do recursion*/){
+		       var r = result == "" ? w : result + " " + w;
+			   var before = results.Count; // track current results count before dfs
+               DfsWithCut(i + 1, s , wordDic, r, results, possible);
+			   if(results.Count == before){ // since no new result found , mark possible[i+1] as false
+			   		possible[i+1] = false;
+			   }
+           }
+		   
+       }
+   }
+   
+}

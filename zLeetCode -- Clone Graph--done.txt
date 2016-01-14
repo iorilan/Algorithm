@@ -1,0 +1,58 @@
+﻿题目描述：
+
+Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.
+
+就是对一个图进行复制。
+
+思路：
+图遍历可以DFS或BFS，两种方式都可以，下面的解法是DFS的递归方式。当然，也可以用队列+哈希表使用BFS完成。
+
+1. 在哈希表hash添加图的首节点source，和复制节点cloned（拷贝label）。
+2. 复制过程：
+2.1 如果source有neighbors，遍历neighbors，对于每个neighbors[i],判断是否在哈希存在，如果不存在，添加一份neighbor[i]的复制到哈希表中，进入递归；
+2.2 如果已经存在，或者完成了2.1的复制步骤，将这个neighbor复制到当前map[source]对应的邻居列表中。即map[source].neighbors.Add(map[neighbor[i]])
+
+实现代码：
+
+
+/**
+ * Definition for undirected graph.
+ * public class UndirectedGraphNode {
+ *     public int label;
+ *     public IList<UndirectedGraphNode> neighbors;
+ *     public UndirectedGraphNode(int x) { label = x; neighbors = new List<UndirectedGraphNode>(); }
+ * };
+ */
+public class Solution {
+    public UndirectedGraphNode CloneGraph(UndirectedGraphNode node) 
+    {
+        if(node == null){
+            return null;
+        }
+		
+		// use a map saving source - cloned node
+        var map = new Dictionary<UndirectedGraphNode, UndirectedGraphNode>();
+		
+		// put root of source - cloned node into map
+		var cloned = new UndirectedGraphNode(node.label);
+		map.Add(node, cloned);
+		
+		Clone(node, ref map);
+		
+        return cloned;
+    }
+	
+    private void Clone(UndirectedGraphNode source, ref Dictionary<UndirectedGraphNode, UndirectedGraphNode> map)
+    {
+        for(var i = 0;i < source.neighbors.Count; i++){
+            var n = source.neighbors[i];
+            if(!map.ContainsKey(n))
+			{
+                map.Add(n, new UndirectedGraphNode(n.label));
+                Clone(n, ref map);
+            }
+			map[source].neighbors.Add(map[n]); 
+        }
+    }
+	
+}

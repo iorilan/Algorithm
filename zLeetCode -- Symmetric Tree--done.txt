@@ -1,0 +1,77 @@
+﻿题目描述：
+Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+
+For example, this binary tree is symmetric:
+
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+But the following is not:
+    1
+   / \
+  2   2
+   \   \
+   3    3
+
+判断一个树的左右子树是否完全相等。
+思路：分别对左右子树进行中序遍历，然后对遍历结果进行一一对比。
+
+
+实现代码：
+
+public class Solution {
+    public bool IsSymmetric(TreeNode root) {
+ 	
+	if(root == null || root.left ==null && root.right == null){
+		return true;
+	}
+	
+	var left = new List<string>();
+	var right = new List<string>();
+	
+    TravelL(root.left, left);	
+	TravelR(root.right, right);
+
+	if(left.Count != right.Count){
+		return false;
+	}
+	
+	for(var i = 0;i < left.Count; i++){
+		if(left[i] != right[i]){
+			return false;
+		}
+	}
+	
+	return true;
+ }
+
+
+	public void TravelL(TreeNode node , IList<string> result){
+	
+		if(node == null){
+			result.Add("N");
+			return;
+		}
+		
+		result.Add(node.val.ToString());
+		TravelL(node.left, result);
+		TravelL(node.right, result);
+		
+	}
+	public void TravelR(TreeNode node , IList<string> result){
+	
+		if(node == null){
+			result.Add("N");
+			return;
+		}
+		
+		result.Add(node.val.ToString());
+		TravelR(node.right, result);
+		TravelR(node.left, result);
+		
+		
+	}
+	
+}

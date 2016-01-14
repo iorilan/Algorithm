@@ -1,0 +1,89 @@
+﻿问题描述：
+
+Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example 1:
+
+11110
+11010
+11000
+00000
+Answer: 1
+
+Example 2:
+
+11000
+11000
+00100
+00011
+Answer: 3
+
+
+给定一个二维数组grid，1表示陆地，0表示海洋，求出岛屿的数量，岛屿的定义为：上下左右为海洋或超出边界(在grid之外)。
+
+例如对于
+
+11000
+11000
+00100
+00011
+
+这个二维数组而言，由
+11
+11
+构成了一个岛屿；中间的
+1
+构成了一个岛屿；最后的
+11
+构成了另一个岛屿，一共3个岛屿。
+
+
+思路：
+
+本题考虑的还是DFS：
+1.初始化一个标记数组flag[,]
+2.遍历grid[,]，如果当前为'1'，则DFS从当前位置向上，下，左，右进行标记（注意判断越界），如果下一个位置也为'1'，flag[row,col]=true。
+这样一来，DFS就能够保证所有可达的'1'都被标记在flag中。
+3.在遍历grid[,]时，发现下一处未标记的'1'，进入DFS进行标记。
+4.标记了多少轮，就有多少个岛屿。
+
+实现代码：
+
+
+public class Solution {
+    public int NumIslands(char[,] grid) 
+    {
+        var row = grid.GetLength(0);
+    	var col = grid.GetLength(1);
+    	
+    	var flag = new bool[row, col];
+    	
+    	var count = 0;
+    	for(var i = 0;i < row; i++){
+    		for(var j = 0;j < col; j++){
+    			if(grid[i,j] == '1' && !flag[i,j]){
+    				count ++;
+    				Mark(ref flag, grid, i, j);
+    			}
+    		}
+    	}
+    	return count;
+    }
+
+    private void Mark(ref bool[,] flag, char[,] grid, int r, int c)
+    {
+    	var row = flag.GetLength(0);
+    	var col = flag.GetLength(1);
+    	
+    	if(r < 0 || c < 0 || r >= row || c >= col || grid[r,c] == '0' ||flag[r,c]){
+    		return;
+    	}
+    	flag[r,c] = true;
+    	
+    	Mark(ref flag, grid, r + 1, c);
+    	Mark(ref flag, grid, r - 1, c);
+    	Mark(ref flag, grid, r, c + 1);
+    	Mark(ref flag, grid, r, c - 1);
+    }
+
+}

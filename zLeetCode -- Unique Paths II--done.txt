@@ -1,0 +1,104 @@
+﻿题目要求：
+
+Follow up for "Unique Paths":
+
+Now consider if some obstacles are added to the grids. How many unique paths would there be?
+
+An obstacle and empty space is marked as 1 and 0 respectively in the grid.
+
+For example,
+There is one obstacle in the middle of a 3x3 grid as illustrated below.
+
+[
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]
+The total number of unique paths is 2.
+
+Note: m and n will be at most 100.
+
+就是在一个矩阵中，求从左上到右下单元的路径个数，每次只能向下或向右移动。0表示可以通过，1表示障碍。
+
+思路：
+本题依然是1个DP问题。设dp[i,j]表示从左上到矩阵的[i,j]位置的路径个数。
+
+1. 当行或列只有1时，如果有障碍，则返回0，否则返回1。
+
+当row > 1 且 col > 1:
+2.1 分别初始化dp的第一行(i)和第一列(j)，即dp[i,0]和dp[0,j]：如果发现障碍，即i==1或j==1，把则dp[i...n,0]和dp[0,j...n]设为0，没有发现障碍时初始化为1。
+2.2 如果obstacleGrid[i,j]为1，即当前为障碍，则dp[i,j]为0，否则：
+dp[i, j] = dp[i-1, j] + dp[i, j-1];
+
+
+实现代码：
+
+
+public class Solution {
+    public int UniquePathsWithObstacles(int[,] obstacleGrid) {
+        var row = obstacleGrid.GetLength(0);
+    	var col = obstacleGrid.GetLength(1);
+    	
+    	if(row < 1 || obstacleGrid[0,0] == 1){
+    		return 0;
+    	}
+    	
+    	if(row == 1){
+    		for(var i = 0; i < col; i ++){
+    			if(obstacleGrid[0,i] == 1){
+    				return 0;
+    			}
+    		}
+    		return 1;
+    	}
+    	if(col == 1){
+    		for(var i = 0; i < row; i ++){
+    			if(obstacleGrid[i,0] == 1){
+    				return 0;
+    			}
+    		}
+    		return 1;
+    	}
+    	
+    	var dp = new int[row, col];
+    	
+    	for(var i = 0;i < col; i++){
+    		if(obstacleGrid[0,i] == 1){
+    			while(i < col){
+    				dp[0,i] = 0;
+    				i++;
+    			}
+    			break;
+    		}
+    		else{
+    			dp[0,i] = 1;
+    		}
+    	}
+    	
+    	for(var i = 0;i < row; i++){
+    		if(obstacleGrid[i,0] == 1){
+    			while(i < row){
+    				dp[i,0] = 0;
+    				i++;
+    			}
+    			break;
+    		}
+    		else{
+    			dp[i,0] = 1;
+    		}
+    	}
+    	
+    	for(var i = 1;i < row; i++){
+    		for(var j = 1;j < col; j++){
+    			if(obstacleGrid[i,j] == 1){
+    				dp[i,j] = 0;
+    			}
+    			else{
+    				dp[i, j] = dp[i-1, j] + dp[i, j-1];
+    			}
+    		}
+    	}
+    	
+    	return dp[row-1, col-1];
+    }
+}

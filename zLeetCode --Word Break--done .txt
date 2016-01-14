@@ -1,0 +1,45 @@
+﻿题目描述：
+Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+For example, given
+s = "leetcode",
+dict = ["leet", "code"].
+
+Return true because "leetcode" can be segmented as "leet code".
+
+就是给定一个字符串s，和一个字典dict，判断s是否满足：如果将s分为若干字串,s1,s2...sn.每个字串在dict中都存在。
+例如s="leetcode" ,dict=["leet","code"]，s就满足这一点，因为对于字串s1="leet",s2="code"而言，都在dict中可以找到。
+
+思路：
+一开始认为本题是典型的回溯+DFS，就是从s的每个字符开始查找，判断s[i...k]是否在dict中可以找到，如果可以，那么继续判断s[k...n]中的某个字串在dict中存在。可是这种算法会超时，无法通过测试数据。
+
+查了一些解法，发现本题其实可以使用DP来做。
+1.设dp[i]表示，在s中i的索引处可以在dict中找到。于是就可以遍历s,i∈[0,n)
+2.当在i这个位置时，就需要对s[0...i]一一判断：是否存在某个位置满足，dp[0,k]=true并且s[k+1,i]在dict中可以找到（其中，k∈[0,i-1]）。如果满足，那么就可以认为dp[i]=true。
+
+实现代码：
+
+public class Solution {
+    public bool WordBreak(string s, ISet<string> wordDict) 
+    {
+        var dict = new Dictionary<string, bool>();
+    	foreach(var w in wordDict){
+    		dict.Add(w, true);
+    	}
+    	
+    	var found = new bool[s.Length + 1];
+    	found[0] = true;
+    	
+    	for(var i = 0;i < s.Length; i++){
+    		for(var j=i; j>=0; j--) {
+    			var str = s.Substring(j,i-j+1); 
+    			if(dict.ContainsKey(str) && found[j]){
+    				found[i+1] = true;
+    				break;
+    			}
+    		}
+    	}
+    	
+    	return found[s.Length];
+    }
+}

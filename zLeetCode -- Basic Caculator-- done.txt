@@ -1,0 +1,117 @@
+﻿题目描述：
+
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string may contain open ( and closing parentheses ), the plus + or minus sign -, non-negative integers and empty spaces .
+
+You may assume that the given expression is always valid.
+
+Some examples:
+"1 + 1" = 2
+" 2-1 + 2 " = 3
+"(1+(4+5+2)-3)+(6+8)" = 23
+
+思路：
+1. 两个栈，1个numStack存数字，1个opStack存(,),+,-
+2. 解析数字过程中，注意数字可能是多位数
+3. 如果是+,(,或-，直接入栈
+4. 如果是)，判断当前opStack最上操作符是否为'('，如果是直接弹出（标记为弹出），如果opStack.Peek()不为'('且opStack中有元素，则进行循环计算：
+4.1 opStack弹出1个，numStack弹出2个，计算结果入numStack
+
+4.2 最后判断，如果最上层为'('且仍未弹出则弹出这个'('
+
+5.最后需要对余下opStack和numStack中的元素进行计算，结果入numStack(与4.1过程一样)
+
+最后弹出numStack的结果即可。
+
+实现代码：
+
+
+
+
+public class Solution {
+public int Calculate(string s) 
+{
+	// two stack
+	var opStack = new Stack<string>();
+	var numStack = new Stack<int>();
+	var n = "";
+	// if number , push number stack
+	for(var i = 0;i < s.Length; i++){
+		if(s[i] == ' '){
+			continue;
+		}
+		
+		// if (, +,- , push op stack
+		if(s[i] == '(' || s[i] == '+' || s[i] == '-'){
+			opStack.Push(s[i].ToString());
+		}
+		// if ).  pop op stack, pop 2 from number stack, until reach '('
+		else if(s[i] == ')'){
+			var poped = false;
+			if(opStack.Count > 0 && opStack.Peek() == "("){
+				poped = true;
+				opStack.Pop();
+			}
+			
+			while(opStack.Count > 0 && opStack.Peek() != "("){
+				var n1 = numStack.Pop();
+				var n2 = numStack.Pop();
+				var o = opStack.Pop();
+				numStack.Push(Calc(n1, n2, o));
+			}
+			if(!poped && opStack.Count > 0 && opStack.Peek() == "("){
+				opStack.Pop();
+			}
+			
+		}
+		// push num into numStack, try calc until reach '('
+		else
+		{
+			// parse out number 
+			var valid = "0123456789";
+			if(valid.Contains(s[i])){
+				n += s[i];
+				if(i == s.Length - 1 || !valid.Contains(s[i+1])){
+					numStack.Push(int.Parse(n));
+					n = "";
+					while(opStack.Count > 0 && opStack.Peek() != "(")
+					{
+						var o = opStack.Pop();
+						var n1 = numStack.Pop();
+						var n2 = numStack.Pop();
+						numStack.Push(Calc(n1,n2,o));
+					}
+					
+				}
+			}
+		}
+	}
+	
+	// pop the rest ops in opstack and numbers in number stack	
+	while(opStack.Count > 0){
+		var o = opStack.Pop();
+		if(o != "+" && o != "-"){
+			continue;
+		}
+		var n1 = numStack.Pop();
+		var n2 = numStack.Pop();
+		numStack.Push(Calc(n1,n2,o));
+	}
+	
+	return numStack.Pop();
+}
+	
+public int Calc(int n1, int n2, string op){
+	switch(op)
+	{
+		case "+" :
+			return n1 + n2;
+		case "-" :
+			return n2 - n1;
+		default :
+		throw new NotSupportedException();
+	}
+}
+
+}

@@ -1,0 +1,66 @@
+﻿题目描述：
+
+Implement the following operations of a queue using stacks.
+
+push(x) -- Push element x to the back of queue.
+pop() -- Removes the element from in front of queue.
+peek() -- Get the front element.
+empty() -- Return whether the queue is empty.
+Notes:
+You must use only standard operations of a stack -- which means only push to top, peek/pop from top, size, and is empty operations are valid.
+Depending on your language, stack may not be supported natively. You may simulate a stack by using a list or deque (double-ended queue), as long as you use only standard operations of a stack.
+You may assume that all operations are valid (for example, no pop or peek operations will be called on an empty queue).
+
+
+思路：
+本题考查的就是使用两个栈来实现一个队列，主要还是对栈本身的一个熟悉。
+1.使用s1和s2两个栈
+2.push时，直接入s2
+3.pop时，先把s2的item 弹出入s1，再从s1中弹出1个，再将s1中元素逐个入s2
+4.peek，类似pop，区别在于只取值但不删除。将s2的每个item弹出入s1，n = s1.pop(),然后将s1元素逐个弹入s2，返回n。
+5.empty，判断s2是否为空即可。
+
+实现代码：
+
+public class Queue {
+    public Queue(){
+        _s1 = new Stack<int>();
+        _s2 = new Stack<int>();
+    }
+    private Stack<int> _s1 ;
+    private Stack<int> _s2;
+    // Push element x to the back of queue.
+    public void Push(int x) {
+        _s2.Push(x);
+    }
+    
+    // Removes the element from front of queue.
+    public void Pop() {
+        while(_s2.Count > 0){
+            _s1.Push(_s2.Pop());
+        }
+        _s1.Pop();
+        while(_s1.Count > 0)
+        {
+            _s2.Push(_s1.Pop());
+        }
+    }
+
+    // Get the front element.
+    public int Peek() {
+		while(_s2.Count > 0){
+			_s1.Push(_s2.Pop());
+		}
+		
+        var n = _s1.Peek();
+		while(_s1.Count > 0){
+			_s2.Push(_s1.Pop());
+		}
+        return n;
+    }
+
+    // Return whether the queue is empty.
+    public bool Empty() {
+        return _s2.Count == 0;
+    }
+}

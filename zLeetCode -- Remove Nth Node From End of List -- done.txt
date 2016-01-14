@@ -1,0 +1,70 @@
+﻿移除链表的倒出第n个节点。
+
+思路：
+
+本题还是考察链表的删除操作，如果要删除节点h：
+
+如果h不是最后节点，
+h.val = h.next.val;
+h.next = h.next.next;
+
+如果h为最后节点，
+h = null；
+
+第一次遍历找到倒数第n个为正数第几，然后找到删除的点直接删除就可以了。
+
+
+实现代码：
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode RemoveNthFromEnd(ListNode head, int n) {
+        
+         if(head == null){
+            return null;
+        }
+        
+        if(n == 1 && head.next == null){
+            return null;
+        }
+        
+       var len = 0;
+       var h = head;
+       while(head != null){
+           head = head.next;
+           len ++;
+       }
+       
+       if(len - n < 0){
+           return null;
+       }
+       var nth = len - n + 1;
+       
+       var tmp = h;
+       if(nth < len){
+	   	var c = 1;
+            while(c < nth){
+               h = h.next;
+               c ++;
+            }
+			
+            h.val = h.next.val;
+            h.next = h.next.next;
+       }else{
+	   		while(h.next.next != null) {
+				h = h.next;
+			}
+           h.next = null;
+       }
+       
+       return tmp;
+    }
+}

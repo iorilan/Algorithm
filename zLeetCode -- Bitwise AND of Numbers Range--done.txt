@@ -1,0 +1,22 @@
+﻿题目描述：
+Given a range [m, n] where 0 <= m <= n <= 2147483647, return the bitwise AND of all numbers in this range, inclusive.
+
+For example, given the range [5, 7], you should return 4.
+
+
+就是对从m到n之间的数字做与运算。
+
+思路：
+本题的关键在于，求出了n& n-1为v，就可以直接把n设为v，而没必要在求v与n-1之间的数了。
+
+实现代码：
+
+public class Solution {
+    public int RangeBitwiseAnd(int m, int n) 
+    {
+        while(n > m){
+            n = n & n-1;
+        }
+        return n & m ;
+    }
+}

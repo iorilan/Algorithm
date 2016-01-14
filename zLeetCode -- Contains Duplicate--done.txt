@@ -1,0 +1,26 @@
+﻿题目描述：
+
+Contains Duplicate
+
+Given an array of integers, find if the array contains any duplicates. Your function should return true if any value appears at least twice in the array, and it should return false if every element is distinct.
+
+判断序列是否存在重复。
+
+算是哈希表的基本使用。
+
+实现代码：
+
+public bool ContainsDuplicate(int[] nums) {
+        var hash = new Dictionary<int,bool>();
+        
+        for(var i = 0;i < nums.Length; i++){
+            if(!hash.ContainsKey(nums[i])){
+                hash.Add(nums[i],true);
+            }
+            else{
+                return true;
+            }
+        }
+        
+        return false;
+    }

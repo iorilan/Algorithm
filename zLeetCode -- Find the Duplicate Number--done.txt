@@ -1,0 +1,55 @@
+﻿问题描述：
+
+ Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
+
+Note:
+You must not modify the array (assume the array is read only).
+You must use only constant, O(1) extra space.
+Your runtime complexity should be less than O(n2).
+There is only one duplicate number in the array, but it could be repeated more than once.
+
+在一个数组中找到重复的那个。
+
+由于题目限制了只能使用O(1)的空间，也不能修改参数数组。
+因此不能排序，也不能创造一个标记数组来一次遍历进行'填空'；并且，由于重复元素可以出现多次，也无法使用等差数列公式求和=>s，再用数组和-s的方式。
+搜到了一种解法，比较巧妙，思路类似于那个题目：在一个链表中找到环，并找出那个环的位置。
+1. 使用了快慢指针
+2. 在快慢指针相遇的位置开始，慢指针与另一个从起始位置出发的指针每次走一步，直到它们相遇，就是那个重复节点发生的地方。
+
+参考链接：
+http://bookshadow.com/weblog/2015/09/28/leetcode-find-duplicate-number/
+
+
+
+
+实现代码：
+
+public class Solution {
+    public int FindDuplicate(int[] nums) 
+    {
+        // define slow and fast , fast each time move 2 times
+        var slow = 0;
+    	var fast = 0;
+    	while(true)
+    	{
+    		slow = nums[slow];
+    		fast = nums[nums[fast]];
+    		if(slow == fast){
+    			break;
+    		}
+    	}
+    	
+    	// now, lets create another pointer 'finder' from the start position. 
+    	// slow will stay where it is.
+    	// finder and slow each time move one step. next time this meet is where duplicate happens
+    	var finder = 0;
+    	while(true)
+    	{
+    		slow   = nums[slow];
+    		finder = nums[finder];
+    		if (slow == finder){
+    			return slow;
+    		}
+    	}
+    }
+}

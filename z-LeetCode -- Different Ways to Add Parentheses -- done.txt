@@ -1,0 +1,78 @@
+﻿题目描述：
+Given a string of numbers and operators, return all possible results from computing all the different possible ways to group numbers and operators. The valid operators are +, - and *.
+
+
+Example 1
+Input: "2-1-1".
+
+((2-1)-1) = 0
+(2-(1-1)) = 2
+Output: [0, 2]
+
+
+Example 2
+Input: "2*3-4*5"
+
+(2*(3-(4*5))) = -34
+((2*3)-(4*5)) = -14
+((2*(3-4))*5) = -10
+(2*((3-4)*5)) = -10
+(((2*3)-4)*5) = 10
+Output: [-34, -14, -10, -10, 10]
+
+就是说，给定一个表达式，可能包含的操作有：+,-,*，现在要求在不同位置加上括号对这个表达式进行计算，求出所有的可能解。
+
+思路：
+设a为操作数，~为操作符，对于表达式:
+a~a，解空间只有 a ~ a
+a~a~a 解空间为 (a~a)~a 和 a~(a~a)
+a~a~a~a 解空间为 a~(解空间(a~a~a))和 (解空间(a~a~a))~a
+...
+因此，要求一个表达式的解空间，可以采用分治策略。例如对于2*3-4*5表达式：
+解空间为：
+2*解空间（3-4*5）
+解空间（2*3） - 解空间（4*5）
+解空间（2*3-4）* 解空间（5）
+然后在对每个子解空间进行递归求解。
+
+实现代码：
+
+public class Solution {
+public IList<int> DiffWaysToCompute(string input) 
+{
+	List<int> result = new List<int>();
+        if (input == null || input.Length == 0) {
+            return result;
+        }
+        
+        for (int i = 0; i < input.Length; i++) {
+            char c = input[i];
+            if (c != '+' && c != '-' && c != '*') {
+                continue;
+            }
+            
+            var left = DiffWaysToCompute(input.Substring(0, i));
+            var right = DiffWaysToCompute(input.Substring(i + 1, input.Length- i - 1));
+            
+            for (var j = 0;j < left.Count; j++) {
+                for (var k = 0;k < right.Count; k++) {
+                    if (c == '+') {
+                        result.Add(left[j] + right[k]);
+                    } else if (c == '-') {
+                        result.Add(left[j] - right[k]);
+                    } else if (c == '*') {
+                        result.Add(left[j] * right[k]);
+                    }
+                }
+            }
+        }
+        
+        if (result.Count == 0) {
+            result.Add(int.Parse(input));
+        }
+        
+        return result;
+}
+}
+
+

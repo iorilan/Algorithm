@@ -1,0 +1,55 @@
+﻿题目描述：
+
+Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)
+
+You have the following 3 operations permitted on a word:
+
+a) Insert a character
+b) Delete a character
+c) Replace a character
+
+就是求从单词1(word1)变化到单词2(word2)的最小变化次数，每次变化只能：添加、删除或更新1个字符。
+本题是一道典型的DP题，递推公式：
+假设dp[i,j]表示word1前i-1个字符到word2的前j-1个字符最小变化次数。
+首先对dp做初始化，当word1为空串时，dp[i,0]为i（情况只可能是添加i个字符），其中i∈[0,n]。同理，dp[0,i]的初始化也可以看作是word2为空串时，从word1变到空串的情况数同样为i（即只可能是移除i个字符）。
+
+I.当word1[i]与word2[j]相等时，无需更新次数，即dp[i+1,j+1] = dp[i,j]
+
+II.当word1[i]与word2[j]不等时，当前的比较的“上一次比较情况”可以分3种可能：
+1. word1[i-1]与word2[j-1]比较
+2. word1[i]与word2[j-1]
+3. word[i-1]与word2[j]。
+只需要从存放这3种情况中比较结果的dp数组中判断哪种情况最小即可。
+即，
+dp[i+1,j+1]= 最小值（dp[i,j+1], dp[i+1,j], dp[i,j]）
+
+
+实现代码：
+
+
+public class Solution {
+    public int MinDistance(string word1, string word2) {
+        var dp = new int [word1.Length+1, word2.Length+1];
+	
+    	for(var i = 0;i < word1.Length + 1; i++){
+    		dp[i,0] = i;
+    	}
+    	for(var i = 0;i < word2.Length + 1; i++){
+    		dp[0,i] = i;
+    	}
+    	
+    	for(var i = 0; i < word1.Length; i++){
+    		for(var j = 0;j < word2.Length; j++){
+    			if(word1[i] == word2[j]){
+    				dp[i+1,j+1] = dp[i,j];
+    			}
+    			else{
+    				var min = Math.Min(Math.Min(dp[i,j], dp[i,j+1]), dp[i+1,j]);
+    				dp[i+1,j+1] = min + 1;
+    			}
+    		}
+    	}
+    	
+    	return dp[word1.Length, word2.Length];
+    }
+}

@@ -1,0 +1,38 @@
+﻿Majority Element
+
+Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
+
+You may assume that the array is non-empty and the majority element always exist in the array.
+
+Credits:
+Special thanks to @ts for adding this problem and creating all test cases.
+
+找出出现次数大于数组1/2 长度次的数字。
+
+
+
+public class Solution {
+    public int MajorityElement(int[] nums) {
+        if(nums.Length == 0){
+    		return 0;
+    	}
+    	
+    	var hash = new Dictionary<int, int>();
+    	var max = 1;
+    	var maxKey = nums[0];
+    	for(var i = 0;i < nums.Length; i++){
+    		if(hash.ContainsKey(nums[i])){
+    			hash[nums[i]] ++;
+    			if(max < hash[nums[i]]){
+    				max = hash[nums[i]];
+    				maxKey = nums[i];
+    			}
+    		}
+    		else{
+    			hash.Add(nums[i],1);
+    		}
+    	}
+    	
+    	return maxKey;
+    }
+}

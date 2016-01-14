@@ -1,0 +1,53 @@
+﻿题目描述：
+Given an array of integers, find two numbers such that they add up to a specific target number.
+
+The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+
+You may assume that each input would have exactly one solution.
+
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2
+
+比较经典的一个题目，在一个数组中，找到两个数字，使得它们的和为target。
+本题有几种解法，比较普遍的是排序+二分查找。这里给出一种使用哈希表的解法。
+1. 对数组nums遍历过程中存nums[i],和索引[i]。如果nums[i]已经出现过：
+1.1 如果nums[i] = target/2,返回{hash[nums[i], i}
+1.2 如果不等，直接忽略
+2. 遍历哈希键值对，对每个键k判断hash[target-k]是否存在，如果存在并且hash[target-k]与hash[k]不相等（不是同一个位置），返回结果。
+3. 返回时注意小索引在前，大的在后面。
+
+实现代码：
+
+public class Solution {
+    public int[] TwoSum(int[] nums, int target) 
+    {
+        var hash = new Dictionary<int, int>();
+    	for(var i = 0;i < nums.Length; i++){
+    		if(!hash.ContainsKey(nums[i])){
+    			hash.Add(nums[i], i);
+    		}
+    		else{
+    			if(target == nums[i] * 2){
+    				return new int[2]{hash[nums[i]] + 1, i + 1};
+    			}
+    			// if one number appears twice and not equals to target half , just take the first one
+    		}
+    	}
+    	
+    	foreach(var k in hash.Keys){
+    		var k2 = target - k;
+    		if(hash.ContainsKey(k2) && hash[k2] != hash[k]){
+    			var index1 = hash[k];
+    			var index2 = hash[k2];
+    			
+    			if(index1 > index2){
+    				return new int[2]{index2 + 1, index1 + 1};
+    			}else{
+    				return new int[2]{index1 + 1, index2 + 1};
+    			}
+    		}
+    	}
+    	
+    	return null;
+    }
+}

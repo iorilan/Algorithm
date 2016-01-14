@@ -1,0 +1,33 @@
+public class Solution {
+public void Flatten(TreeNode root) 
+ {
+     if(root == null)
+	 {
+		return;
+	 }
+	 Travel(root);
+	 
+	 root = _nodes[0];
+	 root.left = null;
+	 root.right = null;
+	 for(var i = 1;i < _nodes.Count; i++){
+			var l = _nodes[i];
+			l.left = null;
+			l.right = null;
+			root.right = l;
+			root = root.right;
+	 }
+ }
+	
+	private List<TreeNode> _nodes = new List<TreeNode>();
+	private void Travel(TreeNode root){
+		_nodes.Add(root);
+		if(root.left != null){
+			Travel(root.left);
+		}
+		if(root.right != null){
+			Travel(root.right);
+		}
+	}
+    
+}

@@ -1,0 +1,40 @@
+﻿题目描述：
+
+Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+Note: You may not slant the container.
+
+已知一个height数组，代表从0到n的纵坐标，对于height[i]和height[j]来说，它们构成的最大水容量为i和j的距离 * Min(height[i], height[j])。问，求出height数组中哪两点间的水容量最大？
+
+思路：
+算是一个two pointer的经典问题，左右两边开始找,left=0,right = n-1：
+1. 如果左边高度低，则left++；如果右边高度低，则r--；如果相等，则left++并且right--; 
+2. 每次计算左右两点的水容量，并更新max值即可
+
+
+实现代码：
+
+
+public class Solution {
+    public int MaxArea(int[] height) {
+        var l = 0;
+    	var r = height.Length - 1;
+    	var max = 0;
+    	while(l < r){
+    		var current = Math.Min(height[l], height[r]) * (r - l);
+		    max = Math.Max(max , current);
+		    
+    		if(height[l] < height[r]){
+    			l++;
+    		}
+    		else if(height[l] > height[r]){
+    			r--;
+    		}
+    		else{
+    			l++;
+    			r--;
+    		}
+    	}
+    	return max;
+    }
+}

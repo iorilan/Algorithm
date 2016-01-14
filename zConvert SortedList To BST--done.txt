@@ -1,0 +1,73 @@
+﻿题目描述：
+
+Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+
+就是把链表转化为二叉查找树
+
+思路：
+使用分治策略
+1.把链表节点遍历，存在nodes集合中
+2.用[0, length/2)节点创建左子树，用(length/2,n]节点创建右子树，使用nodes[length/2]来创建当前节点。
+
+
+实现代码：
+
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode SortedListToBST(ListNode head) {
+        if(head == null){
+		return null;
+	}
+	
+	var nodes = new List<int>();
+	while(head != null){
+		nodes.Add(head.val);
+		head = head.next;
+	}
+	
+	TreeNode root = null;
+	BuildTree(nodes,ref root);
+	
+	return root;
+}
+
+private void BuildTree(IList<int> values,ref TreeNode n){
+	if(values.Count == 0){
+		return;
+	}
+
+	var mid = (int)(values.Count/2);
+	var self = values[mid];
+	n = new TreeNode(self);
+	
+	var leftVals=  values.Where(x=>x < self);
+	var rightVals = values.Where(x=>x > self);
+	
+	if(leftVals.Any()){
+		BuildTree(leftVals.ToList() ,ref n.left);
+	}
+	if(rightVals.Any()){
+		BuildTree(rightVals.ToList(),ref n.right);
+	}
+}
+
+
+}

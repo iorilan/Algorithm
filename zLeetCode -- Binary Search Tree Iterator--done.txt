@@ -1,0 +1,64 @@
+﻿题目描述：
+
+Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
+
+Calling next() will return the next smallest number in the BST.
+
+Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
+
+就是实现一个搜索二叉树的迭代器。
+
+
+思路：
+初始化时对树中序遍历元素入队列；hasNext：判断队列是否空；Next:拿出队列当前元素。
+缺陷：这个做法的缺陷在于如果只拿1个元素，仍然需要对整树遍历一次；可是大多数情况下，使用迭代器的目的显然是从头遍历到尾，因此这个方案是make sense的。
+
+实现代码：
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+
+public class BSTIterator {
+
+    private Queue<int> _values ;
+    public BSTIterator(TreeNode root) 
+	{
+       _values = new Queue<int>();
+	   Init(root);
+    }
+	
+	private void Init(TreeNode current)
+	{
+		if(current == null)
+		{
+			return;
+		}
+		Init(current.left);
+		_values.Enqueue(current.val);
+		Init(current.right);
+	}
+
+    /** @return whether we have a next smallest number */
+    public bool HasNext() {
+        return _values.Count > 0;
+    }
+
+    /** @return the next smallest number */
+    public int Next() {
+		var v = _values.Dequeue();
+		return v;
+    }
+}
+
+/**
+ * Your BSTIterator will be called like this:
+ * BSTIterator i = new BSTIterator(root);
+ * while (i.HasNext()) v[f()] = i.Next();
+ */

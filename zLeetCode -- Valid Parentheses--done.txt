@@ -1,0 +1,57 @@
+﻿题目描述：
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+
+
+在一个只包含"()[]{}"的输入中，判断括号的合法性。
+
+思路：
+栈的基本使用。
+
+实现代码：
+
+public class Solution {
+    public bool IsValid(string s) 
+    {
+        var stack = new Stack<char>();
+	
+    	for(var i = 0;i < s.Length; i++){
+    		switch(s[i]){
+    			case '{':
+    			case '[':
+    			case '(':
+    				stack.Push(s[i]);
+    				break;
+    			case '}':
+    				if(stack.Count > 0 && stack.Peek() == '{'){
+    					stack.Pop();
+    				}
+    				else{
+    					return false;
+    				}
+    				break;
+    			case ']':
+    				if(stack.Count > 0 && stack.Peek() == '['){
+    					stack.Pop();
+    				}
+    				else{
+    					return false;
+    				}
+    				break;
+    			case ')':
+    				if(stack.Count > 0 && stack.Peek() == '('){
+    					stack.Pop();
+    				}
+    				else{
+    					return false;
+    				}
+    				break;
+    			default :
+    				throw new ArgumentException(s);
+    		}
+    	}
+    	
+    	return stack.Count == 0;
+    }
+}

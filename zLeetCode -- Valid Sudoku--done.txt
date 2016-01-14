@@ -1,0 +1,91 @@
+﻿题目描述：
+
+Determine if a Sudoku is valid, according to: Sudoku Puzzles - The Rules.
+
+The Sudoku board could be partially filled, where empty cells are filled with the character '.'.
+
+验证一个数独的合法性。
+
+思路： 数独输入的规则：每行每列，每个3*3的范围内不能有重复。 直接验证就可以了。
+使用辅助数组bool[9]分别对：
+1、对每行判断是否有重复
+2、对每列判断是否有重复
+3、对每个3*3判断是否有重复
+
+
+
+实现代码：
+
+public class Solution {
+   public bool IsValidSudoku(char[,] board) 
+    {
+    	var row = 9;
+    	var col = 9;
+    	
+    	// check each row
+    	for(var i = 0;i < row;i ++){
+    		var flag = new bool[9];;
+    		for(var j = 0;j < col; j++){
+    			var b = Check(board, i, j, ref flag);
+    			if(!b){
+    				return false;
+    			}
+    		}
+    	}
+    	
+    	// check each column
+    	for(var i = 0;i < col;i ++){
+    		var flag = new bool[9];;
+    		for(var j = 0;j < row; j++){
+    			var b = Check(board, j, i, ref flag);
+    			if(!b){
+    				return false;
+    			}
+    		}
+    	}
+    	
+    	// check each 3*3
+    	for(var i = 0;i < 7; i += 3){
+    		for(var j = 0;j < 7; j += 3){
+    			if(!Check_3_3(board, i, j)){
+    				return false;
+    			}
+    		}
+    	}
+    	
+    	return true;
+    }
+    
+    private bool Check_3_3(char[,] board, int i , int j)
+    {
+    	var flag = new bool[9];
+    	for(var r = i; r < i + 3; r++){
+    		for(var c = j; c < j + 3; c++){
+    			var b = Check(board, r, c, ref flag);
+    			if(!b){
+    				return false;
+    			}
+    		}
+    	}
+    	
+    	return true;
+    }
+    
+    private bool Check(char[,] board, int i, int j, ref bool[] flag)
+    {
+    	//Console.WriteLine(i +","+j);
+    	if(board[i,j] != '.'){
+    		if(flag[N(board[i,j])]){
+    			return false;
+    		}
+    		flag[N(board[i,j])] = true;	
+    	}
+    	
+    	return true;
+    }
+    
+    private int N(char c)
+    {
+    	return c - '1';
+    }
+}

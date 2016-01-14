@@ -1,0 +1,47 @@
+﻿题目描述：
+Given an array of strings, group anagrams together.
+
+For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"], 
+Return:
+
+[
+  ["ate", "eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+Note:
+For the return value, each inner list's elements must follow the lexicographic order.
+All inputs will be in lower-case.
+
+给定一个单词数组，对它们进行分组：由同样字母组成的单词分为一组。例如ate和eat分为一组。
+
+思路：
+1.使用哈希表存单词的升序排列
+2.遍历每个单词的过程中，将其升序排列后判断是否在哈希表中存在：如果存在添加到组内；否则创建新组。
+3.返回结果前需要对哈希的每个组内的单词进行升序排列。
+
+
+实现代码：
+
+public class Solution {
+    public IList<IList<string>> GroupAnagrams(string[] strs) 
+    {
+        var hash = new Dictionary<string , IList<string>>();
+    	for(var i = 0;i < strs.Length; i++){
+    		var k = string.Join("",strs[i].OrderBy(x=>x));
+    		if(!hash.ContainsKey(k)){
+    			hash.Add(k, new List<string>(){strs[i]});
+    		}
+    		else{
+    			hash[k].Add(strs[i]);
+    		}
+    	}
+    	
+    	var keys = hash.Keys.ToList();
+    	foreach(var k in keys){
+    		hash[k] = hash[k].OrderBy(x=>x).ToList();
+    	}
+    	
+    	return hash.Values.ToList();
+    }
+}

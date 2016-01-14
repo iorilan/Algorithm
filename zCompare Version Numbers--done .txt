@@ -1,0 +1,51 @@
+﻿题目描述：
+
+compare two version numbers version1 and version2.
+If version1 > version2 return 1, if version1 < version2 return -1, otherwise return 0.
+
+You may assume that the version strings are non-empty and contain only digits and the . character.
+The . character does not represent a decimal point and is used to separate number sequences.
+For instance, 2.5 is not "two and a half" or "half way to version three", it is the fifth second-level revision of the second first-level revision.
+
+Here is an example of version numbers ordering:
+
+0.1 < 1.1 < 1.2 < 13.37
+
+思路：
+1.把用'.'隔开的版本号存入数组中，存为arr1和arr2
+2.同时遍历arr1和arr2，比较arr1[i]和arr2[i]的大小，如果不等：如果arr1[i]>arr2[i]返回1，否则返回-1。 在比较时需要注意版本0、以及其中一个版本为空的情况
+3.遍历到最后没有发现不等，返回0（相等）
+
+
+实现代码：
+
+public class Solution {
+    public int CompareVersion(string version1, string version2) {
+        var v1 = version1;
+		var v2 = version2;
+		
+		var v1Arr = v1.Split('.');
+		var v2Arr = v2.Split('.');
+		
+		var i = 0;
+		var j = 0;
+		while(i < v1Arr.Length || j < v2Arr.Length){
+			if(i == v1Arr.Length){
+				return int.Parse(v2Arr[i]) == 0 ? 0 : -1;
+			}
+			if(i == v2Arr.Length){
+				return int.Parse(v1Arr[i]) == 0 ? 0 : 1;
+			}
+			
+			if(int.Parse(v1Arr[i]) == int.Parse(v2Arr[j])){
+				i++;
+				j++;
+				continue;
+			}
+			
+			return int.Parse(v1Arr[i]) > int.Parse(v2Arr[j]) ? 1 : -1;
+		}
+		
+		return 0;
+    }
+}

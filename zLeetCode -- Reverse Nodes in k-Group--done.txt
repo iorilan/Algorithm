@@ -1,0 +1,107 @@
+﻿题目描述：
+
+Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+
+If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
+
+You may not alter the values in the nodes, only nodes itself may be changed.
+
+Only constant memory is allowed.
+
+For example,
+Given this linked list: 1->2->3->4->5
+
+For k = 2, you should return: 2->1->4->3->5
+
+For k = 3, you should return: 3->2->1->4->5
+
+就是在遍历链表的过程中，如果从当前节点开始算，节点数大于k个，反转这k个节点；然后从当前位置向后移动k个位置，继续反转的过程，直到从当前节点到最后的节点数小于K个停止反转。
+
+思路：
+1. 创建反转函数，反转从当前开始的k个节点。 这个函数空间复杂度O（n）
+2. 先得到链表总长度，如果小于k直接返回，否则每次旋转k个节点并指向下一次旋转的位置。
+
+
+实现代码：
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode ReverseKGroup(ListNode head, int k) 
+    {
+        if(head == null || head.next == null || k == 1){
+    		return head;
+    	}
+    	
+    	var len = 0;
+    	var h = head;
+    	while(head != null){
+    		head = head.next;
+    		len ++;
+    	}
+    	
+    	if(k > len){
+    		return h;
+    	}
+    	
+    	ListNode pre = null;
+    	ListNode newHead = null;
+    	while(len >= k)
+    	{
+    		ReverseKNodes(ref h, k, ref pre);
+    		
+    		if(pre == null){
+    			newHead = h;
+    			pre = h;
+    			for(var i =0 ;i < k-1; i++){
+    				pre = pre.next;	
+    			}
+    		}else{
+    			for(var i = 0;i < k;i++){
+    				pre = pre.next;
+    			}
+    		}
+    		
+    		for(var i = 0;i < k;i++){
+    			h = h.next;
+    		}
+    		
+    		len -= k;
+    	}
+    	
+    	return newHead;
+    }
+
+private void ReverseKNodes(ref ListNode n, int k, ref ListNode preNode)
+{
+	var stack = new Stack<int>();
+	for(var i = 0;i < k; i++){
+		stack.Push(n.val);
+		n = n.next;
+	}
+	ListNode end = n;
+	
+	ListNode tmp = new ListNode(stack.Pop());
+	var tmpHead = tmp;
+	while(stack.Count > 0){
+		var n1 = new ListNode(stack.Pop());
+		tmp.next = n1;
+		tmp = tmp.next;
+	}
+	
+	tmp.next = end;
+	
+	if(preNode != null){
+		n = tmpHead;
+		preNode.next = tmpHead;
+	}else{
+		n = tmpHead;
+	}
+}
+}

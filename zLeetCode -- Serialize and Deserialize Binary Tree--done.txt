@@ -1,0 +1,190 @@
+﻿题目描述：
+
+Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+For example, you may serialize the following tree
+
+    1
+   / \
+  2   3
+     / \
+    4   5
+as "[1,2,3,null,null,4,5]", just the same as how LeetCode OJ serializes a binary tree. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
+
+
+就是写一个类，完成二叉树的序列化和反序列化。
+
+所谓序列化，就是将一个对象变成流，对本题而言，是说把一个树对象转换成字符串的形式。
+
+思路：
+
+本题可以考虑DFS和BFS两种方式，可以根据具体应用情形进行选择。
+但本题要求限制使用空间，因此BFS无法通过测试数据。
+
+
+实现代码：
+
+
+DFS 方式
+
+使用先序遍历，即根左右的顺序递归执行。
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public string serialize(TreeNode root) 
+    {
+        var sb = new StringBuilder();
+        serialize(root, sb);
+        return sb.ToString();
+    }
+    private void serialize(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.Append(" # ");
+        } else {
+            sb.Append(root.val + " ");
+            serialize(root.left, sb);
+            serialize(root.right, sb);
+        }
+    }
+
+    public TreeNode deserialize(string data) {
+        if (data == null || data.Length == 0) {
+            return null;
+        }
+		
+		var values = data.Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).ToList(); // skip empty string in values. IMPORTANT
+        return deserialize(ref values);
+    }
+    private TreeNode deserialize(ref List<string> values) {
+		if(values.Count == 0){
+			return null;
+		}
+		
+        String val = values[0];
+		values.RemoveAt(0);
+		
+        if (val == "#") {
+            return null;
+        }
+		
+        var root = new TreeNode(int.Parse(val));
+        root.left = deserialize(ref values);
+        root.right = deserialize(ref values);
+        return root;
+    }
+	
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+
+
+BFS 方式（逐层序列化，存父节点）
+
+
+
+public class Codec {
+
+    // Encodes a tree to a single string.
+      public string serialize(TreeNode root) {
+		if(root == null){
+			return "";
+		}
+		
+        var result = root.val.ToString();
+		var nodes = new List<TreeNode>();
+		if(root.left != null){
+			nodes.Add(root.left);
+		}
+		if(root.right != null){
+			nodes.Add(root.right);
+		}
+		
+		serialize(ref nodes, ref result);
+		
+		return result;
+    }
+	
+	private void serialize(ref List<TreeNode> nodes, ref string result)
+	{
+		if(nodes.Count == 0){
+			return ;
+		}
+		
+		var next = new List<TreeNode>();
+		for(var i = 0;i < nodes.Count; i++){
+			var n = nodes[i];
+			result += "," + n.val;
+			if(n.left != null){
+				next.Add(n.left);
+			}
+			if(n.right != null){
+				next.Add(n.right);
+			}
+		}
+		
+		serialize(ref next, ref result);
+	}
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(string data) 
+	{
+		if(string.IsNullOrWhiteSpace(data)){
+			return null;
+		}
+		
+		var values = data.Split(',').ToList();
+		if(values[0] == "null"){
+			return null;
+		}
+		
+		var v = values[0];
+		values.RemoveAt(0);
+		var root = new TreeNode(int.Parse(v));
+        var parents = new Queue<TreeNode>();
+		parents.Enqueue(root);
+		
+		var next = new List<TreeNode>();
+		while(parents.Count > 0){
+			var p = parents.Dequeue();
+			if(values.Count > 0){
+				var vLeft = values[0];
+				values.RemoveAt(0);
+				if(vLeft != "null"){
+					p.left = new TreeNode(int.Parse(vLeft));
+					next.Add(p.left);
+				}
+			}
+			
+			if(values.Count > 0){
+				var vRight = values[0];
+				values.RemoveAt(0);
+				if(vRight != "null"){
+					p.right = new TreeNode(int.Parse(vRight));
+					next.Add(p.right);
+				}
+			}
+			
+			if(parents.Count == 0){
+				parents = new Queue<TreeNode>(next);
+				next.Clear();
+			}
+		}
+		
+		return root;
+    }
+	
+}

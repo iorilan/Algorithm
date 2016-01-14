@@ -1,0 +1,79 @@
+﻿题目描述：
+
+Given a binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path does not need to go through the root.
+
+For example:
+Given the below binary tree,
+
+       1
+      / \
+     2   3
+Return 6.
+
+
+思路：
+统计最大权值的路径。
+
+在递归遍历时，最大权值的可能性：
+1.从左子树上来的最大值+本节点值
+2.从右子树上来的最大值+本节点值
+3.本节点值
+
+比较直观的思路为：
+1. 获得左子树路径权值：leftMax , 获得右子树路径权值：rightMax 
+2. 从leftMax+ current和rightMax+ current以及current中找到最大权值作为当前路径最大权值(maxRoute)。
+3. 还需要比较其他三种额外可能性：leftMax, rightMax, leftMax+rightMax+current并存在max。即max = Max(maxRoute,leftMax,rightMax, leftMax+rightMax+current)
+4. 返回值为maxRoute
+5. 最后的max即为所求
+
+
+实现代码：
+
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int MaxPathSum(TreeNode root) {
+    	var max = int.MinValue;
+	    CountMax(root, ref max);
+	
+    	return max;
+    }
+
+private int? CountMax(TreeNode root, ref int max)
+{
+	if(root == null){
+		return null;
+	}
+	
+	var leftMax = CountMax(root.left, ref max);
+	var rightMax = CountMax(root.right, ref max);
+	
+	var maxRoute = root.val;
+	max = Math.Max(maxRoute, max);
+	if(leftMax.HasValue){
+		maxRoute = Math.Max(maxRoute, root.val + leftMax.Value);// Max(current , left)
+		max = Math.Max(Math.Max(max, leftMax.Value), maxRoute);// Max(left, current , left + current)
+	}
+	if(rightMax.HasValue){
+		maxRoute = Math.Max(maxRoute, root.val + rightMax.Value);// Max(currnet, left, right)
+		max = Math.Max(Math.Max(max, rightMax.Value), maxRoute);// Max(left, right, current , right + current)
+	}
+	if(leftMax.HasValue && rightMax.HasValue){
+		max = Math.Max(root.val + leftMax.Value + rightMax.Value, max);//Max(left ,right, current ,  right + current, left+right +current)
+	}
+	
+	return maxRoute;
+}
+
+}

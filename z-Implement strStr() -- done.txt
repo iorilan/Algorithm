@@ -1,0 +1,23 @@
+﻿Implement strStr().
+
+Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+
+
+public class Solution {
+    public int StrStr(string haystack, string needle) {
+        var i = 0;
+        while(i < haystack.Length - needle.Length + 1){
+            var k = i;
+            while(k < haystack.Length - needle.Length + 1){
+				var s = haystack.Substring(k, needle.Length);
+                if(s == needle){
+                    return k;
+                }
+				k++;
+            }
+			i++;
+        }
+        return -1;
+    }
+}

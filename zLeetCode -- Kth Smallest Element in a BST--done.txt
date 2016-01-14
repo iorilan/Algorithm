@@ -1,0 +1,48 @@
+﻿Kth Smallest Element in a BST
+
+在BST中查找第k小的数。
+
+思路： 中序遍历+队列
+
+实现代码：
+
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int KthSmallest(TreeNode root, int k) 
+ {
+ 	if(k < 1){
+		return -1;
+	}
+ 	var q = new Queue<int>();
+    Inorder(root, q);
+	
+	int last = -1;
+	for(var i = 0;i < k - 1; i++){
+		if(q.Count > 0){
+			last = q.Dequeue();
+		}
+	}
+	
+	return q.Count > 0 ? q.Dequeue() : last;
+ }
+ private void Inorder(TreeNode node, Queue<int> queue){
+	if(node.left != null){
+		Inorder(node.left, queue);
+	}
+	queue.Enqueue(node.val);
+	if(node.right != null){
+		Inorder(node.right, queue);
+	}
+	
+ }
+}

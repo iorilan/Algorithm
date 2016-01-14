@@ -1,0 +1,26 @@
+public class Solution {
+    public int MaxProduct(int[] nums) {
+        
+       var len = nums.Length;
+        if(len == 0)
+        {
+            return 0;
+        }
+		
+    	var max = nums[0];
+		var min = nums[0];
+		var result = nums[0];
+        for(var i = 1;i < len; i++){
+            
+			var tmpMax = Math.Max(Math.Max(max * nums[i] , min * nums[i]), nums[i]);
+			var tmpMin = Math.Min(Math.Min(max * nums[i] , min * nums[i]), nums[i]);
+			
+			max = tmpMax;
+			min = tmpMin;
+			
+			result = Math.Max(result , max);
+        }
+        
+        return result;
+    }
+}

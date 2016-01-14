@@ -1,0 +1,42 @@
+﻿题目描述：
+
+Given an integer n, return the number of trailing zeroes in n!.
+
+Note: Your solution should be in logarithmic time complexity.
+
+给定整数n，找出小于n的数中，找出阶乘末尾为0的数的个数。
+
+
+本题如果分别求1!,2!...n!，根本无法通过测试数据。
+规律为：对于数字m!∈(0,n] ，如果m!末尾为0，那么必有1个因数为5和2。因此题目便转化为：
+统计(0,n]之间，5约数个数和。
+
+
+参考链接：
+
+http://bookshadow.com/weblog/2014/12/30/leetcode-factorial-trailing-zeroes/
+http://www.programcreek.com/2014/04/leetcode-factorial-trailing-zeroes-java/
+http://www.danielbit.com/blog/puzzle/leetcode/leetcode-factorial-trailing-zeroes
+
+
+实现代码：
+
+
+public class Solution {
+    public int TrailingZeroes(int n) {
+        var c = 0;
+        var factor = 5;
+		var end = int.MaxValue / 5;
+        while(n >= factor && factor != int.MaxValue){
+            c += n/factor;
+			if(factor > end){
+				factor = int.MaxValue;
+			}
+			else{
+				factor *= 5;
+			}
+        }
+		
+		return c;
+    }
+}

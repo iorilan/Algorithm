@@ -1,0 +1,31 @@
+﻿给定一个已排序的链表，移除链表中的重复元素。
+
+思路：
+由于已经排序，只需判断相邻元素是否相等就可以确定是否重复了。
+1次遍历，使用新链表tmp来存链表head的非重复元素，返回新链表即可。
+
+
+实现代码：
+
+public class Solution {
+    public ListNode DeleteDuplicates(ListNode head) {
+         if(head == null || head.next == null){
+            return head;
+        }
+        
+        var node = new ListNode(head.val);
+		var tmp = node;
+		
+        head = head.next;
+        while(head != null){
+            if(head.val != node.val){
+                node.next = new ListNode(head.val);
+                node = node.next;
+            }
+            head = head.next;
+        }
+        
+		node = tmp;
+        return node;
+    }
+}

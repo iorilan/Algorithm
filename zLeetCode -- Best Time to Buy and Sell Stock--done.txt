@@ -1,0 +1,41 @@
+﻿题目描述：
+Say you have an array for which the ith element is the price of a given stock on day i.
+
+If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), design an algorithm to find the maximum profit.
+
+
+输入一个价格数组prices[]，表示每天的股票价格。
+假设每天只能买或卖一次，并且不能连续两天买或卖，判断最大利润。
+
+思路：
+1.如果只有1个价格，利润为0
+2.使用profit数组，profit[i]表示第i天的利润。profit[0]初始化为0。
+3.遍历prices[0...n)，计算当天prices[i]与昨天prices[i-1]的价格差delta：
+3.1 当delta>0，肯定要买了，即profit[i] = profit[i-1]+delta
+3.2 当delta<0，这就要看delta+profit[i-1]的价格了，如果大于0就继续买。
+3.3 最后返回profit数组的最大值即可。
+
+
+实现代码：
+
+public class Solution {
+    public int MaxProfit(int[] prices) {
+        if(prices.Length < 2){
+    		return 0;
+    	}
+    	
+        var profit = new int[prices.Length];
+    	profit[0] = 0;
+	
+    	for(var i = 1;i < prices.Length; i++){
+    		var delta = prices[i] - prices[i-1];
+    		if(delta > 0){
+    			profit[i] = profit[i-1] + delta;
+    		}else{
+    			profit[i] = delta + profit[i-1] > 0 ? delta + profit[i-1] : 0;
+    		}
+    	}
+    	
+    	return profit.Max();
+    }
+}

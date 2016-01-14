@@ -1,0 +1,41 @@
+public class Solution {
+    
+private List<string> result = new List<string>();
+private int total;
+public IList<string> GenerateParenthesis(int n) 
+{
+	if (n <= 0){
+		return null;
+	}
+	
+	total = n * 2;
+	Travel(total, "("); // always start with '('
+	
+	return result;
+}
+
+private void Travel(int n, string str){
+	if(n == 1){
+		result.Add(str);
+		return ;
+	}
+	
+	if(CanAppendLeft(str)){
+		Travel(n-1, str+"(");
+	}
+	if(CanAppendRight(str)){
+		Travel(n-1, str+")");
+	}
+}
+
+private bool CanAppendLeft(string str){
+	return str.Count(x=>x == '(') < total / 2;
+}
+
+private bool CanAppendRight(string str){
+	var leftCount = str.Count(x=>x == '(');
+	var rightCount = str.Count(x=>x == ')');
+	return leftCount > rightCount;
+}
+
+}

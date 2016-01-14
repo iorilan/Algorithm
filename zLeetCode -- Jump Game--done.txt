@@ -1,0 +1,60 @@
+﻿题目描述：
+
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+For example:
+A = [2,3,1,1,4], return true.
+
+A = [3,2,1,0,4], return false.
+
+思路：
+
+就是给定一个数组，每个数字(nums[i]=n)表示当前索引i所能到达的最远索引为i + nums[i]。
+例如，对于[3,2,1,0,4]来说，前三位所能到达的最远索引为：0+3,1+2,2+1均为3，可nums[3]为，故无法继续前行。
+
+问，判断从索引0开始出发，能否到达末尾。
+
+1. 使用1个reachableIndex来表示所能到达的最远索引，初始化为nums[0]+0 = nums[0]，如果第一个索引为0，直接返回false
+2. 从nums[1]开始往后走，如果reachableIndex小于当前索引，而当前nums[i]又为0，返回false
+3. 如果num[i]+i的值比当前的reachableIndex大，更新reachableIndex
+4. 如果reachableIndex比nums的长度大，返回True
+
+
+
+
+实现代码：
+
+public class Solution {
+    public bool CanJump(int[] nums) 
+    {
+    	if(nums.Length <= 1){
+    		return true;
+    	}
+    	
+    	var reachableIndex = nums[0]; // nums[0] + 0
+    	if(reachableIndex == 0){
+    		return false;
+    	}
+	
+    	for(var i = 1;i < nums.Length; i++){
+    		if(reachableIndex <= i && nums[i] == 0){
+    			return false;
+    		}
+    		
+    		if(nums[i] + i > reachableIndex){
+    			reachableIndex = nums[i] + i;
+    		}
+    		
+    		if(reachableIndex >= nums.Length - 1){
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+
+}

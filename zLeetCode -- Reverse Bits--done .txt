@@ -1,0 +1,58 @@
+﻿题目描述
+
+Reverse bits of a given 32 bits unsigned integer.
+
+For example, given input 43261596 (represented in binary as 00000010100101000001111010011100), return 964176192 (represented in binary as 00111001011110000010100101000000).
+
+Follow up:
+If this function is called many times, how would you optimize it?
+
+
+反转一个无符号数字的二进制串。
+
+思路：
+将n转化字符串，反转字符串，将字符串转换为无符号数。
+
+实现代码
+
+
+
+public class Solution {
+    public uint reverseBits(uint n) 
+    {
+    	var s = ToBinaryStr(n);
+    	
+    	var s1 = "";
+    	for(var i = s.Length - 1; i >= 0; i--){
+    		s1 += s[i];
+    	}
+    
+    	var x = BinaryToN(s1);
+    	return x;
+    }
+
+private string ToBinaryStr(uint n)
+{
+	var s = new uint[32];
+	var counter = 0;
+	while(n > 0){
+		var l = n%2;
+		s[31-counter] = l;
+		n /= 2;
+		counter ++;
+	}
+	
+	return string.Join("",s);
+}
+
+private uint BinaryToN(string s){
+	var n = 0;
+	for(var i = s.Length - 1; i >= 0 ; i--){
+		var x = s[i] == '0' ? 0 : 1;
+		n += x * (int)Math.Pow(2, s.Length - i - 1);
+	}
+	
+	return (uint)n;
+}
+
+}

@@ -1,0 +1,67 @@
+void Main()
+{
+	//the tesing tree would be looks like :
+	//			 R
+	//	       /   \
+	//        A1    A2
+	//       /  \  /  \
+	//      B1  B2 B3  B4
+	
+	// setup 
+	var root = new Node("R");
+	var childGroup1 = new List<Node>();
+	root.Children.Add(new Node("A1", new List<Node>(){new Node("B1"),new Node("B2")}));
+	root.Children.Add(new Node("A2", new List<Node>(){new Node("B3"),new Node("B4")}));
+	
+	// search and link the brother nodes
+	TravelAndLink(root);
+	
+	Console.WriteLine(root);
+}
+
+static void TravelAndLink(Node current){
+	if(current == null || current.Children == null){
+		return;
+	}
+	
+	var len = current.Children.Count;
+	for(var i = 0;i < len; i++){
+		// link right if have 
+		if(i < len - 1){
+			current.Children[i].Right = current.Children[i+1];
+			
+			// link current son's last son to his next brother's first son if possible
+			if(current.Children[i].Children.Any() && current.Children[i+1].Children.Any()){
+				var c1 = current.Children[i].Children.Last();
+				var c2 = current.Children[i+1].Children.First();
+				c1.Right = c2;
+			}
+		}
+		
+		//recursive
+		TravelAndLink(current.Children[i]);
+	}
+	
+	// link my last child to brother's first child if impossible
+}
+
+public class Node
+	{
+		public Node(string v, IEnumerable<Node> children = null)
+		{
+			Val = v;
+			
+			Children = new List<Node>();
+			if(children != null){
+				Children = children.ToArray();
+			}
+			
+			Right = null;
+		}
+	
+	    public IList<Node> Children;
+	    public Node Right;
+		public string Val; // please allow me to add this property to debug 
+	}
+	
+// Define other methods and classes here

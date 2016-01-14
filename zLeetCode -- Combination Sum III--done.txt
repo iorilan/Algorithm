@@ -1,0 +1,67 @@
+﻿题目描述：
+
+Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
+
+Ensure that numbers within the set are sorted in ascending order.
+
+
+Example 1:
+
+Input: k = 3, n = 7
+
+Output:
+
+[[1,2,4]]
+
+Example 2:
+
+Input: k = 3, n = 9
+
+Output:
+
+[[1,2,6], [1,3,5], [2,3,4]]
+
+
+就是从1到9构成的数组{1,2,3,4,5,6,7,8,9}中，找到一种组合，包含K个元素，和为n。
+
+思路：
+是一个典型的回溯问题，也算是问题：从数组nums中找到所有和为n的组合情况的子问题。 
+运用回溯模型直接解即可。 在遍历过程中，只需要收集只有k个元素的组合。
+
+
+
+实现代码：
+
+public class Solution {
+    public IList<IList<int>> CombinationSum3(int k, int n) 
+    {
+       	var result = new List<IList<int>>();
+    	Find(1, n, k, new List<int>(), ref result);
+    	return result;
+    }
+
+private void Find(int start, int target, int k, IList<int> current, ref List<IList<int>> result)
+{
+	if(current.Count > k || target < 0)
+	{
+		return;
+	}
+	
+	if(target == 0)
+	{
+		if(current.Count == k){
+			result.Add(new List<int>(current));
+		}
+		//Console.WriteLine(current);
+		return;
+	}
+	
+	for(var i = start; i < 10; i++)
+	{
+		current.Add(i);
+		Find(i + 1, target - i, k, current,ref result);
+		current.RemoveAt(current.Count-1);
+	}
+}
+
+}

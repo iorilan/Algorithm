@@ -1,0 +1,55 @@
+﻿题目描述：
+
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+For example,
+"A man, a plan, a canal: Panama" is a palindrome.
+"race a car" is not a palindrome.
+
+判断回文，直接实现。
+
+public class Solution {
+    public bool IsPalindrome(string s) 
+    {
+        var i = 0;
+    	var j = s.Length - 1;
+    	while(i < j){
+    		while(Skip(s[i]) && i < j){
+			i++;
+    		}
+    		while(Skip(s[j]) && i < j){
+    			j--;
+    		}
+    		
+    		var delta = s[i] - s[j];
+    		if(delta != 0 && delta != 32 && delta != -32){
+    			return false;
+    		}
+    		
+        		
+    		i++;
+    		j--;
+    	}
+    	
+    	return true;
+    }
+
+    public bool Skip(char c)
+    {
+    	var a = (int)'a';
+    	var A = (int)'A';
+    	var z = (int)'z';
+    	var Z = (int)'Z';
+    	var v = (int)c;
+    	
+    	var zero = (int)'0';
+    	var nine = (int)'9';
+    	
+    	if(v >= a && v <= z || v >= A && v <= Z || v >= zero && v <= nine){
+    		return false;	
+    	}
+    	
+    	return true;
+    }
+
+}

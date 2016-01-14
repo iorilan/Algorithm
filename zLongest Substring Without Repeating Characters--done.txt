@@ -1,0 +1,41 @@
+﻿题目描述：
+
+Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
+
+
+
+
+实现代码：
+
+public class Solution {
+    public int LengthOfLongestSubstring(string s) {
+       if(string.IsNullOrWhiteSpace(s)){
+		return 0;
+    	}
+    	
+    	var keys = new bool[256];
+     
+    	int max = 0;
+    	int start = 0;
+     
+    	for (int i = 0; i < s.Length; i++) {
+    		var current = s[i];
+    		if (keys[current]) {
+    			max = Math.Max(max, i - start);
+    			for (int k = start; k < i; k++) {
+    				if (s[k] == current) {
+    					start = k + 1; 
+    					break;
+    				}
+    				keys[s[k]] = false;
+    			}
+    		} else {
+    			keys[current] = true;
+    		}
+    	}
+     
+    	max = Math.Max(s.Length - start, max);
+     
+    	return max;
+    }
+}

@@ -1,0 +1,32 @@
+﻿本题就是树的先序遍历过程。
+
+实现代码：
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public IList<int> InorderTraversal(TreeNode root) 
+    {
+        Travel(root);
+    	return result;
+    }
+    private void Travel(TreeNode node){
+    
+    	if(node == null){
+    		return ;
+    	}
+    	
+    	Travel(node.left);
+    	result.Add(node.val);
+    	Travel(node.right);
+    }
+    
+    private IList<int> result = new List<int>();
+}

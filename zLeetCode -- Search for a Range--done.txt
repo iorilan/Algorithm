@@ -1,0 +1,51 @@
+﻿题目描述：
+
+Given a sorted array of integers, find the starting and ending position of a given target value.
+
+Your algorithm's runtime complexity must be in the order of O(log n).
+
+If the target is not found in the array, return [-1, -1].
+
+For example,
+Given [5, 7, 7, 8, 8, 10] and target value 8,
+return [3, 4].
+
+就是在排序的数组中找到一个区间的起始和终止边界索引。
+
+
+思路：
+1. 对于目标数target,在数组nums中使用二分查找到该值的一个索引i
+2. 找到nums[i] < target的左边界，i∈[0,i), 找到nums[j] > target的右边界，j∈[i,n)
+
+
+实现代码：
+
+
+
+public class Solution {
+public int[] SearchRange(int[] nums, int target) 
+{
+    if(target > nums[nums.Length - 1] || target < nums[0]){
+		return new int[2]{-1,-1};
+	}
+	
+   var i = Array.BinarySearch<int>(nums,target);
+   if(i < 0){
+   		return new int[2]{-1,-1};
+   }
+   
+   var l = i;
+   var r = i;
+	while(l >= 0 && nums[l] == target){
+		l --;
+	}
+	
+	while(r < nums.Length && nums[r] == target){
+		r++;
+	}
+   
+   return new int[2]{l+1,r-1};
+}
+    
+    
+}

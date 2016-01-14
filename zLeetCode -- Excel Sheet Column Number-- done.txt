@@ -1,0 +1,43 @@
+﻿题目描述：
+
+Related to question Excel Sheet Column Title
+
+Given a column title as appear in an Excel sheet, return its corresponding column number.
+
+For example:
+
+    A -> 1
+    B -> 2
+    C -> 3
+    ...
+    Z -> 26
+    AA -> 27
+    AB -> 28 
+
+本题可以转化为进制转换问题。
+
+思路：和2进制转10进制有点类似，对于AAA，可以理解为26进制的转换：1*26 + 1*26^2 + 1*26^3
+
+
+实现代码：
+
+
+
+public class Solution {
+    public int TitleToNumber(string s) 
+    {
+    	var sum = 0;
+    	for(var i = s.Length - 1; i >= 0; i--){
+    		var d = s.Length - i;
+    		var n = Num(s[i]);
+    		sum += (int)Math.Pow(26, d-1) * n;
+    	}
+    	return sum;
+    }
+	
+private int Num(char c)
+{
+	return (int)c - 64;
+}
+
+}

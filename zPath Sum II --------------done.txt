@@ -1,0 +1,80 @@
+void Main()
+{
+
+	var r = new TreeNode(5);
+	r.left = new TreeNode(4);
+	r.right = new TreeNode(8);
+	
+	r.left.left = new TreeNode(11);
+	r.left.left.left = new TreeNode(7);
+	r.left.left.right = new TreeNode(2);
+	
+	r.right.left = new TreeNode(13);
+	r.right.right = new TreeNode(4);
+	r.right.right.left = new TreeNode(5);
+	r.right.right.right = new TreeNode(1);
+	
+	var s = new Solution();
+	var rr = s.PathSum(r,22);
+	Console.WriteLine(rr);
+}
+
+ public class TreeNode 
+ {
+	      public int val;
+	      public TreeNode left;
+	      public TreeNode right;
+	      public TreeNode(int x) { val = x; }
+	  };
+	 
+	public class Solution {
+    
+        private int _sum;
+		private IList<IList<int>> ret;
+		
+		public Solution(){
+			ret = new List<IList<int>>();
+		}
+	
+	    public IList<IList<int>> PathSum(TreeNode root, int sum) {
+	        _sum = sum;
+			
+			if(root == null || root.left == null && root.right == null && sum == 0){
+				return ret;
+			}
+			
+			// has no child
+			if(root.left == null && root.right == null){
+				ret.Add(new List<int>(){root.val});
+				return ret;
+			}
+			
+			Travel(root, root.val.ToString() ,root.val);
+			return ret;
+	    }
+
+		public void Travel(TreeNode parent , string path ,int sumPath){
+			if(parent.left == null && parent.right == null && sumPath == _sum){
+				// convert string to list<int>
+				var p = path.Split(',');
+				var r = new List<int>();
+				for(var i = 0;i < p.Length; i++){
+					r.Add(int.Parse(p[i]));
+				}
+				// store path
+				ret.Add(r);
+				return;
+			}
+			
+			if(parent.left != null){
+			// track path then go left
+				Travel(parent.left, path + "," + parent.left.val, sumPath + parent.left.val);
+			}
+			
+			if(parent.right != null){
+			// track path then go right
+				Travel(parent.right, path + "," + parent.right.val, sumPath + parent.right.val);
+			}
+		}
+}
+

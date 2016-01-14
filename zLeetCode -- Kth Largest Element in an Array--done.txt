@@ -1,0 +1,71 @@
+﻿题目描述：
+
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+For example,
+Given [3,2,1,5,6,4] and k = 2, return 5.
+
+
+在一个数组中找到第k大的数字。
+
+首先要确定的是，本题可以通过某种排序来完成。由于要找到第k个数字，那么可以通过选择排序或堆排序；
+显然，堆排序效率更好一些。可以大根堆或小根堆来完成，第k大的数，显然使用大根堆。
+
+1.建立堆。
+2.找出前k大的数字，存入集合List。
+3.返回List中的最后一个即可。
+
+
+实现代码：
+
+public class Solution {
+    public int FindKthLargest(int[] nums, int k) 
+    {
+       	var index = k - 1;
+    	if(index >= nums.Length){
+    		index = nums.Length - 1;
+    	}
+    	
+    	var r = TopK(nums.ToList(), index);
+    	return r.Last();
+    }
+	
+private List<int> TopK(List<int> arr, int k)
+{
+	var ret = new List<int>();
+	var c = 0;
+	while (c <= k)
+	{
+		for (int i = arr.Count / 2 - 1;i >= 0; i--)
+		{
+			if (i > 0){
+				HeapMerge(arr, i);
+			}
+			
+			HeapMerge(arr, i * 2 + 1);
+			
+			if (i * 2 + 2 <= arr.Count - 1){
+				HeapMerge(arr, i * 2 +2);
+			}
+		}
+		
+		ret.Add(arr[0]);
+		arr.RemoveAt(0);
+		c++;
+	}
+
+	return ret;
+}
+
+//construct maximum heap
+private void HeapMerge(List<int>arr , int index)
+{
+	if (index > 0 && arr[index] > arr[(index-1)/2])
+	{
+		var tmp = arr[index];
+		arr[index] = arr[(index-1)/2];
+		arr[(index-1)/2] = tmp;
+		HeapMerge(arr,(index-1)/2);
+	}
+}
+}

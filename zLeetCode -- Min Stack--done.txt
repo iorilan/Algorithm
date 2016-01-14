@@ -1,0 +1,49 @@
+﻿题目描述：
+
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+push(x) -- Push element x onto stack.
+pop() -- Removes the element on top of the stack.
+top() -- Get the top element.
+getMin() -- Retrieve the minimum element in the stack.
+
+设计一个栈，要求获取最小值的时间复杂度为常数。
+
+思路：
+对变成语言类库内部的栈进行封装，维护使用一个最小值的成员即可。要注意的就是弹出栈的操作，如果栈中依然有值，需要求出当前最小值更新最小值；如果栈空，最小值设为空。
+
+实现代码：
+
+public class MinStack {
+    private Stack<int> _stack ;
+	private int? _min;
+	public MinStack(){
+		_stack = new Stack<int>();
+	}
+    public void Push(int x) {
+        if(!_min.HasValue || x < _min){
+			_min = x;
+		}
+		_stack.Push(x);
+    }
+
+    public void Pop() {
+        var x = _stack.Pop();
+		if (x == _min){
+			if(_stack.Count > 0){
+				_min = _stack.Min();
+			}
+			else{
+				_min = null;
+			}
+		}
+    }
+
+    public int Top() {
+        return _stack.Peek();
+    }
+
+    public int GetMin() {
+        return _min.Value;
+    }
+}

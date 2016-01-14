@@ -1,0 +1,27 @@
+public class Solution {
+    public int[] PlusOne(int[] digits) {
+        if (digits == null || digits.Length == 0){
+		return null;
+    	}
+    	
+    	
+    	var len = digits.Length;
+    	var c = digits[len-1] == 9 ? 1: 0;
+    	
+    	digits[len-1] = digits[len-1] == 9 ? 0 : digits[len-1] + 1;
+    	
+    	for(var i = len - 2;i >= 0 ; i--){
+    		var s = digits[i] + c ;
+    		c = s / 10;
+    		digits[i] = s % 10;
+    	}
+    	
+    	if(c > 0){
+    		var arr = new List<int>{1};
+    		arr.AddRange(digits);
+    		return arr.ToArray();
+    	}
+    	
+    	return digits;
+    }
+}

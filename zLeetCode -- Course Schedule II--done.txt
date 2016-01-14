@@ -1,0 +1,91 @@
+﻿题目描述：
+
+There are a total of n courses you have to take, labeled from 0 to n - 1.
+
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: [0,1]
+
+Given the total number of courses and a list of prerequisite pairs, return the ordering of courses you should take to finish all courses.
+
+There may be multiple correct orders, you just need to return one of them. If it is impossible to finish all courses, return an empty array.
+
+For example:
+
+2, [[1,0]]
+There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1]
+
+4, [[1,0],[2,0],[3,1],[3,2]]
+There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0. So one correct course order is [0,1,2,3]. Another correct ordering is[0,2,1,3].
+
+
+输入，需要选择的课程数量n，和课程依赖关系pres，输出选课的数组。对于课程a依赖课程b的依赖关系的表示为[a,b]。
+
+思路：
+创建依赖关系列表，存放所有依赖其他课才能选的课，数量表示依赖课程的数量。即初始化dependency[n] ，遍历pres[0...n] 将 dependency[pres[i,1]] += 1;
+每次找出课程集合：{不依赖任何课程的课}。 将其添加到选课结果中并更新依赖关系列表dependency[n]，直到{不依赖任何课程的课}为空集为止。 是一个BFS的过程。
+查找{不依赖任何课程的课}： 遍历依赖关系表： pres[i] ，其中i∈[0,n-1] ，判断dependency[pres[i,0]] 是否大于0即可。
+
+
+
+
+实现代码：
+
+
+public class Solution {
+    
+public int[] FindOrder(int numCourses, int[,] prerequisites) 
+{
+	var row = prerequisites.GetLength(0);
+	if(row == 0){
+        int[] c = new int[numCourses];
+        for(int i=0; i<numCourses; i++){
+            c[i]=i;
+        }
+        return c;
+    }
+	
+	// save [courseId, refCount]
+	var refCountTable = new int[numCourses];
+	
+	for(var i = 0;i < row; i++){
+		refCountTable[prerequisites[i,0]] ++;
+	}
+	
+	// no ref courses
+	var noRefCourses = new Dictionary<int, int>();
+	for(var i = 0;i < row; i++){
+		// find courses does not appear in ref table
+		if(refCountTable[prerequisites[i,1]] == 0 && !noRefCourses.ContainsKey(prerequisites[i,1])){
+			noRefCourses.Add(prerequisites[i,1],1);
+		}
+	}
+	
+	var size = noRefCourses.Count;
+	
+	var result = new int[numCourses];
+	var count = 0;
+	while(noRefCourses.Count > 0){
+		var c = noRefCourses.Keys.First();
+		result[count++] = c;
+		noRefCourses.Remove(c);
+		
+		for(var i = 0;i < row; i++){
+			if(prerequisites[i,1] == c){
+				refCountTable[prerequisites[i,0]] --;
+				
+				if(refCountTable[prerequisites[i,0]] == 0 && !noRefCourses.ContainsKey(prerequisites[i,1])){
+					noRefCourses.Add(prerequisites[i,0], 1);
+					size++;
+				}
+			}
+		}
+	}
+	
+	if(size == numCourses){
+		return result;
+	}
+	return new int[0];
+	
+}
+
+
+}

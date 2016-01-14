@@ -1,0 +1,105 @@
+﻿题目描述：
+
+Given an unsorted array, find the maximum difference between the successive elements in its sorted form.
+
+Try to solve it in linear time/space.
+
+Return 0 if the array contains less than 2 elements.
+
+You may assume all elements in the array are non-negative integers and fit in the 32-bit signed integer range.
+
+本题直接使用.net内置（或其他编程语言）的排序算法就可以，然后计算间隔找出最大的就行了。
+
+
+
+以下是一种最简单的实现方式，调用 LINQ的sort（内部实现为stable的快排）然后计算间隔。 
+
+public class Solution {
+    public int MaximumGap(int[] nums) 
+    {
+        if(nums == null || nums.Length < 2){
+    		return 0;
+    	}
+    	
+    	var lst = nums.OrderBy(n=>n).ToList();
+    	var max = 0;
+    	for(var i = 0;i < lst.Count - 1; i++){
+    		max = Math.Max(max, lst[i+1] - lst[i]);
+    	}
+    	
+    	return max;
+    }
+
+
+}
+
+
+
+官方的答案是使用桶排：
+1. 求出最大最小值，一共需要nums.Length / (max - min)个桶
+2. 遍历nums的过程中判断nums[i]属于哪个桶，然后将元素放入指定的桶中
+3. 维护每个桶的最大最小值
+4. 遍历桶的最值，它们之间的间隔(bucket[i-1]的最小值与bucket[i]的最大值)
+
+
+以下实现参考了：
+http://www.programcreek.com/2014/03/leetcode-maximum-gap-java/
+
+public class Solution {
+    public int MaximumGap(int[] nums) 
+    {
+        if(nums == null || nums.Length < 2){
+    		return 0;
+    	}
+    	
+    	// find the max and min
+    	int max = nums[0];
+        int min = nums[0];
+        for(int i = 1; i < nums.Length; i++){
+            max = Math.Max(max, nums[i]);
+            min = Math.Min(min, nums[i]);
+        }
+     
+        // init bucket
+        var buckets = new Bucket[nums.Length + 1];
+        for(int i=0; i < buckets.Length; i++){
+            buckets[i] = new Bucket();
+        }
+     
+        double height = (double) nums.Length / (max - min);// bucket height
+        
+        // loop each element in nums, find the bucket for it.
+        for(int i=0; i<nums.Length; i++){
+            int index = (int) ((nums[i] - min) * height);
+     
+            if(buckets[index].low == null){
+                buckets[index].low = nums[i];
+                buckets[index].high = nums[i];
+            }else{
+                buckets[index].low = Math.Min(buckets[index].low.Value, nums[i]);
+                buckets[index].high = Math.Max(buckets[index].high.Value, nums[i]);
+            }
+        }
+
+        int result = 0;
+        int prev = buckets[0].high.Value;
+        for(int i=1; i<buckets.Length; i++){
+            if(buckets[i].low != null){
+                result = Math.Max(result, buckets[i].low.Value-prev);
+                prev = buckets[i].high.Value;
+            }
+     
+        }
+     
+        return result;
+    }
+
+public class Bucket{
+   public int? low;
+   public int? high;
+    public Bucket(){
+
+    }
+}
+
+}

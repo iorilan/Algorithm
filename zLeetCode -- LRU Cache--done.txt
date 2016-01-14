@@ -1,0 +1,70 @@
+﻿题目描述：
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+set(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+
+实现一个LRU的缓存，关于LRU缓存，可以概括为一个指定容量的的缓存，当超出容量时，拿掉最长时间没有使用的那个元素。
+
+思路：
+1. 使用哈希来存[key,value]
+2. 维护一个集合，根据key的使用情况（最早使用的放最后）更新位置
+
+实现代码：
+
+public class LRUCache {
+
+    private Dictionary<int, int> _cache; 
+	private List<int> _usedKeys;
+	
+	private int _capacity;
+	
+    public LRUCache(int capacity)
+	{
+		_cache = new Dictionary<int, int>();
+		_usedKeys = new List<int>();
+		
+        _capacity = capacity;
+    }
+
+    public int Get(int key)
+	{
+        if(!_cache.ContainsKey(key)){
+			return -1;
+		}
+		else{
+			_usedKeys.Remove(key);
+			_usedKeys.Insert(0, key);
+			
+			return _cache[key];
+		}
+    }
+
+    public void Set(int key, int value) 
+	{
+		if(_cache.ContainsKey(key)){
+			_cache[key] = value;
+			
+			_usedKeys.Remove(key);
+			_usedKeys.Insert(0, key);
+		}
+		else{
+			if(_cache.Keys.Count < _capacity){
+				_cache.Add(key, value);
+				
+				_usedKeys.Insert(0, key);
+			}
+			else
+			{
+				var removing = _usedKeys.Last();
+				_usedKeys.RemoveAt(_usedKeys.Count - 1);
+				
+				_cache.Remove(removing);
+				_cache.Add(key, value);
+				
+				_usedKeys.Insert(0, key);
+			}
+		}
+    }
+    
+}

@@ -1,0 +1,50 @@
+﻿题目描述：
+
+Given a positive integer, return its corresponding column title as appear in an Excel sheet.
+
+For example:
+
+    1 -> A
+    2 -> B
+    3 -> C
+    ...
+    26 -> Z
+    27 -> AA
+    28 -> AB 
+
+思路：
+和进制转换题目类似，不断取余，除26，做A-Z的mapping。
+要区分余数是否为0的情况。
+
+
+
+实现代码：
+
+
+public class Solution {
+    public string ConvertToTitle(int n) {
+        var ret = string.Empty;
+    	while(n > 26){
+    		var x = n % 26;
+    		n /= 26;
+    		if(x != 0){
+    			ret = Char(x) + ret;
+    		}
+    		else{
+    			ret = Char(26) + ret;
+    			n--;
+    		}
+    		
+    	}
+    	if(n > 0){
+    		ret = Char(n) + ret;
+    	}
+    	
+    	return ret;
+}
+
+private char Char(int x){
+	return (char)('A' + x - 1);
+}
+
+}

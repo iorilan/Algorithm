@@ -1,0 +1,86 @@
+﻿题目描述：
+
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+For example, given s = "aab",
+Return
+
+  [
+    ["aa","b"],
+    ["a","a","b"]
+  ]
+
+把字符串s进行分割，要求分割后的每个子串（s[i...j]，其中i,j∈[0,n)）都是回文。
+
+本题算是回溯问题，与Combination Sum的1和2属于同类问题。
+
+使用经典的回溯模型：
+BackTracking(start , current, result):
+	if start is end :
+		add current to result
+
+	i = start to end:
+	currentAdd(the [i]th element);
+	BackTracking(i+1, current, result)
+	currentRemove(the [i]th element)
+
+至于判断回文的过程就不介绍了，判断两头字符是否相等，直到中间元素位置。
+
+
+实现代码：
+
+
+public class Solution {
+    public IList<IList<string>> Partition(string s) 
+    {
+        if(string.IsNullOrEmpty(s))
+        {
+    		return new List<IList<string>>();
+    	}
+    	
+    	var result = new List<IList<string>>();
+    	Travel(s, 0, new List<string>() , ref result);
+    	
+    	return result;
+    }
+	
+
+private void Travel(string s , int start, IList<string> current, ref List<IList<string>> result)
+{
+	if(start == s.Length)
+	{
+		result.Add(new List<string>(current));
+		return;
+	}
+	
+	for(var i = start + 1; i <= s.Length; i++)
+	{
+		var x = s.Substring(start, i - start);
+		if(IsP(x)){
+			current.Add(x);
+			Travel(s, i , current, ref result);
+			current.RemoveAt(current.Count - 1);
+		}
+	}
+}
+
+
+private bool IsP(string s)
+{
+	if(s.Length == 1){
+		return true;
+	}
+	
+	var len = s.Length % 2 == 0 ? s.Length / 2 : (s.Length - 1) / 2;
+	
+	for(var i = 0;i < len; i++){
+		if(s[i] != s[s.Length - 1- i]){
+			return false;
+		}
+	}
+	
+	return true;
+}
+}

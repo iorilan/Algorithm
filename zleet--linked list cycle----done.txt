@@ -1,0 +1,47 @@
+﻿本题描述：
+
+Given a linked list, determine if it has a cycle in it.
+
+Follow up:
+Can you solve it without using extra space?
+
+检测链表中是否有环。
+
+思路：
+经典算法，使用快慢指针，快的一次走两步，慢的一次走一步，如果有环它们一定会相遇。
+
+实现代码：
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    
+    public bool HasCycle(ListNode head) {
+        if(head == null){
+    		return false;
+    	}
+    	
+    	var p = head;
+    	var q = head;
+
+    	while(p != null && q != null && q.next != null){
+    		var t = q;
+    		p = p.next;
+    		q = q.next.next;
+    		if(ReferenceEquals(p,q)){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+}

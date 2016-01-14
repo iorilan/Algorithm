@@ -1,0 +1,49 @@
+﻿题目描述：
+Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+
+就是对一个排序的序列生成高度平衡的二叉树。
+
+思路：
+本题的算法思路属于分治。
+
+即在数组nums取中间元素nums[m]并生成节点添加到树上，然后对左右分别做DFS。即使用m左边元素生成左子树，使用m右边元素生成右子树。
+
+实现代码：
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode SortedArrayToBST(int[] nums) 
+    {
+        if(nums == null || nums.Length == 0){
+    		return null;
+    	}
+        var node = new TreeNode(nums[nums.Length/2]);
+    	BuildTree(nums, 0, nums.Length - 1, ref node);
+    	return node;
+    }
+
+private void BuildTree(int[] nums,int start, int end, ref TreeNode current)
+{
+	if(start > end){
+		return ;
+	}
+	
+	var m = (start + end) / 2;
+	current = new TreeNode(nums[m]);
+	if(start == end){
+		return;
+	}
+	
+	BuildTree(nums, start, m - 1, ref current.left);
+	BuildTree(nums, m + 1, end, ref current.right);
+}
+
+}

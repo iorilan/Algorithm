@@ -1,0 +1,71 @@
+﻿题目描述：
+
+
+Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+
+The same repeated number may be chosen from C unlimited number of times.
+
+
+Note:
+All numbers (including target) will be positive integers.
+Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+The solution set must not contain duplicate combinations.
+For example, given candidate set 2,3,6,7 and target 7, 
+A solution set is: 
+[7] 
+[2, 2, 3] 
+
+
+给定一个数组，和一个目标数，使用给定数组中的数字，求出所有和等于目标数的可能组合。 例如给定2,3,6,7 ，可能组合是[7]和[2,2,3]
+这个题目有两个条件：
+1. 数字是可以重复的
+2. 组合必须是升序排列
+3. 不能有重复组合
+4. 所有数字都是正数
+
+
+思路：
+对数组遍历，缩小目标数： target-= candidate[i]。如果target < candadite[i] ，中断循环
+使用1个数组:arr记录当前遍历情况，如果target为0，存入结果。
+在遍历数组过程中，添加当前元素：arr.Add(self)，进入递归
+拿掉当前元素： arr.Remove(self)
+
+
+
+
+实现代码：
+
+
+
+public IList<IList<int>> CombinationSum(int[] candidates, int target)
+{
+	if(candidates == null || candidates.Length == 0){
+		return null;
+	}
+
+	var arr = candidates.OrderBy(x=>x).ToList();
+	
+	IList<IList<int>> result = new List<IList<int>>();
+	Travel(arr ,new List<int>(), 0, target, result);
+	
+	return result;
+}
+
+
+private void Travel(IList<int> candidates, IList<int> arr, int index, int target, IList<IList<int>> result){
+	if(target == 0 ){
+		result.Add(new List<int>(arr));
+		return ;
+	}
+	
+	for(var i = index ;i < candidates.Count; i++){
+		if(target < candidates[i]){
+			return;
+		}
+		
+		arr.Add(candidates[i]);
+		Travel(candidates, arr, i + 1 , target - candidates[i], result);
+		arr.Remove(candidates[i]);
+	}
+}
